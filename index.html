@@ -460,14 +460,7 @@ function score(haystack, needle) {
   if (hits === words.length) return 60 + hits * 5;
   if (hits > 0) return 30 + hits * 10;
 
-  // fuzzy character sequence
-  let si = 0, hi = 0, matched = 0;
-  while (si < n.length && hi < h.length) {
-    if (n[si] === h[hi]) { matched++; si++; }
-    hi++;
-  }
-  if (si < n.length) return 0; // not all chars found
-  return Math.round((matched / n.length) * 25);
+  return 0;
 }
 
 // ── highlight matching substrings ────────────────────────────────────────────
