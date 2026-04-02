@@ -20,11 +20,11 @@ for cat, code, desc, fee, notes in rows:
 
 js_array = 'const DATA = [\n' + '\n'.join(js_lines) + '\n];'
 
-with open('ohip_search.html', encoding='utf-8') as f:
+with open('index.html', encoding='utf-8') as f:
     html = f.read()
 
 html_new = re.sub(r'const DATA = \[.*?\];', js_array, html, flags=re.DOTALL)
 
-with open('ohip_search.html', 'w', encoding='utf-8') as f:
+with open('index.html', 'w', encoding='utf-8') as f:
     f.write(html_new)
 print('HTML DATA array replaced successfully')
