@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>April 1st Update Notes — ED OHIP Billing</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a202c;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: #1F4E79;
+    color: white;
+    padding: 18px 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.01em; }
+  header span { font-size: 0.8rem; opacity: 0.75; }
+  header a.nav-link {
+    margin-left: auto;
+    font-size: 0.82rem;
+    color: white;
+    opacity: 0.85;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 5px;
+    padding: 4px 12px;
+    white-space: nowrap;
+  }
+  header a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+
+  main {
+    flex: 1;
+    max-width: 720px;
+    margin: 32px auto;
+    padding: 0 16px 60px;
+    width: 100%;
+  }
+
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1F4E79;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #BDD7EE;
+  }
+
+  .card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+
+  .note-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 13px 20px;
+    border-bottom: 1px solid #edf2f7;
+  }
+  .note-row:last-child { border-bottom: none; }
+  .note-row:hover { background: #ebf3fb; }
+
+  .bullet {
+    color: #1F4E79;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .note-body { font-size: 0.9rem; line-height: 1.5; }
+
+  .code {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: #1F4E79;
+    background: #BDD7EE;
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-right: 3px;
+  }
+
+  .new-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: white;
+    background: #276749;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  .fee-change {
+    font-size: 0.82rem;
+    color: #718096;
+    margin-top: 2px;
+  }
+  .fee-change s { color: #a0aec0; }
+  .fee-change strong { color: #276749; }
+
+  footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    text-align: center;
+    padding: 8px 24px;
+    font-size: 0.78rem;
+    color: #718096;
+    background: white;
+    border-top: 1px solid #dde3ed;
+    z-index: 10;
+  }
+  footer a { color: #1F4E79; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Emergency Department — OHIP Billing Search</h1>
+  <span>Effective April 1, 2026</span>
+  <a href="index.html" class="nav-link">← Back to Search</a>
+</header>
+
+<main>
+  <h2>April 1, 2026 — Key Fee Schedule Changes</h2>
+  <div class="card">
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        <span class="code">H13X</span> Evening codes now <strong>Mon–Thu only</strong> (Friday evening no longer included)
+      </div>
+    </div>
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        <span class="code">H15X</span> Wkd/Hol codes now include <strong>Friday evening 5pm–midnight</strong>
+      </div>
+    </div>
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        <span class="code">H113</span> Premium now includes <strong>Friday evening</strong>
+      </div>
+    </div>
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        <span class="new-badge">New</span>
+        <span class="code">H114</span> Weekday evening premium (Mon–Thu)
+        <div class="fee-change"><strong>$23.65</strong></div>
+      </div>
+    </div>
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        <span class="new-badge">New</span>
+        <span class="code">H264</span> ED pelvic exam with speculum
+        <div class="fee-change"><strong>$12.00</strong></div>
+      </div>
+    </div>
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        Anaesthesia unit value increased
+        <div class="fee-change"><s>$15.49</s> → <strong>$15.96</strong> per unit</div>
+      </div>
+    </div>
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        <span class="code">A007</span> Increased 17.4%
+        <div class="fee-change"><s>~$37.94</s> → <strong>$44.55</strong></div>
+      </div>
+    </div>
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        Abscess, laceration, and suture fees increased <strong>9–65%</strong>
+      </div>
+    </div>
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        K-code fees increased <strong>~14.1%</strong>
+      </div>
+    </div>
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        <span class="code">Z756</span> Fecal disimpaction
+        <div class="fee-change"><s>$36.80</s> → <strong>$46.00</strong></div>
+      </div>
+    </div>
+
+    <div class="note-row">
+      <span class="bullet">•</span>
+      <div class="note-body">
+        <span class="code">Z104</span> Perianal abscess I&amp;D (LA)
+        <div class="fee-change"><s>$20.10</s> → <strong>$33.25</strong> (+65%)</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  Please send feedback/suggestions to <a href="mailto:chisholm.mirror@gmail.com">chisholm.mirror@gmail.com</a>
+</footer>
+
+</body>
+</html>

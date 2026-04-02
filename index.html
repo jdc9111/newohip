@@ -26,6 +26,18 @@
   }
   header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.01em; }
   header span { font-size: 0.8rem; opacity: 0.75; }
+  header a.nav-link {
+    margin-left: auto;
+    font-size: 0.82rem;
+    color: white;
+    opacity: 0.85;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 5px;
+    padding: 4px 12px;
+    white-space: nowrap;
+  }
+  header a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.1); }
 
   .search-bar {
     background: white;
@@ -152,6 +164,7 @@
 <header>
   <h1>Emergency Department — OHIP Billing Search</h1>
   <span>Effective April 1, 2026</span>
+  <a href="updates.html" class="nav-link">April 1st Update Notes</a>
 </header>
 
 <div class="search-bar">
@@ -494,17 +507,19 @@ const tbl    = document.getElementById("tbl");
 function render(query) {
   const q = (query || "").trim();
 
-  let results;
+  tbody.innerHTML = "";
+
   if (!q) {
-    results = DATA.map((r, i) => ({ r, s: 1 }));
-  } else {
-    results = DATA
-      .map((r, i) => ({ r, s: score(SEARCH_TOKENS[i], q) }))
-      .filter(x => x.s > 0)
-      .sort((a, b) => b.s - a.s);
+    tbl.style.display = "none";
+    empty.style.display = "none";
+    status.textContent = "";
+    return;
   }
 
-  tbody.innerHTML = "";
+  const results = DATA
+    .map((r, i) => ({ r, s: score(SEARCH_TOKENS[i], q) }))
+    .filter(x => x.s > 0)
+    .sort((a, b) => b.s - a.s);
 
   if (results.length === 0) {
     tbl.style.display = "none";
@@ -515,12 +530,8 @@ function render(query) {
 
   tbl.style.display = "";
   empty.style.display = "none";
+  status.textContent = `${results.length} result${results.length === 1 ? "" : "s"} for "${q}"`;
 
-  if (q) {
-    status.textContent = `${results.length} result${results.length === 1 ? "" : "s"} for "${q}"`;
-  } else {
-    status.textContent = `Showing all ${results.length} codes`;
-  }
 
   const frag = document.createDocumentFragment();
   for (const { r } of results) {
