@@ -28,9 +28,11 @@
     padding: 14px 24px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    min-height: 68px;
   }
-  header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 0.01em; color: white; }
+  header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 0.01em; color: white; flex: 1; min-width: 0; }
   header a.nav-link {
     margin-left: auto;
     font-size: 0.82rem;
@@ -62,8 +64,11 @@
   }
   .toggle-btn:first-child { border-radius: 6px 0 0 6px; }
   .toggle-btn:last-child  { border-radius: 0 6px 6px 0; border-left: none; }
+  .toggle-btn:not(:first-child) { border-left: none; }
   .toggle-btn.active { background: white; color: #1F4E79; border-color: white; }
   .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.1); color: white; }
+  .beta-badge { font-size: 0.65rem; font-weight: 700; background: #f59e0b; color: white; border-radius: 3px; padding: 1px 4px; margin-left: 4px; vertical-align: middle; letter-spacing: 0.02em; }
+  .toggle-btn.active .beta-badge { background: #d97706; }
   .search-bar {
     background: white;
     padding: 16px 24px;
@@ -126,6 +131,7 @@
 <div class="toggle-bar">
   <a href="index.html" class="toggle-btn">Billing Codes</a>
   <a href="diag.html" class="toggle-btn active">Diagnostic Codes</a>
+  <a href="calc.html" class="toggle-btn">Billing Calculator <span class="beta-badge">β</span></a>
 </div>
 
 <div class="search-bar">
