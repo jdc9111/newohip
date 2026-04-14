@@ -27,13 +27,30 @@
   header {
     background: #1F4E79;
     color: white;
-    padding: 18px 24px;
+    padding: 14px 24px;
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 16px;
   }
-  header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.01em; }
-  header span { font-size: 0.8rem; opacity: 0.75; }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: white;
+    flex-shrink: 0;
+  }
+  .logo-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.25; }
+  .logo-main { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.02em; }
+  .logo-sub  { font-size: 0.72rem; opacity: 0.7; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 1px; }
   header a.nav-link {
     margin-left: auto;
     font-size: 0.82rem;
@@ -46,6 +63,35 @@
     white-space: nowrap;
   }
   header a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+
+  .toggle-bar {
+    background: #163d5e;
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 10px 24px;
+  }
+  .toggle-btn {
+    padding: 8px 28px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: rgba(255,255,255,0.7);
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.3);
+    transition: all 0.15s;
+  }
+  .toggle-btn:first-child { border-radius: 6px 0 0 6px; }
+  .toggle-btn:last-child  { border-radius: 0 6px 6px 0; border-left: none; }
+  .toggle-btn.active {
+    background: white;
+    color: #1F4E79;
+    border-color: white;
+  }
+  .toggle-btn:not(.active):hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+  }
 
   .search-bar {
     background: white;
@@ -170,10 +216,36 @@
 <body>
 
 <header>
-  <h1>Emergency Department — OHIP Billing Search</h1>
-  <span>Effective April 1, 2026</span>
-  <a href="updates.html" class="nav-link">April 1st Update Notes</a>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">
+      <svg width="48" height="48" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bgG" x1="76" y1="68" x2="430" y2="442" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#1F4E79"/>
+            <stop offset="1" stop-color="#163D5E"/>
+          </linearGradient>
+        </defs>
+        <rect width="512" height="512" rx="112" fill="white"/>
+        <rect x="72" y="72" width="368" height="368" rx="92" fill="url(#bgG)"/>
+        <circle cx="220" cy="212" r="88" fill="white"/>
+        <path d="M203 152C203 146.477 207.477 142 213 142H227C232.523 142 237 146.477 237 152V188H273C278.523 188 283 192.477 283 198V212C283 217.523 278.523 222 273 222H237V258C237 263.523 232.523 268 227 268H213C207.477 268 203 263.523 203 258V222H167C161.477 222 157 217.523 157 212V198C157 192.477 161.477 188 167 188H203V152Z" fill="#163D5E"/>
+        <circle cx="220" cy="212" r="86" stroke="#BDD7EE" stroke-width="10"/>
+        <path d="M284 276L348 340" stroke="white" stroke-width="34" stroke-linecap="round"/>
+        <circle cx="220" cy="212" r="100" stroke="white" stroke-width="18"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span class="logo-main">ED OHIP Search</span>
+      <span class="logo-sub">Ontario OHIP · April 2026</span>
+    </div>
+  </a>
+  <a href="updates.html" class="nav-link">April 1st Updates</a>
 </header>
+
+<div class="toggle-bar">
+  <a href="index.html" class="toggle-btn active">Billing Codes</a>
+  <a href="diag.html" class="toggle-btn">Diagnostic Codes</a>
+</div>
 
 <div class="search-bar">
   <div class="search-wrap">
