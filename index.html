@@ -80,6 +80,45 @@
   .beta-badge { font-size: 0.65rem; font-weight: 700; background: #f59e0b; color: white; border-radius: 3px; padding: 1px 4px; margin-left: 4px; vertical-align: middle; letter-spacing: 0.02em; }
   .toggle-btn.active .beta-badge { background: #d97706; }
 
+  /* ── Time-based reminder banner ── */
+  .reminder-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 24px;
+    background: #fffbeb;
+    border-bottom: 2px solid #f59e0b;
+    animation: slideDown 0.3s ease;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .reminder-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 1px; }
+  .reminder-body { flex: 1; }
+  .reminder-title { font-size: 0.88rem; font-weight: 700; color: #92400e; }
+  .reminder-codes { margin-top: 4px; font-size: 0.82rem; color: #78350f; }
+  .reminder-codes code {
+    display: inline-block;
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: inherit;
+    font-weight: 700;
+    color: #92400e;
+    margin: 2px 3px 2px 0;
+    cursor: pointer;
+  }
+  .reminder-codes code:hover { background: #fde68a; }
+  .reminder-dismiss {
+    background: none; border: none; cursor: pointer;
+    color: #b45309; font-size: 1.1rem; line-height: 1;
+    padding: 2px 4px; border-radius: 4px; flex-shrink: 0;
+    opacity: 0.7;
+  }
+  .reminder-dismiss:hover { opacity: 1; background: #fef3c7; }
+
   .search-bar {
     background: white;
     padding: 16px 24px;
@@ -212,6 +251,8 @@
   <a href="diag.html" class="toggle-btn">Diagnostic Codes</a>
   <a href="calc.html" class="toggle-btn">Billing Calculator <span class="beta-badge">β</span></a>
 </div>
+
+<div id="reminder-banner" style="display:none"></div>
 
 <div class="search-bar">
   <div class="search-wrap">
@@ -601,6 +642,55 @@ document.getElementById("query").addEventListener("input", e => {
 
 // initial render
 render("");
+
+// ── Time-based billing reminders ─────────────────────────────────────────────
+(function() {
+  const now  = new Date();
+  const day  = now.getDay();   // 0=Sun,1=Mon,...,5=Fri,6=Sat
+  const hour = now.getHours(); // 0–23
+  const isEvening = hour >= 17; // 5pm–midnight (midnight = next day, hour 0)
+
+  let reminder = null;
+
+  if (day === 5 && isEvening) {
+    // Friday evening 5pm–midnight
+    reminder = {
+      title: "It\u2019s Friday Evening!",
+      body:  "Remember to bill where applicable:",
+      codes: [
+        { code: "H15x", label: "H15x – Wkd/Hol assessments (H151–H154)", search: "H15" },
+        { code: "H113", label: "H113 – Wkd/Hol + Fri eve premium", search: "H113" },
+      ]
+    };
+  } else if (day >= 1 && day <= 4 && isEvening) {
+    // Monday–Thursday evening 5pm–midnight
+    reminder = {
+      title: "It\u2019s a Weekday Evening (Mon\u2013Thu)!",
+      body:  "Remember to bill evening codes where applicable:",
+      codes: [
+        { code: "H114", label: "H114 – Weekday eve premium (NEW Apr 2026)" },
+      ]
+    };
+  }
+
+  if (!reminder) return;
+
+  const codesHtml = reminder.codes.map(c =>
+    `<code title="${c.label}" onclick="document.getElementById('query').value='${c.search||c.code}';document.getElementById('query').dispatchEvent(new Event('input'));document.getElementById('query').focus()">${c.code}</code>`
+  ).join('');
+
+  const banner = document.getElementById('reminder-banner');
+  banner.className = 'reminder-banner';
+  banner.innerHTML = `
+    <span class="reminder-icon">🔔</span>
+    <div class="reminder-body">
+      <div class="reminder-title">${reminder.title}</div>
+      <div class="reminder-codes">${reminder.body} ${codesHtml}</div>
+    </div>
+    <button class="reminder-dismiss" onclick="this.closest('#reminder-banner').style.display='none'" title="Dismiss">✕</button>
+  `;
+  banner.style.display = '';
+})();
 </script>
 </body>
 </html>
