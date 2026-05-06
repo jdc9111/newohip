@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procedural Sedation — ED OHIP</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YMK3RYM38R');
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f0f4f8; color: #1a202c;
+    min-height: 100vh; display: flex; flex-direction: column;
+  }
+  header {
+    background: #1F4E79; color: white; padding: 14px 24px;
+    display: flex; align-items: center; flex-wrap: wrap;
+    gap: 10px 16px; min-height: 68px;
+  }
+  header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 0.01em; color: white; flex: 1; min-width: 0; }
+  header a.nav-link {
+    font-size: 0.82rem; color: white; opacity: 0.85; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.45); border-radius: 5px;
+    padding: 4px 12px; white-space: nowrap; flex-shrink: 0;
+  }
+  header a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+
+  .toggle-bar {
+    background: #163d5e; display: flex; justify-content: center;
+    gap: 0; padding: 10px 24px; flex-wrap: wrap;
+  }
+  .toggle-btn {
+    padding: 8px 16px; font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; color: rgba(255,255,255,0.7);
+    background: transparent; border: 2px solid rgba(255,255,255,0.3);
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .toggle-btn:first-child { border-radius: 6px 0 0 6px; }
+  .toggle-btn:last-child  { border-radius: 0 6px 6px 0; }
+  .toggle-btn:not(:first-child) { border-left: none; }
+  .toggle-btn.active { background: white; color: #1F4E79; border-color: white; }
+  .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.1); color: white; }
+  .beta-badge {
+    font-size: 0.65rem; font-weight: 700; background: #f59e0b; color: white;
+    border-radius: 3px; padding: 1px 4px; margin-left: 4px;
+    vertical-align: middle; letter-spacing: 0.02em;
+  }
+  .toggle-btn.active .beta-badge { background: #d97706; }
+
+  main {
+    flex: 1; max-width: 760px; margin: 24px auto;
+    padding: 0 16px 140px; width: 100%;
+  }
+
+  /* ── Step cards ── */
+  .step-card {
+    background: white; border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 16px;
+  }
+  .step-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 20px; border-bottom: 1px solid #edf2f7;
+  }
+  .step-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #1F4E79; color: white;
+    font-size: 0.8rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .step-title { font-size: 0.92rem; font-weight: 700; color: #2d3748; }
+  .step-subtitle { font-size: 0.8rem; font-weight: 400; color: #718096; margin-left: 6px; }
+  .step-body { padding: 16px 20px; }
+
+  /* ── Procedure search ── */
+  .proc-search-wrap { position: relative; }
+  .proc-search-wrap .search-icon {
+    position: absolute; left: 12px; top: 50%;
+    transform: translateY(-50%); color: #718096; pointer-events: none;
+  }
+  #proc-query {
+    width: 100%; padding: 10px 12px 10px 38px;
+    font-size: 0.95rem; border: 2px solid #BDD7EE; border-radius: 8px;
+    outline: none; transition: border-color 0.15s; background: #fafcff;
+  }
+  #proc-query:focus { border-color: #1F4E79; background: white; }
+  #proc-drop {
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: white; border: 2px solid #1F4E79; border-top: none;
+    border-radius: 0 0 8px 8px; max-height: 420px; overflow-y: scroll;
+    z-index: 20; display: none; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  #proc-drop:after {
+    content: ''; display: block; position: sticky; bottom: 0; left: 0; right: 0;
+    height: 32px; pointer-events: none;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.95));
+  }
+  #proc-drop.open { display: block; }
+  .proc-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 14px; cursor: pointer;
+    border-bottom: 1px solid #edf2f7; transition: background 0.1s;
+  }
+  .proc-item:last-child { border-bottom: none; }
+  .proc-item:hover, .proc-item.focused { background: #ebf3fb; }
+  .pi-code { font-weight: 700; font-size: 0.85rem; color: #1F4E79; min-width: 60px; }
+  .pi-desc { flex: 1; font-size: 0.83rem; color: #2d3748; }
+  .pi-cat  { font-size: 0.68rem; color: #a0aec0; background: #f7fafc; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+
+  /* Selected procedure display */
+  .sel-proc {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; background: #ebf3fb; border-radius: 8px;
+  }
+  .sel-code { font-weight: 800; font-size: 0.95rem; color: #1F4E79; }
+  .sel-billing-code {
+    font-weight: 700; font-size: 0.82rem; color: #276749;
+    background: #f0fff4; border: 1px solid #9ae6b4; border-radius: 5px; padding: 2px 8px;
+  }
+  .sel-desc { flex: 1; font-size: 0.85rem; color: #2d3748; }
+  .sel-clear {
+    background: none; border: none; cursor: pointer;
+    color: #a0aec0; font-size: 1rem; padding: 2px 6px; border-radius: 4px;
+  }
+  .sel-clear:hover { color: #c53030; background: #fff5f5; }
+  .search-hint { font-size: 0.72rem; color: #a0aec0; margin-top: 6px; }
+
+  /* ── Time units ── */
+  .units-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  #time-units {
+    width: 80px; padding: 8px 12px; font-size: 1.15rem; font-weight: 700;
+    border: 2px solid #BDD7EE; border-radius: 8px; outline: none;
+    text-align: center; color: #1F4E79; transition: border-color 0.15s;
+  }
+  #time-units:focus { border-color: #1F4E79; }
+  .units-label { font-size: 0.88rem; color: #4a5568; }
+  .duration-pill {
+    font-size: 0.82rem; color: #718096; background: #f7fafc;
+    border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px;
+  }
+  .duration-pill strong { color: #1F4E79; }
+
+  /* ── Radio options ── */
+  .radio-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .radio-opt {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px;
+    cursor: pointer; transition: all 0.15s; user-select: none;
+    flex: 1; min-width: 150px;
+  }
+  .radio-opt input[type="radio"] { display: none; }
+  .radio-opt.sel-time { border-color: #1F4E79; background: #ebf3fb; }
+  .radio-opt.sel-asa  { border-color: #276749; background: #f0fff4; }
+  .rdot {
+    width: 15px; height: 15px; border-radius: 50%;
+    border: 2px solid #cbd5e0; flex-shrink: 0; margin-top: 2px;
+    transition: all 0.15s;
+  }
+  .radio-opt.sel-time .rdot { background: #1F4E79; border-color: #1F4E79; }
+  .radio-opt.sel-asa  .rdot { background: #276749; border-color: #276749; }
+  .rl-main { font-size: 0.87rem; font-weight: 600; color: #2d3748; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .rl-code { font-size: 0.72rem; color: #718096; margin-top: 2px; }
+  .rl-units { font-size: 0.72rem; font-weight: 700; color: #b45309; margin-left: 5px; }
+
+  /* ── ASA tooltip ── */
+  .asa-info {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #e2e8f0; color: #4a5568; font-size: 0.65rem; font-weight: 800;
+    cursor: pointer; flex-shrink: 0; position: relative; user-select: none;
+    border: none; padding: 0; line-height: 1;
+    transition: background 0.15s;
+  }
+  .asa-info:hover { background: #1F4E79; color: white; }
+  .asa-tooltip {
+    display: none;
+    position: absolute; left: 50%; transform: translateX(-50%);
+    bottom: calc(100% + 8px);
+    background: #1a202c; color: white;
+    font-size: 0.75rem; font-weight: 400; line-height: 1.5;
+    border-radius: 8px; padding: 10px 14px;
+    width: 280px; max-width: 90vw;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    z-index: 50; pointer-events: none; text-align: left;
+  }
+  .asa-tooltip::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent; border-top-color: #1a202c;
+  }
+  .asa-tooltip strong { color: #90cdf4; display: block; margin-bottom: 4px; }
+  .asa-info:hover .asa-tooltip,
+  .asa-info.pinned .asa-tooltip { display: block; }
+
+  /* ── Results ── */
+  #results-card { display: none; }
+  #results-card.visible { display: block; }
+  .results-head { background: #1F4E79; padding: 13px 20px; }
+  .results-head h3 { color: white; font-size: 0.92rem; font-weight: 700; letter-spacing: 0.02em; }
+
+  table.res-table { width: 100%; border-collapse: collapse; }
+  .res-table th {
+    background: #f7fafc; font-size: 0.72rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em; color: #718096;
+    padding: 8px 14px; text-align: left; border-bottom: 2px solid #e2e8f0;
+  }
+  .res-table th:last-child { text-align: right; }
+  .res-table td { padding: 9px 14px; font-size: 0.86rem; border-bottom: 1px solid #edf2f7; }
+  .res-table tr:last-child td { border-bottom: none; }
+  .res-table .td-code { font-weight: 700; color: #1F4E79; white-space: nowrap; }
+  .res-table .td-units { text-align: right; font-weight: 600; color: #2d3748; }
+  .res-table .row-total td { background: #f0f4f8; font-weight: 800; border-top: 2px solid #e2e8f0; }
+  .res-table .row-total .td-code { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: #4a5568; }
+  .res-table .row-total .td-units { font-size: 1rem; color: #1F4E79; }
+  .res-table .row-callin td { background: #fffbeb; }
+  .res-table .row-callin .td-units { color: #b45309; font-weight: 700; }
+
+  .fee-bar {
+    display: flex; border-top: 2px solid #e2e8f0;
+  }
+  .fee-block {
+    flex: 1; padding: 14px 16px; text-align: center;
+    border-right: 1px solid #e2e8f0;
+  }
+  .fee-block:last-child { border-right: none; }
+  .fb-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.07em; color: #718096; }
+  .fb-value { font-size: 1.25rem; font-weight: 800; color: #1F4E79; margin-top: 3px; line-height: 1; }
+  .fb-value.green { color: #276749; font-size: 1.35rem; }
+  .fb-sub { font-size: 0.68rem; color: #a0aec0; margin-top: 3px; }
+
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    text-align: center; padding: 8px 24px; font-size: 0.78rem;
+    color: #718096; background: white; border-top: 1px solid #dde3ed; z-index: 10;
+  }
+  footer a { color: #1F4E79; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Emergency Department<br>OHIP Code Search</h1>
+  <a href="updates.html" class="nav-link">April 1st Updates</a>
+</header>
+
+<div class="toggle-bar">
+  <a href="index.html"    class="toggle-btn">Billing Codes</a>
+  <a href="diag.html"    class="toggle-btn">Diagnostic Codes</a>
+  <a href="sedation.html" class="toggle-btn active">Sedation <span class="beta-badge">Beta</span></a>
+  <a href="calc.html"    class="toggle-btn">Outside OHIP Calculator <span class="beta-badge">Beta</span></a>
+</div>
+
+<main>
+
+  <!-- Step 1: Procedure -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-title">Select Procedure <span class="step-subtitle">(F / D / Z code)</span></div>
+    </div>
+    <div class="step-body">
+      <div id="proc-selected" style="display:none">
+        <div class="sel-proc">
+          <span class="sel-code"    id="sp-code"></span>
+          <span class="sel-billing-code" id="sp-bill"></span>
+          <span class="sel-desc"    id="sp-desc"></span>
+          <button class="sel-clear" onclick="clearProc()" title="Change">✕</button>
+        </div>
+      </div>
+      <div id="proc-search-area">
+        <div class="proc-search-wrap">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input id="proc-query" type="search" placeholder="e.g. shoulder dislocation, ankle fracture, abscess…" autocomplete="off">
+          <div id="proc-drop"></div>
+        </div>
+        <p class="search-hint">Only F, D, and Z codes shown — the procedure code + "C" is the sedation billing code.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Time units -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title">Anaesthesia Time <span class="step-subtitle">1 unit = 15 min</span></div>
+    </div>
+    <div class="step-body">
+      <div class="units-row">
+        <input id="time-units" type="number" min="1" max="40" value="1">
+        <span class="units-label">units</span>
+        <div class="duration-pill">Duration: <strong id="duration-text">15 min</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Time premium -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-title">Time Premium <span class="step-subtitle">optional</span></div>
+    </div>
+    <div class="step-body">
+      <div class="radio-grid" id="time-prem-group">
+        <label class="radio-opt sel-time" onclick="selTimePrem(this,'none')">
+          <input type="radio" name="tp" value="none" checked>
+          <div class="rdot"></div>
+          <div>
+            <div class="rl-main">None</div>
+          </div>
+        </label>
+        <label class="radio-opt" onclick="selTimePrem(this,'E400C')">
+          <input type="radio" name="tp" value="E400C">
+          <div class="rdot"></div>
+          <div>
+            <div class="rl-main">Evening / Weekend <span class="rl-units">+ (T+ASA) units</span></div>
+            <div class="rl-code">E400C &nbsp;·&nbsp; Eve 17:00–24:00 or Weekend 07:00–24:00</div>
+          </div>
+        </label>
+        <label class="radio-opt" onclick="selTimePrem(this,'E401C')">
+          <input type="radio" name="tp" value="E401C">
+          <div class="rdot"></div>
+          <div>
+            <div class="rl-main">Night <span class="rl-units">+ (T+ASA) units</span></div>
+            <div class="rl-code">E401C &nbsp;·&nbsp; Night 00:00–07:00</div>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: ASA status -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div class="step-title">ASA Status <span class="step-subtitle">optional</span></div>
+    </div>
+    <div class="step-body">
+      <div class="radio-grid" id="asa-group">
+        <label class="radio-opt sel-asa" onclick="selASA(this,'none',0)">
+          <input type="radio" name="asa" value="none" checked>
+          <div class="rdot"></div>
+          <div>
+            <div class="rl-main">None / ASA I–II</div>
+          </div>
+        </label>
+        <label class="radio-opt" onclick="selASA(this,'E022C',2)">
+          <input type="radio" name="asa" value="E022C">
+          <div class="rdot"></div>
+          <div>
+            <div class="rl-main">ASA III <span class="rl-units">+2 units</span>
+              <button class="asa-info" onclick="event.stopPropagation();event.preventDefault();togglePin(this)" tabindex="-1">i
+                <div class="asa-tooltip">
+                  <strong>ASA III — Severe systemic disease</strong>
+                  Substantive functional limitations. One or more moderate to severe diseases: poorly controlled DM or HTN, COPD, morbid obesity (BMI ≥40), active hepatitis, alcohol dependence, implanted pacemaker, moderate ↓ EF, ESRD on dialysis, history (&gt;3 mo) of MI, CVA, TIA, or CAD/stents.
+                </div>
+              </button>
+            </div>
+            <div class="rl-code">E022C</div>
+          </div>
+        </label>
+        <label class="radio-opt" onclick="selASA(this,'E017C',10)">
+          <input type="radio" name="asa" value="E017C">
+          <div class="rdot"></div>
+          <div>
+            <div class="rl-main">ASA IV <span class="rl-units">+10 units</span>
+              <button class="asa-info" onclick="event.stopPropagation();event.preventDefault();togglePin(this)" tabindex="-1">i
+                <div class="asa-tooltip">
+                  <strong>ASA IV — Constant threat to life</strong>
+                  Recent (&lt;3 mo) MI, CVA, TIA or CAD/stents; ongoing cardiac ischaemia or severe valve dysfunction; severe ↓ EF; shock; sepsis; DIC; ARD; or ESRD not on regularly scheduled dialysis.
+                </div>
+              </button>
+            </div>
+            <div class="rl-code">E017C</div>
+          </div>
+        </label>
+        <label class="radio-opt" onclick="selASA(this,'E016C',20)">
+          <input type="radio" name="asa" value="E016C">
+          <div class="rdot"></div>
+          <div>
+            <div class="rl-main">ASA V <span class="rl-units">+20 units</span>
+              <button class="asa-info" onclick="event.stopPropagation();event.preventDefault();togglePin(this)" tabindex="-1">i
+                <div class="asa-tooltip">
+                  <strong>ASA V — Moribund, not expected to survive</strong>
+                  Ruptured abdominal/thoracic aneurysm, massive trauma, intracranial bleed with mass effect, ischaemic bowel with significant cardiac pathology, or multiple organ/system dysfunction.
+                </div>
+              </button>
+            </div>
+            <div class="rl-code">E016C</div>
+          </div>
+        </label>
+      </div>
+
+      <!-- ASA E — independent toggle, stackable with ASA III/IV/V -->
+      <div style="margin-top:12px; padding-top:12px; border-top:1px solid #edf2f7;">
+        <div style="font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:#a0aec0; margin-bottom:8px;">Emergency Modifier (stackable)</div>
+        <div class="radio-grid">
+          <div class="radio-opt" id="asaE-toggle" onclick="toggleASAE(this)" style="cursor:pointer;">
+            <div class="rdot" id="asaE-dot"></div>
+            <div>
+              <div class="rl-main">ASA E <span class="rl-units">+4 units</span>
+                <button class="asa-info" onclick="event.stopPropagation();event.preventDefault();togglePin(this)" tabindex="-1">i
+                  <div class="asa-tooltip">
+                    <strong>ASA E — Emergency surgery</strong>
+                    The addition of "E" denotes Emergency surgery. An emergency is defined as existing when delay in treatment of the patient would lead to a significant increase in the threat to life or body part.
+                  </div>
+                </button>
+              </div>
+              <div class="rl-code">E020C &nbsp;·&nbsp; Can be billed alongside ASA III / IV / V</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: Call-in premium -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-title">Call-in Premium <span class="step-subtitle">optional · flat fee</span></div>
+    </div>
+    <div class="step-body">
+      <div class="radio-grid" id="callin-group">
+        <label class="radio-opt sel-time" onclick="selCallIn(this,'none',0)">
+          <input type="radio" name="ci" value="none" checked>
+          <div class="rdot"></div>
+          <div>
+            <div class="rl-main">None</div>
+          </div>
+        </label>
+        <label class="radio-opt" onclick="selCallIn(this,'eve',60)">
+          <input type="radio" name="ci" value="eve">
+          <div class="rdot"></div>
+          <div>
+            <div class="rl-main">Evening <span class="rl-units">+$60</span></div>
+            <div class="rl-code">E998C &nbsp;·&nbsp; Flat fee, not C-units</div>
+          </div>
+        </label>
+        <label class="radio-opt" onclick="selCallIn(this,'night',100)">
+          <input type="radio" name="ci" value="night">
+          <div class="rdot"></div>
+          <div>
+            <div class="rl-main">Night <span class="rl-units">+$100</span></div>
+            <div class="rl-code">E998C &nbsp;·&nbsp; Flat fee, not C-units</div>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 6: Bariatric modifier -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <div class="step-title">Bariatric Modifier <span class="step-subtitle">optional</span></div>
+    </div>
+    <div class="step-body">
+      <div class="radio-grid">
+        <div class="radio-opt" id="bari-toggle" onclick="toggleBari(this)" style="cursor:pointer;">
+          <div class="rdot" id="bari-dot"></div>
+          <div>
+            <div class="rl-main">BMI &gt; 40 <span class="rl-units">+2 units</span></div>
+            <div class="rl-code">E010C</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="step-card" id="results-card">
+    <div class="results-head">
+      <h3>Billing Summary</h3>
+    </div>
+    <table class="res-table">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody id="res-body"></tbody>
+    </table>
+    <div class="fee-bar">
+      <div class="fee-block">
+        <div class="fb-label">OHIP Fee</div>
+        <div class="fb-value" id="res-ohip">—</div>
+        <div class="fb-sub">Anaesthesia C-units × $15.96</div>
+      </div>
+    </div>
+    <div style="padding: 10px 16px; font-size: 0.75rem; color: #718096; border-top: 1px solid #edf2f7; background: #f7fafc; border-radius: 0 0 12px 12px;">
+      ℹ️ Age premiums (E007, E009, E018, E019) are applied automatically by OHIP and do not need to be billed separately.
+    </div>
+  </div>
+
+</main>
+
+<footer>Please send feedback/suggestions to <a href="mailto:chisholm.mirror@gmail.com">chisholm.mirror@gmail.com</a></footer>
+
+<script>
+// ── F / D / Z codes only ──────────────────────────────────────────────────────
+// Full billing DATA — filtered below to D/Z/F codes only
+const ALL_DATA = [
+  ["H101","Minor assessment – Day (8am–5pm)",23,"ED Assessment",""],
+  ["H102","Comprehensive assessment – Day (8am–5pm)",57,"ED Assessment",""],
+  ["H103","Multiple assessment – Day (8am–5pm)",47,"ED Assessment",""],
+  ["H104","Reassessment – Day (8am–5pm)",23,"ED Assessment",">2h, change mgmt, not d/c or referral; max 3/pt/day"],
+  ["H131","Minor assessment – Eve Mon–Thu (5pm–midnight)",30,"ED Assessment",""],
+  ["H132","Comprehensive assessment – Eve Mon–Thu (5pm–midnight)",75,"ED Assessment",""],
+  ["H133","Multiple assessment – Eve Mon–Thu (5pm–midnight)",62,"ED Assessment",""],
+  ["H134","Reassessment – Eve Mon–Thu (5pm–midnight)",30,"ED Assessment",">2h, change mgmt; max 3/pt/day"],
+  ["H121","Minor assessment – Night (midnight–8am)",40,"ED Assessment",""],
+  ["H122","Comprehensive assessment – Night (midnight–8am)",100,"ED Assessment",""],
+  ["H123","Multiple assessment – Night (midnight–8am)",81,"ED Assessment",""],
+  ["H124","Reassessment – Night (midnight–8am)",40,"ED Assessment",">2h, change mgmt; max 3/pt/day"],
+  ["H151","Minor assessment – Wkd/Hol (8am–midnight)",34,"ED Assessment","Incl Fri eve 5pm–midnight"],
+  ["H152","Comprehensive assessment – Wkd/Hol (8am–midnight)",86,"ED Assessment","Incl Fri eve 5pm–midnight"],
+  ["H153","Multiple assessment – Wkd/Hol (8am–midnight)",70,"ED Assessment","Incl Fri eve 5pm–midnight"],
+  ["H154","Reassessment – Wkd/Hol (8am–midnight)",34,"ED Assessment","Incl Fri eve 5pm–midnight; max 3/pt/day"],
+  ["H112","Night premium (midnight–8am)",51,"Premiums","Per patient visit"],
+  ["H113","Wkd/Hol + Fri eve premium",32,"Premiums","Per patient visit; incl Fri eve 5pm–midnight"],
+  ["H114","Weekday eve premium (Mon–Thu)",24,"Premiums","Per patient visit; NEW April 2026"],
+  ["H055","Consultation to ED – FRCPC",126,"Consultations","Must record referring MD billing # or contact info"],
+  ["H065","Consultation to ED – CFPC",96,"Consultations","Must record referring MD billing # or contact info"],
+  ["K734","Phone consult – referring physician",31,"Consultations","≥10 min; cannot lead to follow-up"],
+  ["K735","Phone consult – consultant physician",40,"Consultations","≥10 min; cannot lead to follow-up"],
+  ["K736","CritiCall telephone consultation – referring physician",32,"Consultations","Exact fee $32.45"],
+  ["H960","On-call travel – Weekday Day",37,"On-Call","Max 2/day"],
+  ["H962","On-call travel – Weekday Eve",37,"On-Call","Max 2"],
+  ["H963","On-call travel – Wkd/Hol",37,"On-Call","Max 4"],
+  ["H964","On-call travel – Night",37,"On-Call","Unlimited"],
+  ["H980","On-call 1st patient – Weekday Day",20,"On-Call","Max 5"],
+  ["H984","On-call 1st patient – Weekday Eve",60,"On-Call","Max 5"],
+  ["H968","On-call 1st patient – Wkd/Hol",75,"On-Call","Max 10"],
+  ["H986","On-call 1st patient – Night",100,"On-Call","Unlimited"],
+  ["H981","On-call addl patient – Weekday Day",20,"On-Call","Max 5"],
+  ["H985","On-call addl patient – Weekday Eve",60,"On-Call","Max 5"],
+  ["H989","On-call addl patient – Wkd/Hol",75,"On-Call","Max 10"],
+  ["H987","On-call addl patient – Night",100,"On-Call","Unlimited"],
+  ["K005","Mental health counselling",63,"Counselling / Forms","Min 20 min; document mental health dx + times"],
+  ["K028","STD/Needlestick management counselling",63,"Counselling / Forms","Min 20 min; document times"],
+  ["K015","Counsel family re: death/catastrophe",63,"Counselling / Forms","Min 20 min; document times"],
+  ["K623","Form 1 – psychiatric assessment",105,"Counselling / Forms",""],
+  ["K070","Homecare application",32,"Counselling / Forms",""],
+  ["K035","Medical conditions report",36,"Counselling / Forms","Mandatory report to MOT; exact fee $36.25 (MOH Jan 2025)"],
+  ["A771","Death certificate",34,"Counselling / Forms",""],
+  ["A777","Pronouncement + death certificate",34,"Counselling / Forms",""],
+  ["H105","Interim admission orders",29,"Counselling / Forms",""],
+  ["A320","MAID consultation",174,"Counselling / Forms","NEW April 2026; exact fee $174.25"],
+  ["G521","Imminent life-threatening: 1st 15 min (1st MD)",112,"Critical Care – Imminent",""],
+  ["G523","Imminent life-threatening: 2nd 15 min (1st MD)",58,"Critical Care – Imminent",""],
+  ["G522","Imminent life-threatening: each addl 15 min (max 6)",38,"Critical Care – Imminent",""],
+  ["E420","Trauma ISS > 15 premium",null,"Critical Care – Imminent",""],
+  ["G395","Potential life-threatening: 1st 15 min",57,"Critical Care – Potential",""],
+  ["G391","Potential life-threatening: each addl 15 min (max 7)",31,"Critical Care – Potential",""],
+  ["Z437","Cardioversion (max 3/day)",92,"Critical Care – Other Procedures",""],
+  ["G269","Central line",31,"Critical Care – Other Procedures",""],
+  ["G211","Intubation",38,"Critical Care – Other Procedures",""],
+  ["Z341","Chest tube",70,"Critical Care – Other Procedures",""],
+  ["Z611","Catheter",9,"Critical Care – Other Procedures",""],
+  ["H100","Ultrasound",20,"Critical Care – Other Procedures",""],
+  ["E009","Patient < 1 year old",null,"Anaesthesia Modifiers",""],
+  ["E019","Patient 1–8 years old",null,"Anaesthesia Modifiers",""],
+  ["E007","Patient 70–79 years old",null,"Anaesthesia Modifiers",""],
+  ["E018","Patient > 80 years old",null,"Anaesthesia Modifiers",""],
+  ["E011","Prone position",null,"Anaesthesia Modifiers",""],
+  ["E024","Sitting position",null,"Anaesthesia Modifiers",""],
+  ["E022","ASA III",null,"Anaesthesia Modifiers",""],
+  ["E017","ASA IV",null,"Anaesthesia Modifiers",""],
+  ["E016","ASA V",null,"Anaesthesia Modifiers",""],
+  ["E020","ASA E (emergency)",null,"Anaesthesia Modifiers",""],
+  ["E010","BMI > 40",null,"Anaesthesia Modifiers",""],
+  ["E400","Eve/Wkd/Hol time qualifier",null,"Anaesthesia Modifiers",""],
+  ["E401","Overnight time qualifier",null,"Anaesthesia Modifiers",""],
+  ["E413","Procedure premium – Overnight",null,"Anaesthesia Modifiers",""],
+  ["E412","Procedure premium – Eve/Wkd/Hol",null,"Anaesthesia Modifiers",""],
+  ["Z154","Face suture 0–5 cm",39,"Sutures",""],
+  ["Z177","Face suture 5.1–10 cm",78,"Sutures",""],
+  ["Z190","Face suture 10.1–15 cm",111,"Sutures",""],
+  ["Z192","Face suture > 15 cm",170,"Sutures",""],
+  ["Z176","Body suture 0–5 cm",22,"Sutures",""],
+  ["Z175","Body suture 5.1–10 cm",39,"Sutures",""],
+  ["Z179","Body suture 10.1–15 cm",55,"Sutures",""],
+  ["Z191","Body suture > 15 cm",85,"Sutures",""],
+  ["R024","Acute earlobe repair",101,"Complex Lacerations",""],
+  ["Z189","Complex laceration zone 1",92,"Complex Lacerations",""],
+  ["Z187","Complex face laceration",92,"Complex Lacerations",""],
+  ["R606","Phalanx amputation repair",161,"Complex Lacerations",""],
+  ["Z188","Complex non-face laceration",92,"Complex Lacerations",""],
+  ["P036","Vaginal laceration repair",54,"Complex Lacerations",""],
+  ["R525","Muscle & skin repair",89,"Complex Lacerations",""],
+  ["R578","Extensor tendon repair",164,"Complex Lacerations",""],
+  ["J149C","U/S guided procedure",47,"Routine Procedures",""],
+  ["G269","Central line",31,"Routine Procedures",""],
+  ["G224","Nerve block – ring/small (provides analgesia > 4h)",16,"Routine Procedures",""],
+  ["G268","Arterial line",31,"Routine Procedures",""],
+  ["G060","Major nerve block (provides analgesia > 4h)",55,"Routine Procedures",""],
+  ["G061","Minor nerve block (provides analgesia > 4h)",30,"Routine Procedures",""],
+  ["G260","Major plexus block – 3-in-1 (provides analgesia > 4h)",80,"Routine Procedures",""],
+  ["G231","Dental block",34,"Routine Procedures",""],
+  ["G370","Knee aspiration",20,"Routine Procedures",""],
+  ["G328","Joint aspiration (not knee)",40,"Routine Procedures",""],
+  ["E446","U/S guided aspiration (addl)",30,"Routine Procedures",""],
+  ["Z080","Wound/ulcer debridement",20,"Routine Procedures",""],
+  ["Z331","Diagnostic thoracentesis",32,"Routine Procedures",""],
+  ["Z332","Therapeutic thoracentesis",59,"Routine Procedures",""],
+  ["Z590","Diagnostic paracentesis",31,"Routine Procedures",""],
+  ["Z591","Therapeutic paracentesis",58,"Routine Procedures",""],
+  ["G356","NG tube insertion",34,"Routine Procedures",""],
+  ["Z520","G tube change",11,"Routine Procedures",""],
+  ["Z538","Hernia reduction",25,"Routine Procedures",""],
+  ["Z543","Proctoscopy",9,"Routine Procedures",""],
+  ["Z110","Subungual hematoma drainage",17,"Routine Procedures",""],
+  ["Z608","Manual Foley declogging",59,"Routine Procedures",""],
+  ["Z128","Nail removal",33,"Routine Procedures",""],
+  ["A920","Misoprostol (including assessment)",161,"Routine Procedures",""],
+  ["Z130","Nail removal + cautery",63,"Routine Procedures",""],
+  ["S756","Removal of POC from OS",112,"Routine Procedures",""],
+  ["G313","EKG",4,"Routine Procedures",""],
+  ["Z804","Lumbar puncture",68,"Routine Procedures",""],
+  ["Z399","Endoscopy",93,"Routine Procedures",""],
+  ["L810","Description of CSF",25,"Routine Procedures",""],
+  ["G435","Tonometry",5,"Routine Procedures",""],
+  ["Z432","Exam under anaesthesia",54,"Routine Procedures",""],
+  ["Z756","Rectal disimpaction / fecal disimpaction",46,"Routine Procedures",""],
+  ["H264","ED pelvic exam with speculum",12,"Routine Procedures",""],
+  ["Z101","Abscess I&D – one abscess (LA)",28,"Incision & Drainage",""],
+  ["Z226","Elbow bursa I&D",97,"Incision & Drainage",""],
+  ["Z102","Abscess I&D – one abscess (GA)",49,"Incision & Drainage",""],
+  ["Z506","Oral abscess I&D",51,"Incision & Drainage",""],
+  ["Z173","Abscess I&D – two abscesses (LA)",33,"Incision & Drainage",""],
+  ["Z714","Bartholin's cyst I&D (LA)",17,"Incision & Drainage",""],
+  ["Z174","Abscess I&D – 3+ abscesses (LA)",45,"Incision & Drainage",""],
+  ["Z715","Bartholin's cyst I&D (GA)",51,"Incision & Drainage",""],
+  ["Z104","Perianal abscess I&D (LA)",33,"Incision & Drainage",""],
+  ["Z140","Breast abscess I&D (LA)",33,"Incision & Drainage",""],
+  ["Z105","Perianal abscess I&D (GA)",72,"Incision & Drainage",""],
+  ["Z740","Breast abscess I&D (GA)",75,"Incision & Drainage",""],
+  ["Z106","Pilonidal abscess I&D (LA)",49,"Incision & Drainage",""],
+  ["Z227","IM abscess/hematoma I&D",101,"Incision & Drainage",""],
+  ["Z107","Pilonidal abscess I&D (GA)",118,"Incision & Drainage",""],
+  ["Z510","Peritonsillar abscess (PTA) drainage",91,"Incision & Drainage",""],
+  ["Z545","Hemorrhoid I&D",25,"Incision & Drainage",""],
+  ["E318","Pinna hematoma drainage",92,"Incision & Drainage",""],
+  ["Z114","Foreign body removal – skin (LA)",25,"Foreign Bodies",""],
+  ["Z915","Foreign body removal – ear (LA)",11,"Foreign Bodies",""],
+  ["Z115","Foreign body removal – skin (GA)",89,"Foreign Bodies",""],
+  ["Z866","Foreign body removal – ear (GA)",51,"Foreign Bodies",""],
+  ["R517","Foreign body removal – muscle",108,"Foreign Bodies",""],
+  ["Z311","Foreign body removal – nose (LA)",11,"Foreign Bodies",""],
+  ["Z541","Foreign body removal – rectum (GA)",58,"Foreign Bodies",""],
+  ["Z312","Foreign body removal – nose (GA)",51,"Foreign Bodies",""],
+  ["Z847","Foreign body removal – eye (1 FB)",33,"Foreign Bodies",""],
+  ["Z848","Foreign body removal – eye (2 FBs)",45,"Foreign Bodies",""],
+  ["Z432A","Foreign body removal – vagina (GA)",54,"Foreign Bodies",""],
+  ["S547","Foreign body removal – urethra",171,"Foreign Bodies",""],
+  ["E023C","Foreign body removal – vagina with sedation",null,"Foreign Bodies",""],
+  ["G420","Ear syringe/irrigation",11,"ENT",""],
+  ["G403","Epley manoeuvre",21,"ENT",""],
+  ["Z315","Anterior nasal pack",15,"ENT",""],
+  ["Z321","Direct laryngoscopy",61,"ENT",""],
+  ["Z316","Posterior nasal pack",36,"ENT",""],
+  ["Z322","Direct laryngoscopy with FB removal",106,"ENT",""],
+  ["Z314","Nasal cautery",12,"ENT",""],
+  ["Z324","Indirect laryngoscopy with FB removal",45,"ENT",""],
+  ["F136","Nasal fracture reduction",102,"ENT",""],
+  ["D062","TMJ reduction",52,"ENT",""],
+  ["F004","Phalanx finger fracture – closed, no reduction",49,"Fractures – Upper Extremity",""],
+  ["F005","Phalanx finger fracture – closed, with reduction",99,"Fractures – Upper Extremity",""],
+  ["E558","Phalanx finger – each addl fracture with reduction",22,"Fractures – Upper Extremity",""],
+  ["F007","Phalanx finger fracture – open, with reduction",298,"Fractures – Upper Extremity",""],
+  ["F008","Metacarpal fracture – no reduction",49,"Fractures – Upper Extremity",""],
+  ["F009","Metacarpal fracture – with reduction",99,"Fractures – Upper Extremity",""],
+  ["F012","Bennett's fracture – no reduction",49,"Fractures – Upper Extremity",""],
+  ["F013","Bennett's fracture – with reduction",120,"Fractures – Upper Extremity",""],
+  ["F018","Scaphoid fracture – no reduction",49,"Fractures – Upper Extremity",""],
+  ["F102","Other carpal fracture – no reduction",49,"Fractures – Upper Extremity",""],
+  ["F016","Other carpal fracture – with reduction",115,"Fractures – Upper Extremity",""],
+  ["F027","Colles/Smith fracture – no reduction",68,"Fractures – Upper Extremity",""],
+  ["F028","Colles/Smith fracture – with reduction",109,"Fractures – Upper Extremity",""],
+  ["F046","Colles/Smith fracture – with reduction + sedation",149,"Fractures – Upper Extremity",""],
+  ["F031","Radius or ulna fracture – no reduction",81,"Fractures – Upper Extremity",""],
+  ["F032","Radius or ulna fracture – with reduction",118,"Fractures – Upper Extremity",""],
+  ["F034","Olecranon fracture – no reduction",126,"Fractures – Upper Extremity",""],
+  ["F035","Olecranon fracture – with reduction",129,"Fractures – Upper Extremity",""],
+  ["F029","Epicondyle fracture (no cast) – no reduction",68,"Fractures – Upper Extremity",""],
+  ["F037","Epicondyle fracture (no cast) – with reduction",126,"Fractures – Upper Extremity",""],
+  ["F042","Humeral shaft fracture (no cast) – no reduction",68,"Fractures – Upper Extremity",""],
+  ["F043","Humeral shaft fracture (no cast) – with reduction",148,"Fractures – Upper Extremity",""],
+  ["F053","Humeral neck fracture (no cast) – no reduction",68,"Fractures – Upper Extremity",""],
+  ["F054","Humeral neck fracture (no cast) – with reduction",134,"Fractures – Upper Extremity",""],
+  ["F134","Pelvis fracture with pelvic binder – with reduction",442,"Fractures – Lower Extremity",""],
+  ["F095","Femur fracture – with reduction",407,"Fractures – Lower Extremity",""],
+  ["F085","Patella fracture (no cast) – no reduction",68,"Fractures – Lower Extremity",""],
+  ["F078","Tibia ± fibula fracture – no reduction",116,"Fractures – Lower Extremity",""],
+  ["F079","Tibia ± fibula fracture – with reduction",180,"Fractures – Lower Extremity",""],
+  ["F082","Fibula fracture – no reduction",68,"Fractures – Lower Extremity",""],
+  ["F083","Fibula fracture – with reduction",101,"Fractures – Lower Extremity",""],
+  ["F074","Ankle fracture – no reduction",68,"Fractures – Lower Extremity",""],
+  ["F075","Ankle fracture – with reduction",145,"Fractures – Lower Extremity",""],
+  ["F104","Ankle fracture with plafond burst – with reduction",242,"Fractures – Lower Extremity",""],
+  ["F070","Calcaneus fracture – no reduction",97,"Fractures – Lower Extremity",""],
+  ["F071","Calcaneus fracture – with reduction",161,"Fractures – Lower Extremity",""],
+  ["F061","Metatarsal fracture (no cast) – no reduction",49,"Fractures – Lower Extremity",""],
+  ["F062","Metatarsal fracture (with cast) – no reduction",68,"Fractures – Lower Extremity",""],
+  ["F063","Metatarsal fracture (with cast) – with reduction",98,"Fractures – Lower Extremity",""],
+  ["F066","Tarsal bone fracture – no reduction",98,"Fractures – Lower Extremity",""],
+  ["F067","Tarsal bone fracture – with reduction",165,"Fractures – Lower Extremity",""],
+  ["F056","Phalanx toe fracture – no reduction",49,"Fractures – Lower Extremity",""],
+  ["F058","Phalanx toe fracture – with reduction",72,"Fractures – Lower Extremity",""],
+  ["E560","Phalanx toe – each addl, no reduction",12,"Fractures – Lower Extremity",""],
+  ["E561","Phalanx toe – each addl, with reduction",15,"Fractures – Lower Extremity",""],
+  ["D001","Phalanx finger dislocation reduction",58,"Dislocation Reductions",""],
+  ["E576","Phalanx finger – each addl dislocation",10,"Dislocation Reductions",""],
+  ["D003","Phalanx finger dislocation reduction – open",197,"Dislocation Reductions",""],
+  ["D004","Metacarpophalangeal dislocation reduction",58,"Dislocation Reductions",""],
+  ["D007","Carpal dislocation reduction",128,"Dislocation Reductions",""],
+  ["D012","Pulled elbow reduction",39,"Dislocation Reductions",""],
+  ["D009","Elbow dislocation reduction",84,"Dislocation Reductions",""],
+  ["D015","Shoulder dislocation reduction – no sedation",49,"Dislocation Reductions",""],
+  ["D016","Shoulder dislocation reduction – with sedation",111,"Dislocation Reductions",""],
+  ["D014","A/C or S/C joint – no reduction",68,"Dislocation Reductions",""],
+  ["D042","Hip dislocation reduction",268,"Dislocation Reductions",""],
+  ["D038","Knee dislocation reduction (no cast)",208,"Dislocation Reductions",""],
+  ["D040","Patella dislocation – no sedation, no cast",62,"Dislocation Reductions",""],
+  ["D031","Patella dislocation – with sedation, no cast",97,"Dislocation Reductions",""],
+  ["D035","Ankle dislocation reduction",111,"Dislocation Reductions",""],
+  ["D026","Tarso-metatarsal dislocation reduction (no cast)",148,"Dislocation Reductions",""],
+  ["D030","Metatarsophalangeal dislocation reduction",58,"Dislocation Reductions",""],
+  ["D027","Interphalangeal toe dislocation reduction",58,"Dislocation Reductions",""],
+  ["Z201","Finger splint/cast",10,"Splints & Casts",""],
+  ["Z202","Hand splint/cast",15,"Splints & Casts",""],
+  ["Z203","Arm/forearm/wrist splint/cast",24,"Splints & Casts",""],
+  ["Z213","Below-knee splint/cast",24,"Splints & Casts",""],
+  ["Z211","Long leg splint/cast",29,"Splints & Casts",""],
+  ["Z204","Cast removal",10,"Splints & Casts",""],
+];
+
+// Filter to D, Z, F codes only (deduplicated by code)
+const seen = new Set();
+const PROC_DATA = ALL_DATA.filter(r => {
+  const first = r[0][0].toUpperCase();
+  if ((first === 'D' || first === 'Z' || first === 'F') && !seen.has(r[0])) {
+    seen.add(r[0]);
+    return true;
+  }
+  return false;
+});
+
+const UNIT_RATE  = 15.96;
+const OMA_MULT   = 2.9;
+const PROC_BASE  = 6;   // base units for any sedation procedure code
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let selProc    = null;
+let timePrem   = 'none';
+let asaCode    = 'none';
+let asaUnits   = 0;
+let asaE       = false;
+let bariatric  = false;
+let callInFee  = 0;
+let callInType = 'none';
+
+// ── Search ────────────────────────────────────────────────────────────────────
+const qEl  = document.getElementById('proc-query');
+const drop = document.getElementById('proc-drop');
+let focusIdx = -1;
+
+function score(r, q) {
+  const h = (r[0] + ' ' + r[1] + ' ' + (r[3]||'')).toLowerCase();
+  const n = q.toLowerCase().trim();
+  if (!n) return 0;
+  if (h.includes(n)) return 100 + (n.length / h.length) * 50;
+  const words = n.split(/\s+/).filter(Boolean);
+  let hits = 0;
+  for (const w of words) if (h.includes(w)) hits++;
+  if (hits === words.length) return 60 + hits * 5;
+  if (hits > 0) return 30 + hits * 10;
+  return 0;
+}
+
+qEl.addEventListener('input', () => {
+  const q = qEl.value.trim();
+  if (!q) { drop.classList.remove('open'); return; }
+  const results = PROC_DATA
+    .map(r => ({ r, s: score(r, q) }))
+    .filter(x => x.s > 0)
+    .sort((a, b) => b.s - a.s)
+    .slice(0, 20)
+    .map(x => x.r);
+  if (!results.length) { drop.classList.remove('open'); return; }
+  drop.innerHTML = results.map(r =>
+    `<div class="proc-item" onmousedown="pickProc(${PROC_DATA.indexOf(r)})">
+      <span class="pi-code">${r[0]}</span>
+      <span class="pi-desc">${r[1]}</span>
+      <span class="pi-cat">${r[3]}</span>
+    </div>`
+  ).join('');
+  focusIdx = -1;
+  drop.classList.add('open');
+});
+
+qEl.addEventListener('keydown', e => {
+  const items = drop.querySelectorAll('.proc-item');
+  if (!items.length) return;
+  if (e.key === 'ArrowDown') { e.preventDefault(); focusIdx = Math.min(focusIdx+1, items.length-1); updateFocus(items); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); focusIdx = Math.max(focusIdx-1, 0); updateFocus(items); }
+  else if (e.key === 'Enter' && focusIdx >= 0) { e.preventDefault(); items[focusIdx].dispatchEvent(new MouseEvent('mousedown')); }
+  else if (e.key === 'Escape') { drop.classList.remove('open'); }
+});
+
+function updateFocus(items) {
+  items.forEach((el, i) => el.classList.toggle('focused', i === focusIdx));
+  if (focusIdx >= 0) items[focusIdx].scrollIntoView({ block: 'nearest' });
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.proc-search-wrap')) drop.classList.remove('open');
+});
+
+function pickProc(idx) {
+  selProc = PROC_DATA[idx];
+  drop.classList.remove('open');
+  document.getElementById('sp-code').textContent = selProc[0];
+  document.getElementById('sp-bill').textContent = selProc[0] + 'C';
+  document.getElementById('sp-desc').textContent = selProc[1];
+  document.getElementById('proc-selected').style.display = '';
+  document.getElementById('proc-search-area').style.display = 'none';
+  recalc();
+}
+function clearProc() {
+  selProc = null;
+  document.getElementById('proc-selected').style.display = 'none';
+  document.getElementById('proc-search-area').style.display = '';
+  qEl.value = ''; qEl.focus();
+  recalc();
+}
+
+// ── Selectors ─────────────────────────────────────────────────────────────────
+function togglePin(btn) {
+  const isPinned = btn.classList.contains('pinned');
+  document.querySelectorAll('.asa-info.pinned').forEach(b => b.classList.remove('pinned'));
+  if (!isPinned) btn.classList.add('pinned');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.asa-info')) {
+    document.querySelectorAll('.asa-info.pinned').forEach(b => b.classList.remove('pinned'));
+  }
+});
+
+function selTimePrem(el, val) {
+  document.querySelectorAll('#time-prem-group .radio-opt').forEach(e => e.classList.remove('sel-time'));
+  el.classList.add('sel-time');
+  timePrem = val;
+  recalc();
+}
+function selASA(el, code, units) {
+  document.querySelectorAll('#asa-group .radio-opt').forEach(e => e.classList.remove('sel-asa'));
+  el.classList.add('sel-asa');
+  asaCode = code; asaUnits = units;
+  recalc();
+}
+function toggleASAE(el) {
+  asaE = !asaE;
+  el.classList.toggle('sel-asa', asaE);
+  document.getElementById('asaE-dot').style.background = asaE ? '#276749' : '';
+  document.getElementById('asaE-dot').style.borderColor = asaE ? '#276749' : '';
+  recalc();
+}
+function toggleBari(el) {
+  bariatric = !bariatric;
+  el.classList.toggle('sel-asa', bariatric);
+  document.getElementById('bari-dot').style.background = bariatric ? '#276749' : '';
+  document.getElementById('bari-dot').style.borderColor = bariatric ? '#276749' : '';
+  recalc();
+}
+function selCallIn(el, type, fee) {
+  document.querySelectorAll('#callin-group .radio-opt').forEach(e => e.classList.remove('sel-time'));
+  el.classList.add('sel-time');
+  callInType = type; callInFee = fee;
+  recalc();
+}
+
+document.getElementById('time-units').addEventListener('input', recalc);
+
+// ── Calculation ───────────────────────────────────────────────────────────────
+function recalc() {
+  const T = Math.max(1, parseInt(document.getElementById('time-units').value) || 1);
+  document.getElementById('duration-text').textContent = (T * 15) + ' min';
+
+  if (!selProc) {
+    document.getElementById('results-card').classList.remove('visible');
+    return;
+  }
+
+  const ASA       = asaUnits;
+  const ASA_E     = asaE ? 4 : 0;
+  const BARI      = bariatric ? 2 : 0;
+  const totalASA  = ASA + ASA_E + BARI;
+  const premUnits = timePrem !== 'none' ? (T + totalASA) : 0;
+  const total     = PROC_BASE + T + totalASA + premUnits;
+  const ohipFee   = total * UNIT_RATE;
+  const outside   = ohipFee * OMA_MULT;
+
+  const rows = [];
+  rows.push({ code: selProc[0] + 'C', desc: 'Sedation for: ' + selProc[1] });
+  rows.push({ code: 'Time (' + T + 'u)', desc: T + ' unit' + (T !== 1 ? 's' : '') + ' × 15 min = ' + (T * 15) + ' min' });
+  if (asaCode !== 'none') {
+    const label = { E022C:'ASA III', E017C:'ASA IV', E016C:'ASA V' }[asaCode];
+    rows.push({ code: asaCode, desc: label + ' modifier' });
+  }
+  if (asaE) {
+    rows.push({ code: 'E020C', desc: 'ASA E — Emergency modifier' });
+  }
+  if (bariatric) {
+    rows.push({ code: 'E010C', desc: 'Bariatric — BMI > 40' });
+  }
+  if (timePrem !== 'none') {
+    const label = timePrem === 'E400C' ? 'Evening / Weekend premium' : 'Night premium';
+    rows.push({ code: timePrem, desc: label });
+  }
+  if (callInFee > 0) {
+    const ciLabel = callInType === 'eve' ? 'Evening call-in premium' : 'Night call-in premium';
+    rows.push({ code: 'E998C', desc: ciLabel, isCallIn: true });
+  }
+
+  const totalOhip = ohipFee + callInFee;
+
+  document.getElementById('res-body').innerHTML = rows.map(r =>
+    `<tr class="${r.isCallIn ? 'row-callin' : ''}">
+      <td class="td-code">${r.code}</td>
+      <td>${r.desc}</td>
+    </tr>`
+  ).join('');
+
+  document.getElementById('res-ohip').textContent = '$' + totalOhip.toFixed(2);
+  document.getElementById('results-card').classList.add('visible');
+}
+</script>
+</body>
+</html>
