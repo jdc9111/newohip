@@ -302,6 +302,7 @@
   .dc-btn-pdf:hover  { background: #1e4f37; }
   .dc-btn-copy { background: #1F4E79; }
   .dc-btn-copy:hover { background: #163d5e; }
+  #copy-note-btn:hover { background: #2d3748 !important; }
   .dc-btn svg { flex-shrink: 0; }
 
   footer {
@@ -554,7 +555,7 @@
       <div class="step-title">Bariatric Modifier <span class="step-subtitle">optional</span></div>
     </div>
     <div class="step-body">
-      <div class="radio-grid">
+      <div class="radio-grid" style="align-items:center;">
         <div class="radio-opt" id="bari-toggle" onclick="toggleBari(this)" style="cursor:pointer;">
           <div class="rdot" id="bari-dot"></div>
           <div>
@@ -562,10 +563,16 @@
             <div class="rl-code">E010C</div>
           </div>
         </div>
+        <button onclick="openBMICalc()" id="bmi-calc-btn"
+          style="padding:8px 14px; font-size:0.82rem; font-weight:600; border:2px solid #BDD7EE;
+                 border-radius:8px; background:white; color:#1F4E79; cursor:pointer;
+                 transition:all 0.15s; white-space:nowrap; flex-shrink:0;">
+          ⚖️ Calculate BMI
+        </button>
       </div>
 
-      <!-- Inline BMI calculator -->
-      <div class="bmi-calc">
+      <!-- Inline BMI calculator (hidden until button clicked) -->
+      <div class="bmi-calc" id="bmi-calc-panel" style="display:none;">
         <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#718096; margin-bottom:10px;">BMI Calculator</div>
 
         <!-- Height -->
@@ -577,11 +584,11 @@
           </div>
           <div class="bmi-row">
             <div id="ht-imperial-fields" class="bmi-row" style="margin:0; gap:8px;">
-              <div class="bmi-field"><label>ft</label><input class="bmi-input" id="bmi-ft" type="number" min="3" max="8" placeholder="5" oninput="calcBMI()"></div>
-              <div class="bmi-field"><label>in</label><input class="bmi-input" id="bmi-in" type="number" min="0" max="11" placeholder="10" oninput="calcBMI()"></div>
+              <div class="bmi-field"><label>ft</label><input class="bmi-input" id="bmi-ft" type="number" min="3" max="8" placeholder="5" oninput="calcBMI()" onchange="calcBMI()"></div>
+              <div class="bmi-field"><label>in</label><input class="bmi-input" id="bmi-in" type="number" min="0" max="11" placeholder="10" oninput="calcBMI()" onchange="calcBMI()"></div>
             </div>
             <div id="ht-metric-fields" style="display:none;">
-              <div class="bmi-field"><label>cm</label><input class="bmi-input" id="bmi-cm" type="number" min="100" max="250" placeholder="178" oninput="calcBMI()"></div>
+              <div class="bmi-field"><label>cm</label><input class="bmi-input" id="bmi-cm" type="number" min="100" max="250" placeholder="178" oninput="calcBMI()" onchange="calcBMI()"></div>
             </div>
           </div>
         </div>
@@ -594,7 +601,7 @@
             <button class="bmi-unit-btn"        id="wt-kg-btn"  onclick="setBmiWtUnit('kg')">kg</button>
           </div>
           <div class="bmi-row" style="margin-top:6px;">
-            <div class="bmi-field"><label id="wt-label">lbs</label><input class="bmi-input" id="bmi-wt" type="number" min="30" max="700" placeholder="220" oninput="calcBMI()" style="width:90px;"></div>
+            <div class="bmi-field"><label id="wt-label">lbs</label><input class="bmi-input" id="bmi-wt" type="number" min="30" max="700" placeholder="220" style="width:90px;" oninput="calcBMI()" onchange="calcBMI()"></div>
           </div>
         </div>
 
@@ -649,6 +656,20 @@
       </svg>
       <div style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
         <span id="copy-dc-label">Copy Discharge Instructions</span>
+        <span style="font-size:0.7rem; font-weight:500; opacity:0.8;">Then Ctrl+V to paste in EMR</span>
+      </div>
+    </button>
+  </div>
+
+  <!-- EMR billing note -->
+  <div class="dc-btns" style="margin-top:8px;">
+    <button class="dc-btn" id="copy-note-btn" onclick="copyEMRNote()"
+      style="background:#4a5568; flex:1; min-width:0;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+      </svg>
+      <div style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
+        <span id="copy-note-label">Copy Sedation Note to EMR</span>
         <span style="font-size:0.7rem; font-weight:500; opacity:0.8;">Then Ctrl+V to paste in EMR</span>
       </div>
     </button>
@@ -1036,6 +1057,17 @@ function toggleASAE(el) {
 let bmiHtUnit = 'imperial'; // 'imperial' | 'metric'
 let bmiWtUnit = 'lbs';      // 'lbs' | 'kg'
 
+function openBMICalc() {
+  const panel = document.getElementById('bmi-calc-panel');
+  panel.style.display = 'block';
+  document.getElementById('bmi-calc-btn').style.display = 'none';
+  // Seed with placeholder defaults and run initial calculation
+  document.getElementById('bmi-ft').value = 5;
+  document.getElementById('bmi-in').value = 10;
+  document.getElementById('bmi-wt').value = 220;
+  calcBMI();
+}
+
 function setBmiHtUnit(unit) {
   bmiHtUnit = unit;
   document.getElementById('ht-ft-btn').classList.toggle('active', unit === 'imperial');
@@ -1055,18 +1087,20 @@ function calcBMI() {
   // Height → metres
   let heightM;
   if (bmiHtUnit === 'imperial') {
-    const ft = parseFloat(document.getElementById('bmi-ft').value) || 0;
-    const inches = parseFloat(document.getElementById('bmi-in').value) || 0;
-    if (!ft && !inches) { hideBMI(); return; }
-    heightM = (ft * 12 + inches) * 0.0254;
+    const ft     = parseFloat(document.getElementById('bmi-ft').value);
+    const inches = parseFloat(document.getElementById('bmi-in').value);
+    const ftVal  = isNaN(ft)     ? 0 : ft;
+    const inVal  = isNaN(inches) ? 0 : inches;
+    if (ftVal === 0 && inVal === 0) { hideBMI(); return; }
+    heightM = (ftVal * 12 + inVal) * 0.0254;
   } else {
-    const cm = parseFloat(document.getElementById('bmi-cm').value) || 0;
-    if (!cm) { hideBMI(); return; }
+    const cm = parseFloat(document.getElementById('bmi-cm').value);
+    if (isNaN(cm) || cm <= 0) { hideBMI(); return; }
     heightM = cm / 100;
   }
   // Weight → kg
-  const wtRaw = parseFloat(document.getElementById('bmi-wt').value) || 0;
-  if (!wtRaw || heightM <= 0) { hideBMI(); return; }
+  const wtRaw = parseFloat(document.getElementById('bmi-wt').value);
+  if (isNaN(wtRaw) || wtRaw <= 0 || heightM <= 0) { hideBMI(); return; }
   const weightKg = bmiWtUnit === 'lbs' ? wtRaw * 0.453592 : wtRaw;
   const bmi = weightKg / (heightM * heightM);
 
@@ -1086,6 +1120,13 @@ function calcBMI() {
 function hideBMI() {
   document.getElementById('bmi-result').style.display = 'none';
 }
+
+// Attach BMI listeners for both 'input' (keystrokes) and 'change' (spinners, tab-out, paste)
+['bmi-ft','bmi-in','bmi-cm','bmi-wt'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('input',  calcBMI);
+  el.addEventListener('change', calcBMI);
+});
 
 function setBari(enabled) {
   bariatric = enabled;
@@ -1215,6 +1256,83 @@ function recalc() {
 
   document.getElementById('res-ohip').textContent = '$' + totalOhip.toFixed(2);
   document.getElementById('results-card').classList.add('visible');
+}
+
+// ── EMR sedation note ─────────────────────────────────────────────────────────
+function copyEMRNote() {
+  if (!selProc) {
+    alert('Please select a procedure first.');
+    return;
+  }
+
+  const lines = [];
+  lines.push('PROCEDURAL SEDATION NOTE');
+  lines.push('');
+
+  // Procedure
+  lines.push('Indication / Procedure: ' + selProc[1]);
+
+  // Time in / out
+  if (timeMode === 'time') {
+    const sv = document.getElementById('start-time').value;
+    const ev = document.getElementById('end-time').value;
+    if (sv && ev) lines.push('Time in: ' + sv + '  |  Time out: ' + ev);
+  }
+
+  lines.push('');
+
+  // ASA classification
+  const asaLabels = { E022C: 'ASA III', E017C: 'ASA IV', E016C: 'ASA V' };
+  const asaClassLabel = asaCode !== 'none' ? asaLabels[asaCode] : 'ASA I/II';
+  const asaELabel = asaE ? ' + Emergency (ASA E)' : '';
+  lines.push('ASA Status: ' + asaClassLabel + asaELabel);
+
+  // Call-in
+  if (callInType === 'eve') {
+    lines.push('');
+    lines.push('I was called in for this procedure in the evening.');
+  } else if (callInType === 'night') {
+    lines.push('');
+    lines.push('I was called in for this procedure after midnight.');
+  }
+
+  // BMI / bariatric
+  if (bariatric) {
+    lines.push('');
+    const bmiVal = document.getElementById('bmi-val').textContent;
+    if (bmiVal && bmiVal !== '—') {
+      lines.push('BMI: ' + bmiVal + ' (> 40)');
+    } else {
+      lines.push('BMI > 40');
+    }
+    // Height
+    if (bmiHtUnit === 'imperial') {
+      const ft = document.getElementById('bmi-ft').value;
+      const inches = document.getElementById('bmi-in').value;
+      if (ft || inches) lines.push('Height: ' + (ft || '0') + ' ft ' + (inches || '0') + ' in');
+    } else {
+      const cm = document.getElementById('bmi-cm').value;
+      if (cm) lines.push('Height: ' + cm + ' cm');
+    }
+    // Weight
+    const wt = document.getElementById('bmi-wt').value;
+    if (wt) lines.push('Weight: ' + wt + ' ' + bmiWtUnit);
+  }
+
+  const noteText = lines.join('\n');
+  const label = document.getElementById('copy-note-label');
+
+  navigator.clipboard.writeText(noteText).then(() => {
+    label.textContent = '✓ Copied — Ctrl+V to paste';
+    setTimeout(() => { label.textContent = 'Copy Sedation Note to EMR'; }, 2500);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = noteText; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    label.textContent = '✓ Copied — Ctrl+V to paste';
+    setTimeout(() => { label.textContent = 'Copy Sedation Note to EMR'; }, 2500);
+  });
 }
 
 // ── Discharge instructions copy ───────────────────────────────────────────────
