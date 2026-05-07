@@ -173,6 +173,35 @@
   .time-calc-pill strong { color: #1F4E79; }
   .time-calc-pill.error { color: #c53030; background: #fff5f5; border-color: #feb2b2; }
 
+  /* ── BMI calculator ── */
+  .bmi-calc { margin-top: 14px; padding: 14px 16px; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 10px; }
+  .bmi-unit-toggle { display: flex; margin-bottom: 10px; width: fit-content; }
+  .bmi-unit-btn {
+    padding: 4px 12px; font-size: 0.75rem; font-weight: 600;
+    border: 1.5px solid #BDD7EE; background: white; color: #718096;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .bmi-unit-btn:first-child { border-radius: 5px 0 0 5px; }
+  .bmi-unit-btn:last-child  { border-radius: 0 5px 5px 0; border-left: none; }
+  .bmi-unit-btn.active { background: #1F4E79; border-color: #1F4E79; color: white; }
+  .bmi-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 10px; }
+  .bmi-field { display: flex; flex-direction: column; gap: 4px; }
+  .bmi-field label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #718096; }
+  .bmi-input {
+    width: 80px; padding: 7px 10px; font-size: 1rem; font-weight: 700; color: #1F4E79;
+    border: 2px solid #BDD7EE; border-radius: 7px; outline: none;
+    text-align: center; transition: border-color 0.15s; background: white;
+  }
+  .bmi-input:focus { border-color: #1F4E79; }
+  .bmi-result {
+    display: flex; align-items: center; gap:10px; padding: 8px 12px;
+    border-radius: 7px; font-size: 0.88rem; font-weight: 600;
+    background: #ebf3fb; color: #2d3748; border: 1.5px solid #BDD7EE;
+  }
+  .bmi-result.over40 { background: #fff3cd; border-color: #f59e0b; color: #92400e; }
+  .bmi-val { font-size: 1.3rem; font-weight: 800; color: #1F4E79; margin-right: 4px; }
+  .bmi-result.over40 .bmi-val { color: #b45309; }
+
   /* ── Radio options ── */
   .radio-grid { display: flex; flex-wrap: wrap; gap: 8px; }
   .radio-opt {
@@ -530,8 +559,49 @@
           <div class="rdot" id="bari-dot"></div>
           <div>
             <div class="rl-main">BMI &gt; 40 <span class="rl-units">+2 units</span></div>
-            <div class="rl-code">E010C &nbsp;·&nbsp; <a href="https://www.mdcalc.com/calc/29/body-mass-index-bmi-body-surface-area-bsa#why-use" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:#1F4E79; text-decoration:underline;">BMI Calculator ↗</a></div>
+            <div class="rl-code">E010C</div>
           </div>
+        </div>
+      </div>
+
+      <!-- Inline BMI calculator -->
+      <div class="bmi-calc">
+        <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#718096; margin-bottom:10px;">BMI Calculator</div>
+
+        <!-- Height -->
+        <div style="margin-bottom:8px;">
+          <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#718096; margin-bottom:6px;">Height</div>
+          <div class="bmi-unit-toggle">
+            <button class="bmi-unit-btn active" id="ht-ft-btn"  onclick="setBmiHtUnit('imperial')">ft / in</button>
+            <button class="bmi-unit-btn"        id="ht-cm-btn"  onclick="setBmiHtUnit('metric')">cm</button>
+          </div>
+          <div class="bmi-row">
+            <div id="ht-imperial-fields" class="bmi-row" style="margin:0; gap:8px;">
+              <div class="bmi-field"><label>ft</label><input class="bmi-input" id="bmi-ft" type="number" min="3" max="8" placeholder="5" oninput="calcBMI()"></div>
+              <div class="bmi-field"><label>in</label><input class="bmi-input" id="bmi-in" type="number" min="0" max="11" placeholder="10" oninput="calcBMI()"></div>
+            </div>
+            <div id="ht-metric-fields" style="display:none;">
+              <div class="bmi-field"><label>cm</label><input class="bmi-input" id="bmi-cm" type="number" min="100" max="250" placeholder="178" oninput="calcBMI()"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weight -->
+        <div style="margin-bottom:10px;">
+          <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#718096; margin-bottom:6px;">Weight</div>
+          <div class="bmi-unit-toggle">
+            <button class="bmi-unit-btn active" id="wt-lbs-btn" onclick="setBmiWtUnit('lbs')">lbs</button>
+            <button class="bmi-unit-btn"        id="wt-kg-btn"  onclick="setBmiWtUnit('kg')">kg</button>
+          </div>
+          <div class="bmi-row" style="margin-top:6px;">
+            <div class="bmi-field"><label id="wt-label">lbs</label><input class="bmi-input" id="bmi-wt" type="number" min="30" max="700" placeholder="220" oninput="calcBMI()" style="width:90px;"></div>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div id="bmi-result" style="display:none" class="bmi-result">
+          <span class="bmi-val" id="bmi-val">—</span>
+          <span id="bmi-msg"></span>
         </div>
       </div>
     </div>
@@ -714,6 +784,7 @@ const ALL_DATA = [
   ["L810","Description of CSF",25,"Routine Procedures",""],
   ["G435","Tonometry",5,"Routine Procedures",""],
   ["Z432","Exam under anaesthesia",54,"Routine Procedures",""],
+  ["G552","IUD removal (without sedation)",20,"Routine Procedures","Removal of intrauterine contraceptive device without sedation"],
   ["Z735","IUD removal / exam ± insertion under GA",56.70,"Routine Procedures","Exam and/or dilatation incl insertion and/or removal of IUD under general anaesthetic as sole procedure"],
   ["Z756","Rectal disimpaction / fecal disimpaction",46,"Routine Procedures",""],
   ["H264","ED pelvic exam with speculum",12,"Routine Procedures",""],
@@ -961,13 +1032,71 @@ function toggleASAE(el) {
   document.getElementById('asaE-dot').style.borderColor = asaE ? '#276749' : '';
   recalc();
 }
-function toggleBari(el) {
-  bariatric = !bariatric;
-  el.classList.toggle('sel-asa', bariatric);
-  document.getElementById('bari-dot').style.background = bariatric ? '#276749' : '';
-  document.getElementById('bari-dot').style.borderColor = bariatric ? '#276749' : '';
+// ── BMI calculator ────────────────────────────────────────────────────────────
+let bmiHtUnit = 'imperial'; // 'imperial' | 'metric'
+let bmiWtUnit = 'lbs';      // 'lbs' | 'kg'
+
+function setBmiHtUnit(unit) {
+  bmiHtUnit = unit;
+  document.getElementById('ht-ft-btn').classList.toggle('active', unit === 'imperial');
+  document.getElementById('ht-cm-btn').classList.toggle('active', unit === 'metric');
+  document.getElementById('ht-imperial-fields').style.display = unit === 'imperial' ? '' : 'none';
+  document.getElementById('ht-metric-fields').style.display   = unit === 'metric'   ? '' : 'none';
+  calcBMI();
+}
+function setBmiWtUnit(unit) {
+  bmiWtUnit = unit;
+  document.getElementById('wt-lbs-btn').classList.toggle('active', unit === 'lbs');
+  document.getElementById('wt-kg-btn').classList.toggle('active',  unit === 'kg');
+  document.getElementById('wt-label').textContent = unit;
+  calcBMI();
+}
+function calcBMI() {
+  // Height → metres
+  let heightM;
+  if (bmiHtUnit === 'imperial') {
+    const ft = parseFloat(document.getElementById('bmi-ft').value) || 0;
+    const inches = parseFloat(document.getElementById('bmi-in').value) || 0;
+    if (!ft && !inches) { hideBMI(); return; }
+    heightM = (ft * 12 + inches) * 0.0254;
+  } else {
+    const cm = parseFloat(document.getElementById('bmi-cm').value) || 0;
+    if (!cm) { hideBMI(); return; }
+    heightM = cm / 100;
+  }
+  // Weight → kg
+  const wtRaw = parseFloat(document.getElementById('bmi-wt').value) || 0;
+  if (!wtRaw || heightM <= 0) { hideBMI(); return; }
+  const weightKg = bmiWtUnit === 'lbs' ? wtRaw * 0.453592 : wtRaw;
+  const bmi = weightKg / (heightM * heightM);
+
+  const resultEl = document.getElementById('bmi-result');
+  document.getElementById('bmi-val').textContent = bmi.toFixed(1);
+  resultEl.style.display = 'flex';
+  if (bmi > 40) {
+    resultEl.className = 'bmi-result over40';
+    document.getElementById('bmi-msg').textContent = 'BMI > 40 — E010C applies';
+    setBari(true);
+  } else {
+    resultEl.className = 'bmi-result';
+    document.getElementById('bmi-msg').textContent = 'BMI ≤ 40 — E010C not required';
+    setBari(false);
+  }
+}
+function hideBMI() {
+  document.getElementById('bmi-result').style.display = 'none';
+}
+
+function setBari(enabled) {
+  bariatric = enabled;
+  const el  = document.getElementById('bari-toggle');
+  const dot = document.getElementById('bari-dot');
+  el.classList.toggle('sel-asa', enabled);
+  dot.style.background  = enabled ? '#276749' : '';
+  dot.style.borderColor = enabled ? '#276749' : '';
   recalc();
 }
+function toggleBari(el) { setBari(!bariatric); }
 function selCallIn(el, type, fee) {
   document.querySelectorAll('#callin-group .radio-opt').forEach(e => e.classList.remove('sel-time'));
   el.classList.add('sel-time');
