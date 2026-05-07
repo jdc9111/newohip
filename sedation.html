@@ -132,6 +132,17 @@
   .search-hint { font-size: 0.72rem; color: #a0aec0; margin-top: 6px; }
 
   /* ── Time units ── */
+  .time-mode-bar { display: flex; margin-bottom: 14px; }
+  .tmode-btn {
+    flex: 1; padding: 7px 12px; font-size: 0.8rem; font-weight: 600;
+    border: 2px solid #BDD7EE; background: white; color: #718096;
+    cursor: pointer; transition: all 0.15s; line-height: 1;
+  }
+  .tmode-btn:first-child { border-radius: 6px 0 0 6px; }
+  .tmode-btn:last-child  { border-radius: 0 6px 6px 0; border-left: none; }
+  .tmode-btn.active { background: #1F4E79; border-color: #1F4E79; color: white; }
+  .tmode-btn:not(.active):hover { background: #ebf3fb; color: #1F4E79; }
+
   .units-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
   #time-units {
     width: 80px; padding: 8px 12px; font-size: 1.15rem; font-weight: 700;
@@ -145,6 +156,22 @@
     border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px;
   }
   .duration-pill strong { color: #1F4E79; }
+
+  .time-inputs-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 10px; }
+  .time-field { display: flex; flex-direction: column; gap: 5px; }
+  .time-field label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #718096; }
+  input[type="time"].time-pick {
+    padding: 8px 12px; font-size: 1.1rem; font-weight: 700; color: #1F4E79;
+    border: 2px solid #BDD7EE; border-radius: 8px; outline: none;
+    transition: border-color 0.15s; background: #fafcff;
+  }
+  input[type="time"].time-pick:focus { border-color: #1F4E79; background: white; }
+  .time-calc-pill {
+    font-size: 0.82rem; color: #718096; background: #f7fafc;
+    border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px;
+  }
+  .time-calc-pill strong { color: #1F4E79; }
+  .time-calc-pill.error { color: #c53030; background: #fff5f5; border-color: #feb2b2; }
 
   /* ── Radio options ── */
   .radio-grid { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -234,6 +261,20 @@
   .fb-value.green { color: #276749; font-size: 1.35rem; }
   .fb-sub { font-size: 0.68rem; color: #a0aec0; margin-top: 3px; }
 
+  .dc-btns { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+  .dc-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    flex: 1; min-width: 200px; padding: 14px 20px;
+    color: white; border: none; border-radius: 12px;
+    font-size: 0.92rem; font-weight: 700; cursor: pointer; text-decoration: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10); transition: background 0.15s;
+  }
+  .dc-btn-pdf  { background: #276749; }
+  .dc-btn-pdf:hover  { background: #1e4f37; }
+  .dc-btn-copy { background: #1F4E79; }
+  .dc-btn-copy:hover { background: #163d5e; }
+  .dc-btn svg { flex-shrink: 0; }
+
   footer {
     position: fixed; bottom: 0; left: 0; right: 0;
     text-align: center; padding: 8px 24px; font-size: 0.78rem;
@@ -293,10 +334,31 @@
       <div class="step-title">Anaesthesia Time <span class="step-subtitle">1 unit = 15 min</span></div>
     </div>
     <div class="step-body">
-      <div class="units-row">
+      <div class="time-mode-bar">
+        <button class="tmode-btn active" id="mode-units" onclick="setTimeMode('units')">Enter units</button>
+        <button class="tmode-btn"        id="mode-time"  onclick="setTimeMode('time')">Start / End time</button>
+      </div>
+
+      <!-- Direct unit input -->
+      <div id="panel-units" class="units-row">
         <input id="time-units" type="number" min="1" max="40" value="1">
         <span class="units-label">units</span>
         <div class="duration-pill">Duration: <strong id="duration-text">15 min</strong></div>
+      </div>
+
+      <!-- Time picker -->
+      <div id="panel-time" style="display:none">
+        <div class="time-inputs-row">
+          <div class="time-field">
+            <label>Start</label>
+            <input type="time" id="start-time" class="time-pick">
+          </div>
+          <div class="time-field">
+            <label>End</label>
+            <input type="time" id="end-time" class="time-pick">
+          </div>
+        </div>
+        <div class="time-calc-pill" id="time-calc-pill">Enter start and end time above</div>
       </div>
     </div>
   </div>
@@ -468,7 +530,7 @@
           <div class="rdot" id="bari-dot"></div>
           <div>
             <div class="rl-main">BMI &gt; 40 <span class="rl-units">+2 units</span></div>
-            <div class="rl-code">E010C</div>
+            <div class="rl-code">E010C &nbsp;·&nbsp; <a href="https://www.mdcalc.com/calc/29/body-mass-index-bmi-body-surface-area-bsa#why-use" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:#1F4E79; text-decoration:underline;">BMI Calculator ↗</a></div>
           </div>
         </div>
       </div>
@@ -499,6 +561,27 @@
     <div style="padding: 10px 16px; font-size: 0.75rem; color: #718096; border-top: 1px solid #edf2f7; background: #f7fafc; border-radius: 0 0 12px 12px;">
       ℹ️ Age premiums (E007, E009, E018, E019) are applied automatically by OHIP and do not need to be billed separately.
     </div>
+  </div>
+
+  <!-- Patient discharge instructions -->
+  <div class="dc-btns">
+    <a href="sedation-dc-instructions.pdf" target="_blank" class="dc-btn dc-btn-pdf">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>
+      </svg>
+      Patient Discharge Instructions
+    </a>
+    <button class="dc-btn dc-btn-copy" id="copy-dc-btn" onclick="copyDCInstructions()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      <div style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">
+        <span id="copy-dc-label">Copy Discharge Instructions</span>
+        <span style="font-size:0.7rem; font-weight:500; opacity:0.8;">Then Ctrl+V to paste in EMR</span>
+      </div>
+    </button>
   </div>
 
 </main>
@@ -546,7 +629,7 @@ const ALL_DATA = [
   ["H989","On-call addl patient – Wkd/Hol",75,"On-Call","Max 10"],
   ["H987","On-call addl patient – Night",100,"On-Call","Unlimited"],
   ["K005","Mental health counselling",63,"Counselling / Forms","Min 20 min; document mental health dx + times"],
-  ["K028","STD/Needlestick management counselling",63,"Counselling / Forms","Min 20 min; document times"],
+  ["K028","Needlestick or STI counselling/treatment",80,"Counselling / Forms","Per 30 min; document times. Fee updated April 1 2026"],
   ["K015","Counsel family re: death/catastrophe",63,"Counselling / Forms","Min 20 min; document times"],
   ["K623","Form 1 – psychiatric assessment",105,"Counselling / Forms",""],
   ["K070","Homecare application",32,"Counselling / Forms",""],
@@ -565,6 +648,7 @@ const ALL_DATA = [
   ["G269","Central line",31,"Critical Care – Other Procedures",""],
   ["G211","Intubation",38,"Critical Care – Other Procedures",""],
   ["Z341","Chest tube",70,"Critical Care – Other Procedures",""],
+  ["Z363","Chest tube removal (thoracostomy tube)",22.60,"Critical Care – Other Procedures","Incl wound closure; fee as of April 1 2026"],
   ["Z611","Catheter",9,"Critical Care – Other Procedures",""],
   ["H100","Ultrasound",20,"Critical Care – Other Procedures",""],
   ["E009","Patient < 1 year old",null,"Anaesthesia Modifiers",""],
@@ -630,6 +714,7 @@ const ALL_DATA = [
   ["L810","Description of CSF",25,"Routine Procedures",""],
   ["G435","Tonometry",5,"Routine Procedures",""],
   ["Z432","Exam under anaesthesia",54,"Routine Procedures",""],
+  ["Z735","IUD removal / exam ± insertion under GA",56.70,"Routine Procedures","Exam and/or dilatation incl insertion and/or removal of IUD under general anaesthetic as sole procedure"],
   ["Z756","Rectal disimpaction / fecal disimpaction",46,"Routine Procedures",""],
   ["H264","ED pelvic exam with speculum",12,"Routine Procedures",""],
   ["Z101","Abscess I&D – one abscess (LA)",28,"Incision & Drainage",""],
@@ -761,6 +846,7 @@ const PROC_BASE  = 6;   // base units for any sedation procedure code
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let selProc    = null;
+let timeMode   = 'units';
 let timePrem   = 'none';
 let asaCode    = 'none';
 let asaUnits   = 0;
@@ -890,11 +976,68 @@ function selCallIn(el, type, fee) {
 }
 
 document.getElementById('time-units').addEventListener('input', recalc);
+document.getElementById('start-time').addEventListener('change', recalc);
+document.getElementById('end-time').addEventListener('change', recalc);
+
+// Default start/end times: end = now, start = now − 45 min
+(function () {
+  const pad = n => String(n).padStart(2, '0');
+  const now  = new Date();
+  const start = new Date(now.getTime() - 45 * 60 * 1000);
+  document.getElementById('end-time').value   = pad(now.getHours())   + ':' + pad(now.getMinutes());
+  document.getElementById('start-time').value = pad(start.getHours()) + ':' + pad(start.getMinutes());
+})();
+
+function setTimeMode(mode) {
+  timeMode = mode;
+  document.getElementById('mode-units').classList.toggle('active', mode === 'units');
+  document.getElementById('mode-time').classList.toggle('active',  mode === 'time');
+  document.getElementById('panel-units').style.display = mode === 'units' ? '' : 'none';
+  document.getElementById('panel-time').style.display  = mode === 'time'  ? '' : 'none';
+  recalc();
+}
+
+function calcUnitsFromTime() {
+  const sv = document.getElementById('start-time').value;
+  const ev = document.getElementById('end-time').value;
+  if (!sv || !ev) return null;
+  const [sh, sm] = sv.split(':').map(Number);
+  const [eh, em] = ev.split(':').map(Number);
+  let startMins = sh * 60 + sm;
+  let endMins   = eh * 60 + em;
+  if (endMins <= startMins) endMins += 24 * 60;   // crosses midnight
+  const diffMins = endMins - startMins;
+  return { units: Math.floor(diffMins / 15), diffMins };
+}
 
 // ── Calculation ───────────────────────────────────────────────────────────────
 function recalc() {
-  const T = Math.max(1, parseInt(document.getElementById('time-units').value) || 1);
-  document.getElementById('duration-text').textContent = (T * 15) + ' min';
+  let T;
+  if (timeMode === 'time') {
+    const tr = calcUnitsFromTime();
+    const pill = document.getElementById('time-calc-pill');
+    if (!tr) {
+      pill.className = 'time-calc-pill';
+      pill.textContent = 'Enter start and end time above';
+      document.getElementById('results-card').classList.remove('visible');
+      return;
+    }
+    if (tr.units < 1) {
+      pill.className = 'time-calc-pill error';
+      pill.textContent = 'Duration too short — minimum 1 unit (15 min)';
+      document.getElementById('results-card').classList.remove('visible');
+      return;
+    }
+    const hrs  = Math.floor(tr.diffMins / 60);
+    const mins = tr.diffMins % 60;
+    const durStr = hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
+    pill.className = 'time-calc-pill';
+    pill.innerHTML = `${durStr} &nbsp;→&nbsp; <strong>${tr.units} unit${tr.units !== 1 ? 's' : ''}</strong>`;
+    T = tr.units;
+  } else {
+    T = Math.max(1, parseInt(document.getElementById('time-units').value) || 1);
+    document.getElementById('duration-text').textContent = (T * 15) + ' min';
+  }
 
   if (!selProc) {
     document.getElementById('results-card').classList.remove('visible');
@@ -944,6 +1087,118 @@ function recalc() {
   document.getElementById('res-ohip').textContent = '$' + totalOhip.toFixed(2);
   document.getElementById('results-card').classList.add('visible');
 }
+
+// ── Discharge instructions copy ───────────────────────────────────────────────
+const DC_TEXT = `PROCEDURAL SEDATION DISCHARGE INSTRUCTIONS
+
+You received sedation medication today
+
+You were given medication to help you relax, reduce pain, and/or make you sleepy during your procedure in the Emergency Department.
+
+These medications can continue to affect your thinking, coordination, balance, and reaction time for up to 24 hours — even if you feel mostly normal.
+
+
+FOR THE NEXT 24 HOURS
+
+DO NOT:
+• Drive any vehicle
+• Ride a bicycle, motorcycle, scooter, or e-bike
+• Operate machinery or power tools
+• Drink alcohol
+• Use cannabis or recreational drugs
+• Take sleeping pills or sedating medications unless instructed by your doctor
+• Make important medical, legal, or financial decisions
+• Sign important paperwork or legal documents
+• Cook alone or do potentially dangerous activities
+• Climb ladders or work at heights
+
+
+GOING HOME
+
+• You must have a responsible adult drive you home
+• Rest for the remainder of the day
+• Move carefully and slowly, as dizziness and poor balance are common
+• Use caution when walking or using stairs. Your balance, coordination, and judgment may still be impaired for up to 24 hours
+• Start with clear fluids or a light meal before eating heavier foods
+• Drink plenty of fluids
+
+If possible, have a responsible adult stay with you for the next several hours.
+
+
+DRIVING
+
+Do NOT drive for 24 hours after sedation.
+
+Sedation medications may slow your reaction time and impair judgment even if you feel awake and alert.
+
+This applies to:
+• Cars
+• Motorcycles
+• Bicycles and e-bikes
+• Boats
+• Work vehicles
+
+
+SEEK MEDICAL ATTENTION IMMEDIATELY IF YOU HAVE:
+• Trouble breathing
+• Chest pain
+• Severe or worsening pain
+• Repeated vomiting
+• Fever
+• Bleeding or significant swelling
+• Confusion or unusual behaviour
+• Difficulty waking up
+• Fainting or seizure activity
+
+
+FOLLOW-UP
+
+Follow any additional instructions given for your injury or procedure.
+
+Take medications only as directed.
+
+If you have worsening symptoms or concerns, contact your healthcare provider or return to the Emergency Department.`;
+
+function copyDCInstructions() {
+  navigator.clipboard.writeText(DC_TEXT).then(() => {
+    const label = document.getElementById('copy-dc-label');
+    label.textContent = '✓ Copied — Ctrl+V to paste';
+    setTimeout(() => { label.textContent = 'Copy Discharge Instructions'; }, 2500);
+  }).catch(() => {
+    // Fallback for browsers that block clipboard API
+    const ta = document.createElement('textarea');
+    ta.value = DC_TEXT;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const label = document.getElementById('copy-dc-label');
+    label.textContent = '✓ Copied — Ctrl+V to paste';
+    setTimeout(() => { label.textContent = 'Copy Discharge Instructions'; }, 2500);
+  });
+}
+
+// ── Auto-select time premium based on current time / day ──────────────────────
+(function () {
+  const now  = new Date();
+  const hour = now.getHours();  // 0–23
+  const day  = now.getDay();    // 0=Sun, 6=Sat
+
+  let val = 'none';
+  if (hour < 7) {
+    val = 'E401C';                                    // Night 00:00–07:00 — takes precedence
+  } else if (hour >= 17 || day === 0 || day === 6) {
+    val = 'E400C';                                    // Evening 17:00–24:00 or Sat/Sun
+  }
+
+  if (val !== 'none') {
+    const opts = document.querySelectorAll('#time-prem-group .radio-opt');
+    // opts[0]=None, opts[1]=E400C (Evening/Weekend), opts[2]=E401C (Night)
+    const el = val === 'E400C' ? opts[1] : opts[2];
+    if (el) selTimePrem(el, val);
+  }
+})();
 </script>
 </body>
 </html>

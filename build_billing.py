@@ -73,7 +73,7 @@ rows = [
     ("On-Call","H987","On-call addl patient – Night",100,"Unlimited"),
     # Counselling / Forms
     ("Counselling / Forms","K005","Mental health counselling",63,"Min 20 min; document mental health dx + times"),
-    ("Counselling / Forms","K028","STD/Needlestick management counselling",63,"Min 20 min; document times"),
+    ("Counselling / Forms","K028","Needlestick or STI counselling/treatment",80,"Per 30 min; document times. Fee updated April 1 2026"),
     ("Counselling / Forms","K015","Counsel family re: death/catastrophe",63,"Min 20 min; document times"),
     ("Counselling / Forms","K623","Form 1 – psychiatric assessment",105,""),
     ("Counselling / Forms","K070","Homecare application",32,""),
@@ -95,6 +95,7 @@ rows = [
     ("Critical Care – Other Procedures","G269","Central line",31,""),
     ("Critical Care – Other Procedures","G211","Intubation",38,"Allowed with G395 but NOT G521; exact fee $38.35 (MOH Jan 2025)"),
     ("Critical Care – Other Procedures","Z341","Chest tube",70,""),
+    ("Critical Care – Other Procedures","Z363","Chest tube removal (thoracostomy tube)",22.60,"Incl wound closure; fee as of April 1 2026"),
     ("Critical Care – Other Procedures","Z611","Catheter",9,"Exact fee $8.55 (MOH Jan 2025)"),
     ("Critical Care – Other Procedures","H100","Ultrasound",20,""),
     # Anaesthesia modifiers
@@ -164,6 +165,7 @@ rows = [
     ("Routine Procedures","L810","Description of CSF",25,"Exact fee $25.00 (MOH Jan 2025)"),
     ("Routine Procedures","G435","Tonometry",5,"Exact fee $5.10 (MOH Jan 2025)"),
     ("Routine Procedures","Z432","Exam under anaesthesia",54,""),
+    ("Routine Procedures","Z735","IUD removal / exam ± insertion under GA",56.70,"Exam and/or dilatation incl insertion and/or removal of IUD under general anaesthetic as sole procedure"),
     ("Routine Procedures","Z756","Rectal disimpaction / fecal disimpaction",46,"Was $36.80 → $46.00 April 2026"),
     ("Routine Procedures","H264","ED pelvic exam with speculum",12,"NEW April 2026"),
     # Incision & Drainage
