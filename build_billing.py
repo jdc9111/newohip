@@ -165,6 +165,7 @@ rows = [
     ("Routine Procedures","L810","Description of CSF",25,"Exact fee $25.00 (MOH Jan 2025)"),
     ("Routine Procedures","G435","Tonometry",5,"Exact fee $5.10 (MOH Jan 2025)"),
     ("Routine Procedures","Z432","Exam under anaesthesia",54,""),
+    ("Routine Procedures","G552","IUD removal (without sedation)",20,"Removal of intrauterine contraceptive device without sedation"),
     ("Routine Procedures","Z735","IUD removal / exam ± insertion under GA",56.70,"Exam and/or dilatation incl insertion and/or removal of IUD under general anaesthetic as sole procedure"),
     ("Routine Procedures","Z756","Rectal disimpaction / fecal disimpaction",46,"Was $36.80 → $46.00 April 2026"),
     ("Routine Procedures","H264","ED pelvic exam with speculum",12,"NEW April 2026"),
