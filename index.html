@@ -222,6 +222,25 @@
 
   .note { font-size: 0.76rem; color: #718096; margin-top: 3px; }
 
+  .info-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #e2e8f0; color: #4a5568;
+    font-size: 0.65rem; font-weight: 800; line-height: 1;
+    border: none; cursor: pointer; margin-left: 6px;
+    vertical-align: middle; flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .info-btn:hover, .info-btn.open { background: #1F4E79; color: white; }
+  .ext-note {
+    display: none; margin-top: 8px; padding: 10px 12px;
+    background: #f0f7ff; border-left: 3px solid #1F4E79; border-radius: 0 6px 6px 0;
+    font-size: 0.78rem; color: #2d3748; line-height: 1.6;
+  }
+  .ext-note.open { display: block; }
+  .ext-note ul { margin: 4px 0 0 14px; }
+  .ext-note li { margin-bottom: 2px; }
+
   mark {
     background: #fef08a;
     border-radius: 2px;
@@ -237,6 +256,93 @@
   }
   #empty svg { margin-bottom: 12px; opacity: 0.4; }
   #empty p { font-size: 0.95rem; }
+
+  /* ── Code-of-the-Day modal ── */
+  .cotd-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(15,23,42,0.55);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .cotd-card {
+    background: white;
+    border-radius: 14px;
+    max-width: 520px; width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    overflow: hidden;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .cotd-header {
+    background: #1F4E79;
+    color: white;
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cotd-header-icon { font-size: 1.3rem; }
+  .cotd-header-text { flex: 1; }
+  .cotd-header-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; opacity: 0.75;
+  }
+  .cotd-header-title { font-size: 1rem; font-weight: 700; }
+  .cotd-body { padding: 20px; }
+  .cotd-code-row {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px;
+  }
+  .cotd-code {
+    font-size: 1.5rem; font-weight: 800; color: #1F4E79; letter-spacing: 0.04em;
+  }
+  .cotd-fee {
+    font-size: 1rem; font-weight: 700; color: #276749;
+  }
+  .cotd-desc {
+    font-size: 1rem; font-weight: 600; color: #1a202c; margin-bottom: 8px;
+  }
+  .cotd-cat {
+    display: inline-block; font-size: 0.68rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: #1F4E79; background: #BDD7EE;
+    border-radius: 4px; padding: 2px 8px; margin-bottom: 10px;
+  }
+  .cotd-note {
+    font-size: 0.8rem; color: #4a5568;
+    border-top: 1px solid #e2e8f0; padding-top: 10px; margin-top: 6px;
+  }
+  .cotd-ext {
+    margin-top: 10px; padding: 10px 12px;
+    background: #f0f7ff; border-left: 3px solid #1F4E79;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.8rem; color: #2d3748; line-height: 1.6;
+  }
+  .cotd-ext ul { margin: 4px 0 0 14px; }
+  .cotd-ext li { margin-bottom: 3px; }
+  .cotd-footer {
+    padding: 14px 20px;
+    border-top: 1px solid #edf2f7;
+    display: flex; justify-content: flex-end; gap: 10px;
+  }
+  .cotd-btn-optout {
+    padding: 8px 18px; border-radius: 7px; font-size: 0.88rem; font-weight: 600;
+    border: none; background: none; color: #a0aec0; cursor: pointer;
+    margin-right: auto;
+  }
+  .cotd-btn-optout:hover { color: #718096; text-decoration: underline; }
+  .cotd-btn-search {
+    padding: 8px 18px; border-radius: 7px; font-size: 0.88rem; font-weight: 600;
+    border: 2px solid #1F4E79; color: #1F4E79; background: white; cursor: pointer;
+  }
+  .cotd-btn-search:hover { background: #ebf3fb; }
+  .cotd-btn-dismiss {
+    padding: 8px 18px; border-radius: 7px; font-size: 0.88rem; font-weight: 600;
+    border: none; background: #1F4E79; color: white; cursor: pointer;
+  }
+  .cotd-btn-dismiss:hover { background: #163d5e; }
 </style>
 </head>
 <body>
@@ -285,6 +391,9 @@
   </div>
 </main>
 
+<!-- Code-of-the-Day modal (injected by JS) -->
+<div id="cotd-overlay" class="cotd-overlay" style="display:none" onclick="if(event.target===this)closeCOTD()"></div>
+
 <footer style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:8px 24px;font-size:0.78rem;color:#718096;background:white;border-top:1px solid #dde3ed;z-index:10;">
   Please send feedback/suggestions to <a href="mailto:chisholm.mirror@gmail.com" style="color:#1F4E79;">chisholm.mirror@gmail.com</a>
 </footer>
@@ -329,6 +438,7 @@ const DATA = [
   ["H987","On-call addl patient – Night",100,"On-Call","Unlimited"],
   ["K005","Mental health counselling",63,"Counselling / Forms","Min 20 min; document mental health dx + times"],
   ["K028","Needlestick or STI counselling/treatment",80,"Counselling / Forms","Per 30 min; document times. Fee updated April 1 2026"],
+  ["K034","Telephone report of reportable disease to MOH",36,"Counselling / Forms","Max 1 per physician per patient per disease per 12 months; must be personally rendered by physician"],
   ["K015","Counsel family re: death/catastrophe",63,"Counselling / Forms","Min 20 min; document times"],
   ["K623","Form 1 – psychiatric assessment",105,"Counselling / Forms",""],
   ["K070","Homecare application",32,"Counselling / Forms",""],
@@ -337,7 +447,7 @@ const DATA = [
   ["A777","Pronouncement + death certificate",34,"Counselling / Forms",""],
   ["H105","Interim admission orders",29,"Counselling / Forms",""],
   ["A320","MAID consultation",174,"Counselling / Forms","NEW April 2026; exact fee $174.25"],
-  ["G521","Imminent life-threatening: 1st 15 min (1st MD)",112,"Critical Care – Imminent","Arrest/Trauma; document times; cannot see other pts simultaneously; exact fee $111.80 (MOH Jan 2025)"],
+  ["G521","Imminent life-threatening: 1st 15 min (1st MD)",112,"Critical Care – Imminent","Arrest/Trauma; document times; cannot see other pts simultaneously; exact fee $111.80 (MOH Jan 2025). <strong>E420 +50% trauma premium (ISS > 15)</strong>"],
   ["G523","Imminent life-threatening: 2nd 15 min (1st MD)",58,"Critical Care – Imminent","Arrest/Trauma; exact fee $57.65 (MOH Jan 2025)"],
   ["G522","Imminent life-threatening: each addl 15 min (max 6)",38,"Critical Care – Imminent","Arrest/Trauma; bill for 2nd/3rd MD too; exact fee $38.00 (MOH Jan 2025)"],
   ["E420","Trauma ISS > 15 premium",null,"Critical Care – Imminent","Add to critical care codes"],
@@ -589,6 +699,73 @@ const status = document.getElementById("status");
 const empty  = document.getElementById("empty");
 const tbl    = document.getElementById("tbl");
 
+// ── Extended billing notes ────────────────────────────────────────────────────
+const CONSULTATION_NOTE = `<ul>
+    <li>Provided upon a <strong>written request</strong> from a referring physician requesting an opinion, or because another opinion was requested by the patient.</li>
+    <li>Consultant must perform a general or specific assessment, including review of all relevant data.</li>
+    <li>Consultant must submit findings, opinions, and recommendations <strong>in writing to the referring physician.</strong></li>
+    <li>A copy of the written request must be maintained in the medical record.</li>
+    <li><strong>No written request?</strong> Fee is reduced to the amount payable for an assessment.</li>
+    <li>Cannot be claimed when a patient presents without a referral from their primary physician.</li>
+  </ul>`;
+
+const REASSESSMENT_NOTE = `<ul>
+    <li>Maximum 3 reassessments per patient per day</li>
+    <li>Maximum 2 reassessments per physician per patient per day</li>
+    <li>Must be at least 2 hours apart from previous assessment</li>
+    <li>Must result in a new management order (not admission or discharge)</li>
+    <li>Examples: Gravol, repeat vitals, walk test, imaging/labs</li>
+  </ul>`;
+
+const EXTENDED_NOTES = {
+  "H104": REASSESSMENT_NOTE,
+  "H134": REASSESSMENT_NOTE,
+  "H154": REASSESSMENT_NOTE,
+  "H124": REASSESSMENT_NOTE,
+  "E420": `<ul>
+    <li>ISS &gt; 15 if patient is ≥ 16 years old</li>
+    <li>ISS &gt; 12 if patient is &lt; 16 years old</li>
+    <li>ISS must be recorded on the chart</li>
+  </ul>`,
+  "G521": `<ul>
+    <li>Patient must have a critical illness or injury that acutely impairs one or more vital organs or systems such that imminent life-threatening deterioration is highly probable</li>
+    <li><strong>Excludes:</strong> intubation, lines, defibrillation, cardioversion, ABGs, Foleys, NGTs</li>
+    <li>Does <em>not</em> exclude other procedure codes (fractures, lacerations, etc.)</li>
+    <li><strong>Examples:</strong> STEMI, CHF with intubation or BiPAP, severe sepsis/shock, true anaphylaxis (epi given), status epilepticus, trauma with unstable vitals, croup requiring epi</li>
+  </ul>`,
+  "H055": CONSULTATION_NOTE,
+  "H065": CONSULTATION_NOTE,
+  "K035": `<ul>
+    <li>Mandatory report to the Ministry of Transportation (MOT) for medical conditions that may impair driving ability.</li>
+    <li><strong>Cognitive Impairment</strong> — disorder affecting attention, judgment/problem-solving, planning/sequencing, memory, insight, reaction time, or visuospatial perception; substantial limitation in daily activities (e.g., dementia).</li>
+    <li><strong>Epilepsy</strong> — uncontrolled seizures; non-epileptic spells resembling seizures.</li>
+    <li><strong>Cardiac Conditions</strong> — syncope/heart conditions causing loss of consciousness or equivalent incapacitation.</li>
+    <li><strong>Psychiatric Disorders</strong> — severe non-organic conditions (e.g., psychosis, bipolar mania) with poor compliance, poor insight, or substance dependence.</li>
+    <li><strong>Sleep Disorders</strong> — narcolepsy/cataplexy; sleep apnea with excessive daytime somnolence.</li>
+    <li><strong>Vision Impairment</strong> — visual acuity worse than 20/30 (best-corrected, better eye); visual field &lt;120° continuous horizontally.</li>
+  </ul>`,
+  "K034": `<ul>
+    <li>Telephone report of a <strong>specified reportable disease</strong> to a Medical Officer of Health (MOH), as required under Ontario's Health Protection and Promotion Act (HPPA).</li>
+    <li>Applies only to diseases listed in <strong>Ontario Regulation 559/91</strong> (communicable diseases requiring public health notification).</li>
+    <li>Must be <strong>personally rendered by the physician</strong> — cannot be delegated.</li>
+    <li><strong>Limit:</strong> 1 per physician, per patient, per specified reportable disease, within a 12-month period.</li>
+    <li>Distinct from K080 (patient telephone calls) — K034 is specifically for MOH reporting obligations.</li>
+  </ul>`,
+  "G395": `<ul>
+    <li>Where there is a potential threat to life or limb, physician provides resuscitation in order to address the high probability of loss of limb or requirement for "life threatening" critical care.</li>
+    <li><strong>Excludes:</strong> intubation, lines, ABGs, catheters</li>
+    <li>Does <em>not</em> exclude cardioversion, defibrillation, or other procedure codes (fractures, dislocations, lacerations, etc.)</li>
+    <li><strong>Examples:</strong> Backboard/collar with imaging, chest pain requiring intervention, abdo pain requiring intervention, head injury requiring CT, OD/intoxication with decreased LOC, extremity requiring immediate reduction</li>
+  </ul>`,
+};
+
+function toggleExtNote(btn) {
+  const panel = btn.nextElementSibling;
+  const open  = panel.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.title = open ? 'Hide details' : 'Show details';
+}
+
 function render(query) {
   const q = (query || "").trim();
 
@@ -624,12 +801,13 @@ function render(query) {
     const tr = document.createElement("tr");
     const feeStr = fee !== null ? "$" + fee : "—";
 
+    const extNote = EXTENDED_NOTES[code] || "";
     tr.innerHTML = `
       <td>${highlight(code, q)}</td>
       <td>
-        ${highlight(desc, q)}
+        ${highlight(desc, q)}${extNote ? `<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">i</button><div class="ext-note">${extNote}</div>` : ""}
         <div class="cat-pill">${highlight(cat, q)}</div>
-        ${notes ? `<div class="note">${highlight(notes, q)}</div>` : ""}
+        ${notes ? `<div class="note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
       </td>
       <td>${feeStr}</td>`;
     frag.appendChild(tr);
@@ -646,6 +824,74 @@ document.getElementById("query").addEventListener("input", e => {
 
 // initial render
 render("");
+
+// ── Code-of-the-Day ──────────────────────────────────────────────────────────
+// Add codes here that are worth remembering — rarely billed, high-value, or easily forgotten.
+const FLAGGED_CODES = [
+  "E420",   // Trauma ISS premium — frequently missed
+  "H113",   // Weekend/holiday + Fri eve premium
+  "H114",   // Weekday evening premium — new, often missed
+  "H264",   // ED pelvic exam with speculum — new, underused
+  "Z756",   // Rectal/fecal disimpaction — often forgotten
+  "G552",   // IUD removal without sedation
+  "Z363",   // Chest tube removal — separate billable code
+  "K034",   // Telephone report of reportable disease to MOH
+  "K035",   // Medical conditions report to MOT
+];
+
+function openCOTD() {
+  const code = FLAGGED_CODES[Math.floor(Math.random() * FLAGGED_CODES.length)];
+  const row  = DATA.find(r => r[0] === code);
+  if (!row) return;
+
+  const [c, desc, fee, cat, notes] = row;
+  const feeStr   = fee !== null ? '$' + fee.toFixed(2) : '—';
+  const extNote  = EXTENDED_NOTES[c] || "";
+  const noteHtml = notes
+    ? `<div class="cotd-note">${/[<>]/.test(notes) ? notes : esc(notes)}</div>`
+    : "";
+  const extHtml  = extNote ? `<div class="cotd-ext">${extNote}</div>` : "";
+
+  const overlay = document.getElementById('cotd-overlay');
+  overlay.innerHTML = `
+    <div class="cotd-card" role="dialog" aria-modal="true">
+      <div class="cotd-header">
+        <span class="cotd-header-icon">💡</span>
+        <div class="cotd-header-text">
+          <div class="cotd-header-label">Code of the Day</div>
+          <div class="cotd-header-title">Worth remembering</div>
+        </div>
+      </div>
+      <div class="cotd-body">
+        <div class="cotd-code-row">
+          <span class="cotd-code">${esc(c)}</span>
+          <span class="cotd-fee">${feeStr}</span>
+        </div>
+        <div class="cotd-desc">${esc(desc)}</div>
+        <span class="cotd-cat">${esc(cat)}</span>
+        ${noteHtml}
+        ${extHtml}
+      </div>
+      <div class="cotd-footer">
+        <button class="cotd-btn-optout" onclick="closeCOTD(true)">Disable Code of the Day</button>
+        <button class="cotd-btn-search" onclick="closeCOTD();document.getElementById('query').value='${esc(c)}';document.getElementById('query').dispatchEvent(new Event('input'));document.getElementById('query').focus()">Search this code</button>
+        <button class="cotd-btn-dismiss" onclick="closeCOTD()">Got it</button>
+      </div>
+    </div>`;
+  overlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCOTD(optOut) {
+  if (optOut) localStorage.setItem('cotd_optout', '1');
+  document.getElementById('cotd-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCOTD(); });
+
+// Show on load (unless user has opted out)
+if (!localStorage.getItem('cotd_optout')) openCOTD();
 
 // ── Time-based billing reminders ─────────────────────────────────────────────
 (function() {
