@@ -859,15 +859,10 @@ function generateInvoice() {
   else if (hasPremiumCode('E412')) premNote = 'E412 eve/wkd/hol procedural premium (+20%) applied to Z/F/D codes.';
 
   const rowsHtml = bill.map((item, i) => {
-    const applyPrem = premActive && isPremiumTarget(item.code) && item.fee != null;
-    const dispFee   = applyPrem ? item.fee * mult : item.fee;
-    const feeStr    = dispFee != null ? '$' + dispFee.toFixed(2) : '—';
-    const premMark  = applyPrem ? `<span style="font-size:0.7em;color:#b45309;margin-left:3px">${pctLabel}</span>` : '';
-    const bg        = i % 2 === 0 ? '#f9fafb' : '#ffffff';
+    const bg = i % 2 === 0 ? '#f9fafb' : '#ffffff';
     return `<tr style="background:${bg}">
       <td style="padding:8px 12px;font-weight:700;color:#1F4E79;white-space:nowrap">${item.code}</td>
       <td style="padding:8px 12px;color:#2d3748">${item.desc}</td>
-      <td style="padding:8px 12px;text-align:right;font-weight:600;color:#276749;white-space:nowrap">${feeStr}${premMark}</td>
     </tr>`;
   }).join('');
 
@@ -938,32 +933,19 @@ function generateInvoice() {
       <tr>
         <th style="width:90px">Code</th>
         <th>Description</th>
-        <th style="width:100px">OHIP Fee</th>
       </tr>
     </thead>
     <tbody>${rowsHtml}</tbody>
   </table>
 
   <div class="totals">
-    <div class="totals-row">
-      <span>OHIP Fee Total</span>
-      <span>$${ohipTotal.toFixed(2)}</span>
-    </div>
-    <div class="totals-row">
-      <span>OMA Multiplier (2026)</span>
-      <span>× ${OMA_MULTIPLIER.toFixed(1)}</span>
-    </div>
     <div class="totals-row final">
       <span>Total Charge</span>
       <span>$${finalCharge.toFixed(2)}</span>
     </div>
   </div>
 
-  <div class="notes">
-    <strong>Note:</strong> This invoice reflects outside/uninsured OHIP billing at the ${OMA_MULTIPLIER}× OMA-recommended rate for 2026.
-    ${premNote ? '<br><strong>Premium:</strong> ' + premNote : ''}
-    ${nulls ? `<br>${nulls} code(s) with unit-based fees (anaesthesia modifiers) are excluded from the total.` : ''}
-  </div>
+  ${nulls ? `<div class="notes">${nulls} code(s) with unit-based fees are excluded from the total.</div>` : ''}
 
   <button class="print-btn no-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
 </body>
