@@ -710,11 +710,10 @@ const CONSULTATION_NOTE = `<ul>
   </ul>`;
 
 const REASSESSMENT_NOTE = `<ul>
-    <li>Maximum 3 reassessments per patient per day</li>
-    <li>Maximum 2 reassessments per physician per patient per day</li>
-    <li>Must be at least 2 hours apart from previous assessment</li>
-    <li>Must result in a new management order (not admission or discharge)</li>
-    <li>Examples: Gravol, repeat vitals, walk test, imaging/labs</li>
+    <li><strong>Max 3</strong> reassessments per patient per day</li>
+    <li><strong>Max 2</strong> reassessments per physician per patient per day</li>
+    <li>Must be <strong>at least 2 hours apart</strong> from previous assessment</li>
+    <li>Must involve a <strong>new order</strong> — not admission or discharge (e.g. Gravol, repeat vitals, walk test, imaging, labs)</li>
   </ul>`;
 
 const EXTENDED_NOTES = {
@@ -728,13 +727,18 @@ const EXTENDED_NOTES = {
     <li>ISS must be recorded on the chart</li>
   </ul>`,
   "G521": `<ul>
-    <li>Patient must have a critical illness or injury that acutely impairs one or more vital organs or systems such that imminent life-threatening deterioration is highly probable</li>
+    <li>Patient must have a critical illness or injury that acutely impairs one or more vital organs or systems such that <strong>imminent life-threatening deterioration is highly probable.</strong></li>
     <li><strong>Excludes:</strong> intubation, lines, defibrillation, cardioversion, ABGs, Foleys, NGTs</li>
     <li>Does <em>not</em> exclude other procedure codes (fractures, lacerations, etc.)</li>
     <li><strong>Examples:</strong> STEMI, CHF with intubation or BiPAP, severe sepsis/shock, true anaphylaxis (epi given), status epilepticus, trauma with unstable vitals, croup requiring epi</li>
   </ul>`,
   "H055": CONSULTATION_NOTE,
   "H065": CONSULTATION_NOTE,
+  "K734": `<ul>
+    <li>Providing advice re: management &amp; treatment — discussion must be <strong>&gt;10 minutes.</strong></li>
+    <li><strong>Must document:</strong> start and stop time of discussion, name of consultant MD, reason for consult, and opinion/recommendations of the consultant MD.</li>
+    <li><strong>Not payable</strong> if the phone consultation leads to a face-to-face assessment by the consultant physician either the same day or the day following the call.</li>
+  </ul>`,
   "K035": `<ul>
     <li>Mandatory report to the Ministry of Transportation (MOT) for medical conditions that may impair driving ability.</li>
     <li><strong>Cognitive Impairment</strong> — disorder affecting attention, judgment/problem-solving, planning/sequencing, memory, insight, reaction time, or visuospatial perception; substantial limitation in daily activities (e.g., dementia).</li>
@@ -890,8 +894,11 @@ function closeCOTD(optOut) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCOTD(); });
 
-// Show on load (unless user has opted out)
-if (!localStorage.getItem('cotd_optout')) openCOTD();
+// Show once per session, unless permanently opted out
+if (!localStorage.getItem('cotd_optout') && !sessionStorage.getItem('cotd_shown')) {
+  sessionStorage.setItem('cotd_shown', '1');
+  openCOTD();
+}
 
 // ── Time-based billing reminders ─────────────────────────────────────────────
 (function() {
