@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fractures & Dislocations – ED OHIP</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a202c;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: #1F4E79;
+    color: white;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    min-height: 68px;
+  }
+  header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 0.01em; color: white; flex: 1; min-width: 0; }
+  header a.nav-link {
+    font-size: 0.82rem; color: white; opacity: 0.85; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.45); border-radius: 5px;
+    padding: 4px 12px; white-space: nowrap; flex-shrink: 0;
+  }
+  header a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+
+  .toggle-bar {
+    background: #163d5e;
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 10px 24px;
+    flex-wrap: wrap;
+  }
+  .toggle-btn {
+    padding: 8px 22px;
+    font-size: 0.9rem; font-weight: 600;
+    text-decoration: none;
+    color: rgba(255,255,255,0.7);
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.3);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .toggle-btn:first-child { border-radius: 6px 0 0 6px; }
+  .toggle-btn:last-child  { border-radius: 0 6px 6px 0; border-left: none; }
+  .toggle-btn:not(:first-child) { border-left: none; }
+  .toggle-btn.active { background: white; color: #1F4E79; border-color: white; }
+  .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.1); color: white; }
+  .beta-badge { font-size: 0.65rem; font-weight: 700; background: #f59e0b; color: white; border-radius: 3px; padding: 1px 4px; margin-left: 4px; vertical-align: middle; }
+
+  main {
+    flex: 1;
+    max-width: 860px;
+    margin: 28px auto;
+    padding: 0 16px 80px;
+    width: 100%;
+  }
+
+  /* ── Extremity sections ── */
+  .extremity-section { margin-bottom: 36px; }
+  .extremity-title {
+    font-size: 1.15rem; font-weight: 800; color: #1F4E79;
+    border-bottom: 3px solid #1F4E79;
+    padding-bottom: 8px; margin-bottom: 14px;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Accordion ── */
+  .accordion { margin-bottom: 8px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  .accordion-header {
+    display: flex; align-items: center; justify-content: space-between;
+    background: white;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+    border: none; width: 100%; text-align: left;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .accordion-header:hover { background: #ebf3fb; }
+  .accordion-header.open { background: #1F4E79; color: white; }
+
+  .accordion-title {
+    font-size: 0.95rem; font-weight: 700;
+  }
+  .accordion-meta {
+    font-size: 0.75rem; opacity: 0.65; margin-left: 10px; font-weight: 400;
+  }
+  .accordion-chevron {
+    font-size: 0.8rem; transition: transform 0.2s; flex-shrink: 0; margin-left: 12px;
+  }
+  .accordion-header.open .accordion-chevron { transform: rotate(180deg); }
+
+  .accordion-body {
+    display: none;
+    background: white;
+    border-top: 1px solid #edf2f7;
+  }
+  .accordion-body.open { display: block; }
+
+  /* ── Code rows ── */
+  .code-row {
+    display: flex; align-items: baseline;
+    padding: 9px 16px;
+    border-bottom: 1px solid #f0f4f8;
+    gap: 10px;
+    font-size: 0.88rem;
+  }
+  .code-row:last-child { border-bottom: none; }
+  .code-row:nth-child(even) { background: #fafbfc; }
+
+  .row-code {
+    font-weight: 700; color: #1F4E79;
+    font-size: 0.9rem; letter-spacing: 0.03em;
+    min-width: 52px; flex-shrink: 0;
+  }
+  .row-desc {
+    flex: 1; color: #2d3748;
+  }
+  .row-note {
+    font-size: 0.75rem; color: #718096; margin-top: 2px;
+  }
+  .row-fee {
+    font-weight: 600; color: #276749;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .row-indent {
+    padding-left: 28px;
+    background: #fefefe;
+  }
+  .row-indent .row-code { color: #4a7ea5; }
+
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    text-align: center; padding: 8px 24px;
+    font-size: 0.78rem; color: #718096;
+    background: white; border-top: 1px solid #dde3ed; z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Emergency Department<br>OHIP Code Search</h1>
+  <a href="updates.html" class="nav-link">April 1st Updates</a>
+</header>
+
+<div class="toggle-bar">
+  <a href="index.html" class="toggle-btn">Billing Codes</a>
+  <a href="diag.html" class="toggle-btn">Diagnostic Codes</a>
+  <a href="sedation.html" class="toggle-btn">Sedation <span class="beta-badge">Beta</span></a>
+  <a href="fractures.html" class="toggle-btn active">Fractures &amp; Dislocations</a>
+  <a href="calc.html" class="toggle-btn">Outside OHIP Calculator <span class="beta-badge">Beta</span></a>
+</div>
+
+<main>
+
+  <!-- ══════════════════════════════════════════════════════ UPPER EXTREMITY -->
+  <div class="extremity-section">
+    <div class="extremity-title">🦾 Upper Extremity</div>
+
+    <!-- Fingers -->
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Fingers</span><span class="accordion-meta">Phalanx fractures &amp; dislocations</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">F004</span><div><div class="row-desc">Phalanx finger – no reduction</div></div><span class="row-fee">$49.20</span></div>
+        <div class="code-row row-indent"><span class="row-code">F005</span><div><div class="row-desc">↳ Closed reduction</div><div class="row-note">Ortho f/u = 75%</div></div><span class="row-fee">$99.25</span></div>
+        <div class="code-row row-indent"><span class="row-code">E558</span><div><div class="row-desc">↳ Each additional with reduction</div></div><span class="row-fee">$22.25</span></div>
+        <div class="code-row row-indent"><span class="row-code">F007</span><div><div class="row-desc">↳ Open reduction</div></div><span class="row-fee">$298.45</span></div>
+        <div class="code-row"><span class="row-code">D001</span><div><div class="row-desc">Phalanx finger dislocation</div></div><span class="row-fee">$57.50</span></div>
+        <div class="code-row row-indent"><span class="row-code">E576</span><div><div class="row-desc">↳ Each additional dislocation</div></div><span class="row-fee">$10.25</span></div>
+        <div class="code-row row-indent"><span class="row-code">D003</span><div><div class="row-desc">↳ Open dislocation reduction</div></div><span class="row-fee">$196.50</span></div>
+      </div>
+    </div>
+
+    <!-- Hand -->
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Hand</span><span class="accordion-meta">Metacarpal, carpal &amp; MCP</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">F008</span><div><div class="row-desc">Metacarpal – no reduction</div></div><span class="row-fee">$49.20</span></div>
+        <div class="code-row row-indent"><span class="row-code">F009</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$99.25</span></div>
+        <div class="code-row row-indent"><span class="row-code">E504</span><div><div class="row-desc">↳ Each additional with reduction</div></div><span class="row-fee">$22.25</span></div>
+        <div class="code-row"><span class="row-code">F006</span><div><div class="row-desc">Metacarpal intra-articular – closed reduction</div></div><span class="row-fee">$119.75</span></div>
+        <div class="code-row row-indent"><span class="row-code">E503</span><div><div class="row-desc">↳ Each additional</div></div><span class="row-fee">$26.85</span></div>
+        <div class="code-row"><span class="row-code">F012</span><div><div class="row-desc">Bennett's fracture – no reduction</div></div><span class="row-fee">$49.20</span></div>
+        <div class="code-row row-indent"><span class="row-code">F013</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$119.80</span></div>
+        <div class="code-row"><span class="row-code">F018</span><div><div class="row-desc">Scaphoid – no reduction</div></div><span class="row-fee">$49.20</span></div>
+        <div class="code-row"><span class="row-code">F102</span><div><div class="row-desc">Other carpal – no reduction</div></div><span class="row-fee">$49.20</span></div>
+        <div class="code-row row-indent"><span class="row-code">F016</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$115.10</span></div>
+        <div class="code-row"><span class="row-code">D004</span><div><div class="row-desc">Metacarpophalangeal dislocation</div></div><span class="row-fee">$57.50</span></div>
+        <div class="code-row row-indent"><span class="row-code">E577</span><div><div class="row-desc">↳ Each additional</div></div><span class="row-fee">$10.25</span></div>
+        <div class="code-row row-indent"><span class="row-code">D006</span><div><div class="row-desc">↳ Open reduction</div></div><span class="row-fee">$181.85</span></div>
+        <div class="code-row"><span class="row-code">D007</span><div><div class="row-desc">Carpal dislocation</div></div><span class="row-fee">$128.05</span></div>
+        <div class="code-row"><span class="row-code">R629</span><div><div class="row-desc">Revision of amputated fingertip</div></div><span class="row-fee">$241.55</span></div>
+      </div>
+    </div>
+
+    <!-- Wrist / Forearm -->
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Wrist &amp; Forearm</span><span class="accordion-meta">Radius, ulna, Colles/Smith</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">F024</span><div><div class="row-desc">Radius &amp; ulna shaft – no reduction</div></div><span class="row-fee">$67.75</span></div>
+        <div class="code-row row-indent"><span class="row-code">F025</span><div><div class="row-desc">↳ Closed reduction</div></div><span class="row-fee">$148.50</span></div>
+        <div class="code-row"><span class="row-code">F027</span><div><div class="row-desc">Colles / Smith (distal radius) – no reduction</div></div><span class="row-fee">$67.75</span></div>
+        <div class="code-row row-indent"><span class="row-code">F028</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$109.45</span></div>
+        <div class="code-row row-indent"><span class="row-code">F046</span><div><div class="row-desc">↳ With reduction + sedation</div></div><span class="row-fee">$149.35</span></div>
+        <div class="code-row"><span class="row-code">F031</span><div><div class="row-desc">Radius or ulna – no reduction</div></div><span class="row-fee">$81.30</span></div>
+        <div class="code-row row-indent"><span class="row-code">F032</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$117.85</span></div>
+      </div>
+    </div>
+
+    <!-- Elbow -->
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Elbow</span><span class="accordion-meta">Olecranon, epicondyle &amp; dislocations</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">F039</span><div><div class="row-desc">Transcondylar – no reduction</div></div><span class="row-fee">$67.80</span></div>
+        <div class="code-row row-indent"><span class="row-code">F040</span><div><div class="row-desc">↳ Closed reduction</div></div><span class="row-fee">$298.35</span></div>
+        <div class="code-row"><span class="row-code">F034</span><div><div class="row-desc">Olecranon – no reduction</div></div><span class="row-fee">$126.25</span></div>
+        <div class="code-row row-indent"><span class="row-code">F035</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$129.00</span></div>
+        <div class="code-row"><span class="row-code">F029</span><div><div class="row-desc">Epicondyle (no cast) – no reduction</div></div><span class="row-fee">$67.75</span></div>
+        <div class="code-row row-indent"><span class="row-code">F037</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$126.25</span></div>
+        <div class="code-row"><span class="row-code">D009</span><div><div class="row-desc">Elbow dislocation</div></div><span class="row-fee">$84.45</span></div>
+        <div class="code-row"><span class="row-code">D012</span><div><div class="row-desc">Pulled elbow (radial head)</div></div><span class="row-fee">$39.00</span></div>
+        <div class="code-row"><span class="row-code">Z226</span><div><div class="row-desc">I&amp;D / manipulation of bursa under GA</div></div><span class="row-fee">$134.10</span></div>
+      </div>
+    </div>
+
+    <!-- Humerus & Shoulder -->
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Humerus &amp; Shoulder</span><span class="accordion-meta">Shaft, neck &amp; shoulder dislocations</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">F047</span><div><div class="row-desc">Tuberosity – no reduction</div></div><span class="row-fee">$67.80</span></div>
+        <div class="code-row row-indent"><span class="row-code">F048</span><div><div class="row-desc">↳ Closed reduction</div></div><span class="row-fee">$117.85</span></div>
+        <div class="code-row"><span class="row-code">F042</span><div><div class="row-desc">Humeral shaft – no reduction</div></div><span class="row-fee">$67.80</span></div>
+        <div class="code-row row-indent"><span class="row-code">F043</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$147.60</span></div>
+        <div class="code-row"><span class="row-code">F053</span><div><div class="row-desc">Humeral neck – no reduction</div></div><span class="row-fee">$67.80</span></div>
+        <div class="code-row row-indent"><span class="row-code">F054</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$133.60</span></div>
+        <div class="code-row"><span class="row-code">F050</span><div><div class="row-desc">Humeral neck with head dislocation – no reduction</div></div><span class="row-fee">$67.80</span></div>
+        <div class="code-row row-indent"><span class="row-code">F051</span><div><div class="row-desc">↳ Closed reduction</div></div><span class="row-fee">$183.80</span></div>
+        <div class="code-row"><span class="row-code">F119</span><div><div class="row-desc">Scapula – no reduction</div></div><span class="row-fee">$67.80</span></div>
+        <div class="code-row"><span class="row-code">F110</span><div><div class="row-desc">Clavicle – closed reduction with anaesthetic</div></div><span class="row-fee">$62.20</span></div>
+        <div class="code-row"><span class="row-code">D014</span><div><div class="row-desc">A/C or S/C joint – no reduction</div></div><span class="row-fee">$67.80</span></div>
+        <div class="code-row row-indent"><span class="row-code">D025</span><div><div class="row-desc">↳ Closed reduction with anaesthetic</div></div><span class="row-fee">$134.55</span></div>
+        <div class="code-row"><span class="row-code">D015</span><div><div class="row-desc">Shoulder dislocation – no sedation</div></div><span class="row-fee">$49.20</span></div>
+        <div class="code-row row-indent"><span class="row-code">D016</span><div><div class="row-desc">↳ With sedation</div></div><span class="row-fee">$111.40</span></div>
+      </div>
+    </div>
+
+  </div><!-- end upper extremity -->
+
+  <!-- ══════════════════════════════════════════════════════ LOWER EXTREMITY -->
+  <div class="extremity-section">
+    <div class="extremity-title">🦵 Lower Extremity</div>
+
+    <!-- Pelvis & Hip -->
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Pelvis &amp; Hip</span><span class="accordion-meta">Pelvic ring, hip &amp; femur</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">F134</span><div><div class="row-desc">Pelvic ring – closed reduction with binder</div></div><span class="row-fee">$442.45</span></div>
+        <div class="code-row"><span class="row-code">D042</span><div><div class="row-desc">Hip dislocation</div></div><span class="row-fee">$268.25</span></div>
+        <div class="code-row"><span class="row-code">F098</span><div><div class="row-desc">Hip fracture – closed reduction / traction</div></div><span class="row-fee">$426.90</span></div>
+        <div class="code-row"><span class="row-code">F094</span><div><div class="row-desc">Femur fracture (child) – with traction</div></div><span class="row-fee">$258.00</span></div>
+        <div class="code-row"><span class="row-code">F095</span><div><div class="row-desc">Femur fracture (adult) – with traction</div></div><span class="row-fee">$407.35</span></div>
+        <div class="code-row"><span class="row-code">G260</span><div><div class="row-desc">3-in-1 hip block</div></div><span class="row-fee">$80.00</span></div>
+        <div class="code-row"><span class="row-code">G606</span><div><div class="row-desc">Femoral nerve / fascia iliaca block</div></div><span class="row-fee">$50.00</span></div>
+      </div>
+    </div>
+
+    <!-- Knee -->
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Knee</span><span class="accordion-meta">Patella &amp; knee dislocations</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">F085</span><div><div class="row-desc">Patella – no reduction</div></div><span class="row-fee">$67.75</span></div>
+        <div class="code-row"><span class="row-code">D040</span><div><div class="row-desc">Patella dislocation – no sedation</div></div><span class="row-fee">$62.20</span></div>
+        <div class="code-row row-indent"><span class="row-code">D031</span><div><div class="row-desc">↳ With sedation</div></div><span class="row-fee">$97.35</span></div>
+        <div class="code-row"><span class="row-code">D038</span><div><div class="row-desc">Knee dislocation</div></div><span class="row-fee">$207.90</span></div>
+      </div>
+    </div>
+
+    <!-- Tibia & Fibula -->
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Tibia &amp; Fibula</span><span class="accordion-meta">Shaft fractures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">F078</span><div><div class="row-desc">Tibia ± fibula – no reduction</div></div><span class="row-fee">$115.95</span></div>
+        <div class="code-row row-indent"><span class="row-code">F079</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$180.05</span></div>
+        <div class="code-row"><span class="row-code">F082</span><div><div class="row-desc">Fibula – no reduction</div></div><span class="row-fee">$67.75</span></div>
+        <div class="code-row row-indent"><span class="row-code">F083</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$101.25</span></div>
+      </div>
+    </div>
+
+    <!-- Ankle -->
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Ankle</span><span class="accordion-meta">Fractures &amp; dislocations</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">F074</span><div><div class="row-desc">Ankle – no reduction</div></div><span class="row-fee">$67.75</span></div>
+        <div class="code-row row-indent"><span class="row-code">F075</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$144.80</span></div>
+        <div class="code-row row-indent"><span class="row-code">F104</span><div><div class="row-desc">↳ With tibial plafond burst</div></div><span class="row-fee">$242.25</span></div>
+        <div class="code-row"><span class="row-code">D035</span><div><div class="row-desc">Ankle dislocation</div></div><span class="row-fee">$111.35</span></div>
+      </div>
+    </div>
+
+    <!-- Foot -->
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Foot</span><span class="accordion-meta">Metatarsal, tarsal, calcaneus &amp; toes</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">F070</span><div><div class="row-desc">Calcaneus – no reduction</div></div><span class="row-fee">$97.35</span></div>
+        <div class="code-row row-indent"><span class="row-code">F071</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$161.45</span></div>
+        <div class="code-row"><span class="row-code">F066</span><div><div class="row-desc">Tarsal – no reduction</div></div><span class="row-fee">$98.10</span></div>
+        <div class="code-row row-indent"><span class="row-code">F067</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$165.20</span></div>
+        <div class="code-row"><span class="row-code">D026</span><div><div class="row-desc">Tarso-metatarsal dislocation</div></div><span class="row-fee">$147.60</span></div>
+        <div class="code-row"><span class="row-code">F061</span><div><div class="row-desc">Metatarsal – no cast, no reduction</div></div><span class="row-fee">$49.20</span></div>
+        <div class="code-row row-indent"><span class="row-code">F062</span><div><div class="row-desc">↳ With cast, no reduction</div></div><span class="row-fee">$67.75</span></div>
+        <div class="code-row row-indent"><span class="row-code">F063</span><div><div class="row-desc">↳ With cast &amp; reduction</div></div><span class="row-fee">$98.35</span></div>
+        <div class="code-row"><span class="row-code">D030</span><div><div class="row-desc">Metatarsophalangeal dislocation</div></div><span class="row-fee">$57.50</span></div>
+        <div class="code-row row-indent"><span class="row-code">E579</span><div><div class="row-desc">↳ Each additional</div></div><span class="row-fee">$10.25</span></div>
+        <div class="code-row"><span class="row-code">D033</span><div><div class="row-desc">Tarsal dislocation – closed reduction</div></div><span class="row-fee">$147.60</span></div>
+        <div class="code-row"><span class="row-code">F056</span><div><div class="row-desc">Phalanx toe – no reduction</div></div><span class="row-fee">$49.20</span></div>
+        <div class="code-row row-indent"><span class="row-code">E560</span><div><div class="row-desc">↳ Each additional, no reduction</div></div><span class="row-fee">$12.05</span></div>
+        <div class="code-row row-indent"><span class="row-code">F058</span><div><div class="row-desc">↳ With reduction</div></div><span class="row-fee">$72.35</span></div>
+        <div class="code-row row-indent"><span class="row-code">E561</span><div><div class="row-desc">↳ Each additional with reduction</div></div><span class="row-fee">$14.90</span></div>
+        <div class="code-row row-indent"><span class="row-code">F060</span><div><div class="row-desc">↳ Open reduction</div></div><span class="row-fee">$172.30</span></div>
+        <div class="code-row"><span class="row-code">F057</span><div><div class="row-desc">IP joint intra-articular – closed reduction</div></div><span class="row-fee">$77.95</span></div>
+        <div class="code-row row-indent"><span class="row-code">E578</span><div><div class="row-desc">↳ Each additional</div></div><span class="row-fee">$10.25</span></div>
+        <div class="code-row"><span class="row-code">D027</span><div><div class="row-desc">Interphalangeal toe dislocation</div></div><span class="row-fee">$57.50</span></div>
+      </div>
+    </div>
+
+  </div><!-- end lower extremity -->
+
+</main>
+
+<footer>
+  Please send feedback/suggestions to <a href="mailto:chisholm.mirror@gmail.com" style="color:#1F4E79;">chisholm.mirror@gmail.com</a>
+</footer>
+
+<script>
+function toggle(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+</script>
+</body>
+</html>
