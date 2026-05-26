@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dx Quick Reference – ED OHIP</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a202c;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: #1F4E79;
+    color: white;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    min-height: 68px;
+  }
+  header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 0.01em; color: white; flex: 1; min-width: 0; }
+  header a.nav-link {
+    font-size: 0.82rem; color: white; opacity: 0.85; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.45); border-radius: 5px;
+    padding: 4px 12px; white-space: nowrap; flex-shrink: 0;
+  }
+  header a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+
+  .toggle-bar {
+    background: #163d5e;
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 10px 24px;
+    flex-wrap: wrap;
+  }
+  .toggle-btn {
+    padding: 8px 22px;
+    font-size: 0.9rem; font-weight: 600;
+    text-decoration: none;
+    color: rgba(255,255,255,0.7);
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.3);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .toggle-btn:first-child { border-radius: 6px 0 0 6px; }
+  .toggle-btn:last-child  { border-radius: 0 6px 6px 0; border-left: none; }
+  .toggle-btn:not(:first-child) { border-left: none; }
+  .toggle-btn.active { background: white; color: #1F4E79; border-color: white; }
+  .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.1); color: white; }
+  .beta-badge { font-size: 0.65rem; font-weight: 700; background: #f59e0b; color: white; border-radius: 3px; padding: 1px 4px; margin-left: 4px; vertical-align: middle; }
+  @media (max-width: 640px) {
+    .toggle-bar { flex-direction: column; padding: 8px 12px; gap: 4px; flex-wrap: nowrap; }
+    .toggle-btn { border-radius: 6px !important; border: 2px solid rgba(255,255,255,0.3) !important; text-align: center; width: 100%; }
+  }
+
+  main {
+    flex: 1;
+    max-width: 860px;
+    margin: 28px auto;
+    padding: 0 16px 80px;
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: 1.15rem; font-weight: 800; color: #1F4E79;
+    border-bottom: 3px solid #1F4E79;
+    padding-bottom: 8px; margin-bottom: 20px;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Accordion ── */
+  .accordion { margin-bottom: 8px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  .accordion-header {
+    display: flex; align-items: center; justify-content: space-between;
+    background: white;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+    border: none; width: 100%; text-align: left;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .accordion-header:hover { background: #ebf3fb; }
+  .accordion-header.open { background: #1F4E79; color: white; }
+
+  .accordion-title { font-size: 0.95rem; font-weight: 700; }
+  .accordion-meta { font-size: 0.75rem; opacity: 0.65; margin-left: 10px; font-weight: 400; }
+  .accordion-chevron { font-size: 0.8rem; transition: transform 0.2s; flex-shrink: 0; margin-left: 12px; }
+  .accordion-header.open .accordion-chevron { transform: rotate(180deg); }
+
+  .accordion-body {
+    display: none;
+    background: white;
+    border-top: 1px solid #edf2f7;
+  }
+  .accordion-body.open { display: block; }
+
+  /* ── Code rows ── */
+  .code-row {
+    display: flex; align-items: baseline;
+    padding: 9px 16px;
+    border-bottom: 1px solid #f0f4f8;
+    gap: 12px;
+    font-size: 0.88rem;
+  }
+  .code-row:last-child { border-bottom: none; }
+  .code-row:nth-child(even) { background: #fafbfc; }
+
+  .row-code {
+    font-weight: 700; color: #1F4E79;
+    font-size: 0.9rem; letter-spacing: 0.03em;
+    min-width: 48px; flex-shrink: 0;
+  }
+  .row-desc { flex: 1; color: #2d3748; }
+
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    text-align: center; padding: 8px 24px;
+    font-size: 0.78rem; color: #718096;
+    background: white; border-top: 1px solid #dde3ed; z-index: 10;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Emergency Department<br>OHIP Code Search</h1>
+  <a href="updates.html" class="nav-link">April 1st Updates</a>
+</header>
+
+<div class="toggle-bar">
+  <a href="index.html"    class="toggle-btn">Billing Codes</a>
+  <a href="diag.html"     class="toggle-btn">Diagnostic Codes</a>
+  <a href="diagref.html"  class="toggle-btn active">Dx Quick Ref</a>
+  <a href="sedation.html" class="toggle-btn">Sedation <span class="beta-badge">Beta</span></a>
+  <a href="fractures.html" class="toggle-btn">Fractures &amp; Dislocations</a>
+  <a href="calc.html"     class="toggle-btn">Outside OHIP <span class="beta-badge">Beta</span></a>
+</div>
+
+<main>
+  <div class="page-title">Common Diagnostic Codes by Category</div>
+  <div id="diag-ref"></div>
+</main>
+
+<footer>
+  Please send feedback/suggestions to <a href="mailto:chisholm.mirror@gmail.com" style="color:#1F4E79;">chisholm.mirror@gmail.com</a>
+</footer>
+
+<script>
+/* ── Category definitions (order = display order) ── */
+const CATEGORIES = [
+  { key: 'cvs',   label: 'Cardiovascular',           icon: '❤️'  },
+  { key: 'resp',  label: 'Respiratory',               icon: '🫁'  },
+  { key: 'neuro', label: 'Neurology',                 icon: '🧠'  },
+  { key: 'psych', label: 'Psychiatry',                icon: '💊'  },
+  { key: 'gi',    label: 'Gastrointestinal',          icon: '🫃'  },
+  { key: 'gu',    label: 'Genitourinary',             icon: '🫘'  },
+  { key: 'gyne',  label: 'Gynecology & Obstetrics',   icon: '🩺'  },
+  { key: 'breast',label: 'Breast',                    icon: '🩺'  },
+  { key: 'id',    label: 'Infectious Disease',        icon: '🦠'  },
+  { key: 'skin',  label: 'Skin & Wounds',             icon: '🩹'  },
+  { key: 'msk',   label: 'Musculoskeletal',           icon: '🦴'  },
+  { key: 'lac',   label: 'Laceration',                icon: '🩹'  },
+  { key: 'eye',   label: 'Ophthalmology',             icon: '👁'  },
+  { key: 'ent',   label: 'ENT',                       icon: '👂'  },
+  { key: 'teeth', label: 'Dental',                    icon: '🦷'  },
+  { key: 'blood', label: 'Hematology & Endocrine',    icon: '🩸'  },
+  { key: 'nyd',   label: 'Symptoms / NYD',            icon: '❓'  },
+];
+
+/* ── Diagnostic code data ── */
+const DIAG_CODES = [
+  // ── Cardiovascular ──
+  { code:"412",  description:"Angina",                                                    category:"cvs" },
+  { code:"441",  description:"Aortic aneurysm",                                           category:"cvs" },
+  { code:"427",  description:"Arrhythmia / SVT / AFib / Arrest",                          category:"cvs" },
+  { code:"429",  description:"Cardiomyopathy, endocarditis, valve disease, pericardial disease", category:"cvs" },
+  { code:"785",  description:"Chest pain",                                                category:"cvs" },
+  { code:"428",  description:"CHF",                                                       category:"cvs" },
+  { code:"451",  description:"DVT / PE / Thromboembolism",                                category:"cvs" },
+  { code:"426",  description:"Heart block",                                               category:"cvs" },
+  { code:"401",  description:"Hypertension",                                              category:"cvs" },
+  { code:"410",  description:"MI – acute",                                                category:"cvs" },
+  { code:"785",  description:"Palpitations / Syncope",                                    category:"cvs" },
+  { code:"443",  description:"Peripheral vascular disease",                               category:"cvs" },
+  { code:"415",  description:"Pulmonary embolism",                                        category:"cvs" },
+  // ── Respiratory ──
+  { code:"493",  description:"Asthma",                                                    category:"resp" },
+  { code:"466",  description:"Bronchitis",                                                category:"resp" },
+  { code:"492",  description:"COPD",                                                      category:"resp" },
+  { code:"464",  description:"Croup / Laryngitis / Epiglottitis",                         category:"resp" },
+  { code:"451",  description:"DVT / PE / Thromboembolism",                                category:"resp" },
+  { code:"460",  description:"Pharyngitis",                                               category:"resp" },
+  { code:"511",  description:"Pleural effusion",                                          category:"resp" },
+  { code:"486",  description:"Pneumonia",                                                 category:"resp" },
+  { code:"512",  description:"Pneumothorax",                                              category:"resp" },
+  { code:"461",  description:"Sinusitis",                                                 category:"resp" },
+  // ── Neurology ──
+  { code:"781",  description:"Abnormal involuntary movement",                             category:"neuro" },
+  { code:"351",  description:"Bell's Palsy",                                              category:"neuro" },
+  { code:"850",  description:"Concussion",                                                category:"neuro" },
+  { code:"854",  description:"Head injury / Intracranial injury",                         category:"neuro" },
+  { code:"780",  description:"Headache NYD / Dizziness / Paresthesia / Vertigo",          category:"neuro" },
+  { code:"346",  description:"Migraine",                                                  category:"neuro" },
+  { code:"307",  description:"Headache – Tension",                                        category:"neuro" },
+  { code:"320",  description:"Meningitis",                                                category:"neuro" },
+  { code:"340",  description:"Multiple Sclerosis",                                        category:"neuro" },
+  { code:"332",  description:"Parkinson's",                                               category:"neuro" },
+  { code:"739",  description:"Peripheral nerve / CTS / Bell's",                           category:"neuro" },
+  { code:"345",  description:"Seizure disorder",                                          category:"neuro" },
+  { code:"436",  description:"Stroke – acute",                                            category:"neuro" },
+  { code:"437",  description:"Stroke – chronic",                                          category:"neuro" },
+  { code:"435",  description:"TIA",                                                       category:"neuro" },
+  // ── Psychiatry ──
+  { code:"303",  description:"Alcohol problems",                                          category:"psych" },
+  { code:"316",  description:"Anorexia",                                                  category:"psych" },
+  { code:"300",  description:"Anxiety / Depression",                                      category:"psych" },
+  { code:"312",  description:"Behaviour problem",                                         category:"psych" },
+  { code:"290",  description:"Dementia",                                                  category:"psych" },
+  { code:"304",  description:"Drug abuse / addiction",                                    category:"psych" },
+  { code:"307",  description:"Insomnia",                                                  category:"psych" },
+  { code:"977",  description:"Overdose",                                                  category:"psych" },
+  { code:"301",  description:"Personality disorder",                                      category:"psych" },
+  { code:"298",  description:"Psychosis",                                                 category:"psych" },
+  { code:"295",  description:"Schizophrenia",                                             category:"psych" },
+  // ── Gastrointestinal ──
+  { code:"787",  description:"Abdominal pain NYD",                                        category:"gi" },
+  { code:"565",  description:"Anal fissure / Constipation",                               category:"gi" },
+  { code:"549",  description:"Appendicitis",                                              category:"gi" },
+  { code:"574",  description:"Cholecystitis",                                             category:"gi" },
+  { code:"555",  description:"Crohn's",                                                   category:"gi" },
+  { code:"009",  description:"Diarrhea / Gastroenteritis",                                category:"gi" },
+  { code:"562",  description:"Diverticulosis",                                            category:"gi" },
+  { code:"532",  description:"Duodenal ulcer",                                            category:"gi" },
+  { code:"530",  description:"Esophagitis",                                               category:"gi" },
+  { code:"531",  description:"Gastric ulcer",                                             category:"gi" },
+  { code:"535",  description:"Gastritis",                                                 category:"gi" },
+  { code:"536",  description:"Heartburn / GERD / Dyspepsia",                              category:"gi" },
+  { code:"455",  description:"Hemorrhoids",                                               category:"gi" },
+  { code:"553",  description:"Hernia: abdominal, femoral, diaphragmatic, hiatus",         category:"gi" },
+  // ── Genitourinary ──
+  { code:"607",  description:"Balanitis",                                                 category:"gu" },
+  { code:"600",  description:"BPH",                                                       category:"gu" },
+  { code:"604",  description:"Epididymitis / Orchitis",                                   category:"gu" },
+  { code:"599",  description:"Hematuria / Proteinuria / Incontinence / Renal problem",    category:"gu" },
+  { code:"603",  description:"Hydrocele",                                                 category:"gu" },
+  { code:"608",  description:"Male genital problem",                                      category:"gu" },
+  { code:"605",  description:"Phimosis",                                                  category:"gu" },
+  { code:"601",  description:"Prostatitis",                                               category:"gu" },
+  { code:"590",  description:"Pyelonephritis",                                            category:"gu" },
+  { code:"584",  description:"Renal failure",                                             category:"gu" },
+  { code:"099",  description:"STI",                                                       category:"gu" },
+  { code:"592",  description:"Stone – bladder / renal",                                   category:"gu" },
+  { code:"598",  description:"Urethral stricture",                                        category:"gu" },
+  { code:"595",  description:"UTI",                                                       category:"gu" },
+  // ── Gynecology & Obstetrics ──
+  { code:"650",  description:"Delivery – normal / Pregnancy – normal",                    category:"gyne" },
+  { code:"627",  description:"Dysfunctional uterine bleeding",                            category:"gyne" },
+  { code:"626",  description:"Dysmenorrhea / Menorrhagia",                                category:"gyne" },
+  { code:"634",  description:"Early fetal loss – Complete / Incomplete",                  category:"gyne" },
+  { code:"632",  description:"Early fetal loss – Missed",                                 category:"gyne" },
+  { code:"640",  description:"Early fetal loss – Threatened",                             category:"gyne" },
+  { code:"642",  description:"Eclampsia / Pre-eclampsia / Toxaemia",                      category:"gyne" },
+  { code:"615",  description:"Ectopic pregnancy / Endometriosis",                         category:"gyne" },
+  { code:"218",  description:"Fibroid",                                                   category:"gyne" },
+  { code:"643",  description:"Hyperemesis",                                               category:"gyne" },
+  { code:"V25",  description:"IUD / Contraceptive management",                            category:"gyne" },
+  { code:"611",  description:"Menopausal symptoms",                                       category:"gyne" },
+  { code:"256",  description:"Ovarian cyst",                                              category:"gyne" },
+  { code:"614",  description:"PID – Pelvic inflammatory disease",                         category:"gyne" },
+  { code:"669",  description:"Post-partum complications",                                 category:"gyne" },
+  { code:"099",  description:"STI",                                                       category:"gyne" },
+  { code:"616",  description:"Vaginitis / Cervicitis",                                    category:"gyne" },
+  // ── Breast ──
+  { code:"611",  description:"Breast disorder",                                           category:"breast" },
+  { code:"785",  description:"Breast mass",                                               category:"breast" },
+  { code:"174",  description:"Breast cancer",                                             category:"breast" },
+  { code:"610",  description:"Breast abscess",                                            category:"breast" },
+  { code:"675",  description:"Mastitis",                                                  category:"breast" },
+  // ── Infectious Disease ──
+  { code:"682",  description:"Abscess / Cellulitis",                                      category:"id" },
+  { code:"619",  description:"Candida",                                                   category:"id" },
+  { code:"616",  description:"Cervicitis",                                                category:"id" },
+  { code:"052",  description:"Chicken pox",                                               category:"id" },
+  { code:"080",  description:"COVID",                                                     category:"id" },
+  { code:"070",  description:"Hepatitis",                                                 category:"id" },
+  { code:"099",  description:"Herpes / STI",                                              category:"id" },
+  { code:"053",  description:"Herpes Zoster",                                             category:"id" },
+  { code:"054",  description:"Herpes Simplex",                                            category:"id" },
+  { code:"487",  description:"Influenza",                                                 category:"id" },
+  { code:"055",  description:"Measles",                                                   category:"id" },
+  { code:"075",  description:"Mononucleosis / EBV",                                       category:"id" },
+  { code:"072",  description:"Mumps",                                                     category:"id" },
+  { code:"112",  description:"Pneumonia (fungal/atypical)",                               category:"id" },
+  { code:"034",  description:"Strep pharyngitis",                                         category:"id" },
+  { code:"010",  description:"TB",                                                        category:"id" },
+  { code:"078",  description:"Warts",                                                     category:"id" },
+  // ── Skin & Wounds ──
+  { code:"919",  description:"Abrasion / bruise / bite / FB / crush",                     category:"skin" },
+  { code:"682",  description:"Abscess",                                                   category:"skin" },
+  { code:"919",  description:"Abscess – Pilonidal cyst",                                  category:"skin" },
+  { code:"949",  description:"Burn",                                                      category:"skin" },
+  { code:"910",  description:"Bites – insect",                                            category:"skin" },
+  { code:"112",  description:"Candida (skin)",                                            category:"skin" },
+  { code:"682",  description:"Cellulitis",                                                category:"skin" },
+  { code:"702",  description:"Dermatitis",                                                category:"skin" },
+  { code:"684",  description:"Impetigo",                                                  category:"skin" },
+  { code:"691",  description:"Rash",                                                      category:"skin" },
+  { code:"133",  description:"Scabies",                                                   category:"skin" },
+  { code:"706",  description:"Sebaceous cyst",                                            category:"skin" },
+  { code:"709",  description:"Skin abnormality / Rash NYD",                               category:"skin" },
+  { code:"454",  description:"Stasis dermatitis / ulcers / varicose",                     category:"skin" },
+  { code:"708",  description:"Urticaria",                                                 category:"skin" },
+  { code:"539",  description:"Zoster",                                                    category:"skin" },
+  { code:"078",  description:"Warts",                                                     category:"skin" },
+  // ── Musculoskeletal ──
+  { code:"829",  description:"Fracture",                                                  category:"msk" },
+  { code:"274",  description:"Gout",                                                      category:"msk" },
+  { code:"959",  description:"Injury or trauma – other",                                  category:"msk" },
+  { code:"848",  description:"Muscle sprain / strain",                                    category:"msk" },
+  { code:"715",  description:"Osteoarthritis",                                            category:"msk" },
+  // ── Laceration ──
+  { code:"884",  description:"Laceration – upper limb",                                   category:"lac" },
+  { code:"894",  description:"Laceration – lower limb",                                   category:"lac" },
+  { code:"879",  description:"Laceration – except limbs",                                 category:"lac" },
+  // ── Ophthalmology ──
+  { code:"369",  description:"Blindness / Loss of vision",                                category:"eye" },
+  { code:"372",  description:"Conjunctivitis / Subconjunctival hemorrhage",               category:"eye" },
+  { code:"370",  description:"Corneal ulcer",                                             category:"eye" },
+  { code:"378",  description:"Diplopia",                                                  category:"eye" },
+  { code:"379",  description:"Eye pain NYD",                                              category:"eye" },
+  { code:"930",  description:"Foreign body – eye",                                        category:"eye" },
+  { code:"365",  description:"Glaucoma",                                                  category:"eye" },
+  { code:"373",  description:"Stye / Blepharitis / Lid problem",                          category:"eye" },
+  // ── ENT ──
+  { code:"351",  description:"Bell's Palsy",                                              category:"ent" },
+  { code:"388",  description:"Earwax",                                                    category:"ent" },
+  { code:"786",  description:"Epistaxis",                                                 category:"ent" },
+  { code:"939",  description:"Foreign body – ear",                                        category:"ent" },
+  { code:"379",  description:"Hearing loss",                                              category:"ent" },
+  { code:"386",  description:"Labyrinthitis / Meniere's / BPV vertigo",                   category:"ent" },
+  { code:"380",  description:"Otitis externa",                                            category:"ent" },
+  { code:"382",  description:"Otitis media",                                              category:"ent" },
+  { code:"461",  description:"Sinusitis",                                                 category:"ent" },
+  { code:"034",  description:"Strep throat",                                              category:"ent" },
+  // ── Dental ──
+  { code:"521",  description:"Dental problem: caries / abscess",                          category:"teeth" },
+  { code:"523",  description:"Gingivitis",                                                category:"teeth" },
+  { code:"524",  description:"Mandible / TMJ problem",                                    category:"teeth" },
+  { code:"525",  description:"Dental pain / Teething",                                    category:"teeth" },
+  { code:"527",  description:"Salivary gland",                                            category:"teeth" },
+  { code:"528",  description:"Stomatitis / Aphthous ulcer",                               category:"teeth" },
+  // ── Hematology & Endocrine ──
+  { code:"790",  description:"Abnormal lab results",                                      category:"blood" },
+  { code:"285",  description:"Anemia",                                                    category:"blood" },
+  { code:"287",  description:"Coag disorder / Anticoag",                                  category:"blood" },
+  { code:"250",  description:"Diabetes",                                                  category:"blood" },
+  { code:"269",  description:"Hypoglycemia / Nutritional deficiency / FTT",               category:"blood" },
+  { code:"274",  description:"Gout / Neutropenia / WBC abnormality",                      category:"blood" },
+  { code:"242",  description:"Hyperthyroid",                                              category:"blood" },
+  { code:"244",  description:"Hypothyroid",                                               category:"blood" },
+  { code:"683",  description:"Lymphadenopathy",                                           category:"blood" },
+  { code:"199",  description:"Neoplasm – malignant",                                      category:"blood" },
+  { code:"279",  description:"Thyroiditis",                                               category:"blood" },
+  // ── Symptoms / NYD ──
+  { code:"739",  description:"Arthritis NYD",                                             category:"nyd" },
+  { code:"839",  description:"Dislocation",                                               category:"nyd" },
+  { code:"977",  description:"Adverse effects – drugs / medications (allergy, overdose, reaction)", category:"nyd" },
+  { code:"787",  description:"Abdominal pain NYD",                                        category:"nyd" },
+  { code:"785",  description:"Chest pain NYD / Syncope",                                  category:"nyd" },
+  { code:"780",  description:"Dizziness / Headache",                                      category:"nyd" },
+  { code:"786",  description:"Dyspnea / SOB / Epistaxis",                                 category:"nyd" },
+  { code:"959",  description:"Injury or trauma – other",                                  category:"nyd" },
+  { code:"199",  description:"Neoplasm – malignant",                                      category:"nyd" },
+  { code:"798",  description:"Sudden death – unknown cause",                              category:"nyd" },
+  { code:"691",  description:"Rash",                                                      category:"nyd" },
+];
+
+/* ── Render ── */
+function toggle(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+
+function renderAll() {
+  const container = document.getElementById('diag-ref');
+
+  CATEGORIES.forEach(cat => {
+    const codes = DIAG_CODES.filter(d => d.category === cat.key);
+    if (!codes.length) return;
+
+    const rows = codes.map(d =>
+      `<div class="code-row">
+         <span class="row-code">${d.code}</span>
+         <span class="row-desc">${d.description}</span>
+       </div>`
+    ).join('');
+
+    const el = document.createElement('div');
+    el.className = 'accordion';
+    el.innerHTML = `
+      <button class="accordion-header" onclick="toggle(this)">
+        <span>
+          <span class="accordion-title">${cat.icon} ${cat.label}</span>
+          <span class="accordion-meta">${codes.length} code${codes.length !== 1 ? 's' : ''}</span>
+        </span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">${rows}</div>`;
+    container.appendChild(el);
+  });
+}
+
+renderAll();
+</script>
+</body>
+</html>
