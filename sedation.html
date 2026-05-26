@@ -22,9 +22,14 @@
   header {
     background: #1F4E79; color: white; padding: 14px 24px;
     display: flex; align-items: center; flex-wrap: wrap;
-    gap: 10px 16px; min-height: 68px;
+    gap: 10px 16px; min-height: 84px;
   }
-  header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 0.01em; color: white; flex: 1; min-width: 0; }
+  .header-brand { display: flex; flex-direction: row; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+  .header-subtitle { font-size: 1.25rem; color: rgba(255,255,255,0.92); font-weight: 700; letter-spacing: 0.01em; line-height: 1.4; }
+  @media (max-width: 640px) {
+    .header-brand { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .header-subtitle { font-size: 0.88rem; font-weight: 600; }
+  }
   header a.nav-link {
     font-size: 0.82rem; color: white; opacity: 0.85; text-decoration: none;
     border: 1px solid rgba(255,255,255,0.45); border-radius: 5px;
@@ -320,7 +325,10 @@
 <body>
 
 <header>
-  <h1>Emergency Department<br>OHIP Code Search</h1>
+  <div class="header-brand">
+    <img src="shiftcodes-icon-transparent.png" alt="ShiftCodes" style="height:66px; width:auto; display:block;">
+    <div class="header-subtitle">Emergency Department<br>OHIP Code Search</div>
+  </div>
   <a href="updates.html" class="nav-link">April 1st Updates</a>
 </header>
 
