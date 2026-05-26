@@ -146,6 +146,17 @@
   }
   .row-indent .row-code { color: #4a7ea5; }
 
+  .cast-note-row {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 10px 16px;
+  }
+  .cast-billing-note {
+    font-size: 0.82rem;
+    color: #92400e;
+    font-weight: 600;
+  }
+
   footer {
     position: fixed; bottom: 0; left: 0; right: 0;
     text-align: center; padding: 8px 24px;
@@ -162,11 +173,12 @@
 </header>
 
 <div class="toggle-bar">
-  <a href="index.html" class="toggle-btn">Billing Codes</a>
-  <a href="diag.html" class="toggle-btn">Diagnostic Codes</a>
+  <a href="index.html"    class="toggle-btn">Billing Codes</a>
+  <a href="diag.html"     class="toggle-btn">Diagnostic Codes</a>
+  <a href="diagref.html"  class="toggle-btn">Dx Quick Ref</a>
   <a href="sedation.html" class="toggle-btn">Sedation <span class="beta-badge">Beta</span></a>
   <a href="fractures.html" class="toggle-btn active">Fractures &amp; Dislocations</a>
-  <a href="calc.html" class="toggle-btn">Outside OHIP Calculator <span class="beta-badge">Beta</span></a>
+  <a href="calc.html"     class="toggle-btn">Outside OHIP <span class="beta-badge">Beta</span></a>
 </div>
 
 <main>
@@ -372,6 +384,52 @@
     </div>
 
   </div><!-- end lower extremity -->
+
+  <!-- ══════════════════════════════════════════════════════ OTHER MSK -->
+  <div class="extremity-section">
+    <div class="extremity-title">🩺 Other MSK</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Joint Injections &amp; Procedures</span><span class="accordion-meta">Aspirations, debridement &amp; manipulation</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">G370</span><div><div class="row-desc">Injection / aspiration of joint or bursa</div></div><span class="row-fee">$20.00</span></div>
+        <div class="code-row"><span class="row-code">G328</span><div><div class="row-desc">Aspiration / injection of complex joint <em style="color:#718096;font-size:0.82rem;">(not knee)</em></div></div><span class="row-fee">$40.00</span></div>
+        <div class="code-row"><span class="row-code">E556</span><div><div class="row-desc">Extensive debridement of open fracture</div><div class="row-note">Add-on to F code</div></div><span class="row-fee">+40%</span></div>
+        <div class="code-row"><span class="row-code">E556</span><div><div class="row-desc">Joint manipulation with sedation</div></div><span class="row-fee"></span></div>
+      </div>
+    </div>
+
+  </div><!-- end other msk -->
+
+  <!-- ══════════════════════════════════════════════════════ CASTS -->
+  <div class="extremity-section">
+    <div class="extremity-title">🩼 Casts &amp; Splints</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Cast Codes</span><span class="accordion-meta">Application, removal &amp; modification</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row cast-note-row">
+          <span class="cast-billing-note">⚠️ Do not bill cast codes with an F code, or within 2 weeks of an F code</span>
+        </div>
+        <div class="code-row"><span class="row-code">Z204</span><div><div class="row-desc">Cast removal</div></div><span class="row-fee">$10.25</span></div>
+        <div class="code-row"><span class="row-code">Z216</span><div><div class="row-desc">Cast wedge / bivalve</div></div><span class="row-fee">$10.25</span></div>
+        <div class="code-row"><span class="row-code">Z201</span><div><div class="row-desc">Finger cast</div></div><span class="row-fee">$10.25</span></div>
+        <div class="code-row"><span class="row-code">Z202</span><div><div class="row-desc">Hand cast</div></div><span class="row-fee">$14.90</span></div>
+        <div class="code-row"><span class="row-code">Z203</span><div><div class="row-desc">Forearm / wrist cast</div></div><span class="row-fee">$24.10</span></div>
+        <div class="code-row"><span class="row-code">Z198</span><div><div class="row-desc">Toes cast</div></div><span class="row-fee">$10.25</span></div>
+        <div class="code-row"><span class="row-code">Z213</span><div><div class="row-desc">Below knee / knee splint</div></div><span class="row-fee">$24.10</span></div>
+        <div class="code-row"><span class="row-code">Z213</span><div><div class="row-desc">Whole leg cast</div></div><span class="row-fee">$28.80</span></div>
+        <div class="code-row"><span class="row-code">Z211</span><div><div class="row-desc">Shoulder spica</div></div><span class="row-fee">$97.35</span></div>
+      </div>
+    </div>
+
+  </div><!-- end casts -->
 
 </main>
 

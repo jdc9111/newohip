@@ -357,11 +357,12 @@
 </header>
 
 <div class="toggle-bar">
-  <a href="index.html" class="toggle-btn active">Billing Codes</a>
-  <a href="diag.html" class="toggle-btn">Diagnostic Codes</a>
+  <a href="index.html"    class="toggle-btn active">Billing Codes</a>
+  <a href="diag.html"     class="toggle-btn">Diagnostic Codes</a>
+  <a href="diagref.html"  class="toggle-btn">Dx Quick Ref</a>
   <a href="sedation.html" class="toggle-btn">Sedation <span class="beta-badge">Beta</span></a>
   <a href="fractures.html" class="toggle-btn">Fractures &amp; Dislocations</a>
-  <a href="calc.html" class="toggle-btn">Outside OHIP Calculator <span class="beta-badge">Beta</span></a>
+  <a href="calc.html"     class="toggle-btn">Outside OHIP <span class="beta-badge">Beta</span></a>
 </div>
 
 <div id="reminder-banner" style="display:none"></div>
@@ -447,6 +448,7 @@ const DATA = [
   ["K015","Counsel family re: death/catastrophe",63,"Counselling / Forms","Min 20 min; document times"],
   ["K623","Form 1 – psychiatric assessment",105,"Counselling / Forms",""],
   ["K070","Homecare application",32,"Counselling / Forms",""],
+  ["K071","Acute Home Care Supervision",21,"Counselling / Forms","Exact fee $21.40; max 1 per physician per patient per 2 weeks; first 12 weeks following admission to home care program"],
   ["K035","Medical conditions report",36,"Counselling / Forms","Mandatory report to MOT; exact fee $36.25 (MOH Jan 2025)"],
   ["A771","Death certificate",34,"Counselling / Forms",""],
   ["A777","Pronouncement + death certificate",34,"Counselling / Forms",""],
@@ -760,6 +762,18 @@ const EXTENDED_NOTES = {
     <li><strong>Limit:</strong> 1 per physician, per patient, per specified reportable disease, within a 12-month period.</li>
     <li>Distinct from K080 (patient telephone calls) — K034 is specifically for MOH reporting obligations.</li>
   </ul>`,
+  "K071": `<ul>
+    <li>Billed for supervision of a patient during the <strong>first 12 weeks following admission to a home care program.</strong></li>
+    <li><strong>Limit:</strong> max 1 service per physician per patient per 2-week period.</li>
+    <li>Exact fee: <strong>$21.40</strong> (OMA Jan 2025).</li>
+    <li><strong>ED context:</strong> consider billing K071 when a patient without a family physician returns to the ED for follow-up after you arranged their home care (K070) — you are effectively supervising their acute home care episode.</li>
+  </ul>`,
+  "E412": `<ul>
+    <li>After-hours procedural premium for <strong>Emergency Department physicians</strong> — adds <strong>+20%</strong> to the procedural fee.</li>
+    <li><strong>Evenings (Mon–Fri):</strong> 17:00 – 24:00</li>
+    <li><strong>Saturdays:</strong> daytime and evening hours</li>
+    <li><strong>Holidays:</strong> all hours</li>
+  </ul>`,
   "G395": `<ul>
     <li>Where there is a potential threat to life or limb, physician provides resuscitation in order to address the high probability of loss of limb or requirement for "life threatening" critical care.</li>
     <li><strong>Excludes:</strong> intubation, lines, ABGs, catheters</li>
@@ -848,6 +862,7 @@ const FLAGGED_CODES = [
   "K035",   // Medical conditions report to MOT
   "Z756",   // Rectal/fecal disimpaction — often forgotten
   "Z104",   // Perianal abscess I&D — significant fee increase April 2026
+  "K071",   // Acute Home Care Supervision — often missed for ED follow-ups
 ];
 
 function openCOTD() {
