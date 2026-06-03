@@ -74,6 +74,89 @@
     color: #718096; background: white; border-top: 1px solid #dde3ed; z-index: 10;
   }
   footer a { color: #1F4E79; }
+
+  /* ── AI Search ── */
+  .ai-search-wrap {
+    max-width: 720px;
+    margin: 10px auto 0;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .ai-input-row {
+    position: relative;
+    flex: 1;
+  }
+  .ai-input-row svg {
+    position: absolute; left: 14px; top: 50%;
+    transform: translateY(-50%); color: #b45309; pointer-events: none;
+  }
+  #ai-query {
+    width: 100%;
+    padding: 11px 14px 11px 42px;
+    font-size: 1rem;
+    border: 2px solid #fcd34d;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.15s;
+    background: #fffbeb;
+  }
+  #ai-query:focus { border-color: #f59e0b; background: white; }
+  #ai-query::placeholder { color: #a16207; opacity: 0.7; }
+  .ai-search-btn {
+    padding: 11px 18px;
+    background: #1F4E79;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ai-search-btn:hover { background: #163d5e; }
+  .ai-search-btn:disabled { background: #93c5fd; cursor: not-allowed; }
+  .ai-hint { max-width: 720px; margin: 5px auto 0; font-size: 0.75rem; color: #92400e; }
+  .ai-results {
+    background: #fffbeb;
+    border: 1.5px solid #fcd34d;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .ai-results-header {
+    background: #fef3c7;
+    border-bottom: 1px solid #fcd34d;
+    padding: 8px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #92400e;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ai-results table {
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .ai-results tbody tr:hover { background: #fef9e7; }
+  .ai-spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid #fcd34d;
+    border-top-color: #b45309;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 <script src="header.js"></script>
 </head>
@@ -89,10 +172,23 @@
     <input id="query" type="search" placeholder="Search by code (e.g. 787) or diagnosis (e.g. fracture, chest pain, abscess)…" autocomplete="off" autofocus>
   </div>
   <p class="hint">Searches code and description simultaneously.</p>
+  <div class="ai-search-wrap">
+    <div class="ai-input-row">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M12 2a10 10 0 1 0 10 10"/><path d="m22 2-10 10"/><path d="M15 2h5v5"/>
+      </svg>
+      <input id="ai-query" type="text" placeholder="e.g. afib, PE, shingles, BPPV, OD, blocked bowel..." autocomplete="off">
+    </div>
+    <button class="ai-search-btn" id="ai-btn" onclick="aiSearch()">
+      <span id="ai-btn-label">&#10024; AI Search</span>
+    </button>
+  </div>
+  <p class="ai-hint">Understands abbreviations &amp; synonyms &mdash; powered by AI</p>
 </div>
 
 <main>
-  <div id="status"></div>
+    <div id="ai-results-container" style="display:none"></div>
+<div id="status"></div>
   <table id="tbl" style="display:none">
     <thead><tr><th>Code</th><th>Diagnosis</th></tr></thead>
     <tbody id="tbody"></tbody>
@@ -2052,6 +2148,63 @@ document.getElementById('query').addEventListener('input', e => {
   clearTimeout(timer);
   timer = setTimeout(() => render(e.target.value), 120);
 });
+
+// ── AI diagnostic code search ──────────────────────────────────────────────
+async function aiSearch() {
+  const query = document.getElementById('ai-query').value.trim();
+  if (!query) return;
+
+  const btn   = document.getElementById('ai-btn');
+  const label = document.getElementById('ai-btn-label');
+  const container = document.getElementById('ai-results-container');
+
+  // Loading state
+  btn.disabled = true;
+  label.innerHTML = '<span class="ai-spinner"></span> Searching...';
+  container.style.display = 'none';
+
+  try {
+    const res = await fetch('/.netlify/functions/diagnose', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query })
+    });
+
+    if (!res.ok) throw new Error('Function error ' + res.status);
+
+    const data = await res.json();
+    const results = data.results || [];
+
+    if (!results.length) {
+      container.innerHTML = '<div class="ai-results"><div class="ai-results-header">&#10024; AI Suggestions &mdash; no matches found</div></div>';
+    } else {
+      const rows = results.map(r =>
+        `<tr><td>${r.code}</td><td>${r.description}</td></tr>`
+      ).join('');
+      container.innerHTML = `
+        <div class="ai-results">
+          <div class="ai-results-header">&#10024; AI Suggestions for &ldquo;${query}&rdquo;</div>
+          <table><thead><tr><th>Code</th><th>Diagnosis</th></tr></thead>
+          <tbody>${rows}</tbody></table>
+        </div>`;
+    }
+    container.style.display = '';
+
+  } catch (err) {
+    container.innerHTML = '<div class="ai-results"><div class="ai-results-header" style="color:#dc2626">AI search unavailable &mdash; use keyword search above</div></div>';
+    container.style.display = '';
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    label.innerHTML = '&#10024; AI Search';
+  }
+}
+
+// Allow Enter key in the AI input to trigger search
+document.getElementById('ai-query').addEventListener('keydown', e => {
+  if (e.key === 'Enter') aiSearch();
+});
+
 </script>
 </body>
 </html>
