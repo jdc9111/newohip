@@ -2147,6 +2147,9 @@ let timer;
 document.getElementById('query').addEventListener('input', e => {
   clearTimeout(timer);
   timer = setTimeout(() => render(e.target.value), 120);
+  // Clear AI results when keyword search is used
+  document.getElementById('ai-results-container').style.display = 'none';
+  document.getElementById('ai-query').value = '';
 });
 
 // ── AI diagnostic code search ──────────────────────────────────────────────
