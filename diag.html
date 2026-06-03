@@ -2161,6 +2161,11 @@ async function aiSearch() {
   const label = document.getElementById('ai-btn-label');
   const container = document.getElementById('ai-results-container');
 
+  // Clear keyword search and cancel any pending debounce when AI search runs
+  clearTimeout(timer);
+  document.getElementById('query').value = '';
+  render('');
+
   // Loading state
   btn.disabled = true;
   label.innerHTML = '<span class="ai-spinner"></span> Searching...';
