@@ -572,6 +572,32 @@
     </div>
   </div>
 
+  <!-- Step 7: Position modifier -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">7</div>
+      <div class="step-title">Position Modifier <span class="step-subtitle">optional</span></div>
+    </div>
+    <div class="step-body">
+      <div class="radio-grid">
+        <div class="radio-opt" id="prone-toggle" onclick="toggleProne(this)" style="cursor:pointer;">
+          <div class="rdot" id="prone-dot"></div>
+          <div>
+            <div class="rl-main">Prone position <span class="rl-units">+4 units</span></div>
+            <div class="rl-code">E011C</div>
+          </div>
+        </div>
+        <div class="radio-opt" id="sitting-toggle" onclick="toggleSitting(this)" style="cursor:pointer;">
+          <div class="rdot" id="sitting-dot"></div>
+          <div>
+            <div class="rl-main">Sitting &gt;60&deg; <span class="rl-units">+4 units</span></div>
+            <div class="rl-code">E024C</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Results -->
   <div class="step-card" id="results-card">
     <div class="results-head">
@@ -902,6 +928,8 @@ let asaCode    = 'none';
 let asaUnits   = 0;
 let asaE       = false;
 let bariatric  = false;
+let prone      = false;
+let sitting    = false;
 let callInFee  = 0;
 let callInType = 'none';
 
@@ -1111,6 +1139,22 @@ function setBari(enabled) {
   recalc();
 }
 function toggleBari(el) { setBari(!bariatric); }
+function toggleProne(el) {
+  prone = !prone;
+  el.classList.toggle('sel-asa', prone);
+  document.getElementById('prone-dot').style.background  = prone ? '#276749' : '';
+  document.getElementById('prone-dot').style.borderColor = prone ? '#276749' : '';
+  if (prone) playCashRegister();
+  recalc();
+}
+function toggleSitting(el) {
+  sitting = !sitting;
+  el.classList.toggle('sel-asa', sitting);
+  document.getElementById('sitting-dot').style.background  = sitting ? '#276749' : '';
+  document.getElementById('sitting-dot').style.borderColor = sitting ? '#276749' : '';
+  if (sitting) playCashRegister();
+  recalc();
+}
 function selCallIn(el, type, fee) {
   document.querySelectorAll('#callin-group .radio-opt').forEach(e => e.classList.remove('sel-time'));
   el.classList.add('sel-time');
@@ -1191,7 +1235,9 @@ function recalc() {
   const ASA       = asaUnits;
   const ASA_E     = asaE ? 4 : 0;
   const BARI      = bariatric ? 2 : 0;
-  const totalASA  = ASA + ASA_E + BARI;
+  const PRONE     = prone   ? 4 : 0;
+  const SITTING   = sitting ? 4 : 0;
+  const totalASA  = ASA + ASA_E + BARI + PRONE + SITTING;
   const premUnits = timePrem !== 'none' ? (T + totalASA) : 0;
   const total     = PROC_BASE + T + totalASA + premUnits;
   const ohipFee   = total * UNIT_RATE;
@@ -1209,6 +1255,12 @@ function recalc() {
   }
   if (bariatric) {
     rows.push({ code: 'E010C', desc: 'Bariatric — BMI > 40' });
+  }
+  if (prone) {
+    rows.push({ code: 'E011C', desc: 'Prone position' });
+  }
+  if (sitting) {
+    rows.push({ code: 'E024C', desc: 'Sitting > 60°' });
   }
   if (timePrem !== 'none') {
     const label = timePrem === 'E400C' ? 'Evening / Weekend premium' : 'Night premium';
@@ -1268,6 +1320,16 @@ function copyEMRNote() {
   } else if (callInType === 'night') {
     lines.push('');
     lines.push('I was called in for this procedure after midnight.');
+  }
+
+  // Position modifiers
+  if (prone) {
+    lines.push('');
+    lines.push('Patient was in the prone position (E011C).');
+  }
+  if (sitting) {
+    lines.push('');
+    lines.push('Patient was sitting > 60 degrees (E024C).');
   }
 
   // BMI / bariatric
