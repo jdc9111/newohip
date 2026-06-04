@@ -521,20 +521,6 @@
             <div class="rl-code">E010C</div>
           </div>
         </div>
-        <div class="radio-opt" id="prone-toggle" onclick="toggleProne(this)" style="cursor:pointer;">
-          <div class="rdot" id="prone-dot"></div>
-          <div>
-            <div class="rl-main">Prone position <span class="rl-units">+4 units</span></div>
-            <div class="rl-code">E011C</div>
-          </div>
-        </div>
-        <div class="radio-opt" id="sitting-toggle" onclick="toggleSitting(this)" style="cursor:pointer;">
-          <div class="rdot" id="sitting-dot"></div>
-          <div>
-            <div class="rl-main">Sitting &gt;60&deg; <span class="rl-units">+4 units</span></div>
-            <div class="rl-code">E024C</div>
-          </div>
-        </div>
         <button onclick="openBMICalc()" id="bmi-calc-btn"
           style="padding:8px 14px; font-size:0.82rem; font-weight:600; border:2px solid #BDD7EE;
                  border-radius:8px; background:white; color:#1F4E79; cursor:pointer;
@@ -581,6 +567,32 @@
         <div id="bmi-result" style="display:none" class="bmi-result">
           <span class="bmi-val" id="bmi-val">—</span>
           <span id="bmi-msg"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 7: Position modifier -->
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num">7</div>
+      <div class="step-title">Position Modifier <span class="step-subtitle">optional</span></div>
+    </div>
+    <div class="step-body">
+      <div class="radio-grid">
+        <div class="radio-opt" id="prone-toggle" onclick="toggleProne(this)" style="cursor:pointer;">
+          <div class="rdot" id="prone-dot"></div>
+          <div>
+            <div class="rl-main">Prone position <span class="rl-units">+4 units</span></div>
+            <div class="rl-code">E011C</div>
+          </div>
+        </div>
+        <div class="radio-opt" id="sitting-toggle" onclick="toggleSitting(this)" style="cursor:pointer;">
+          <div class="rdot" id="sitting-dot"></div>
+          <div>
+            <div class="rl-main">Sitting &gt;60&deg; <span class="rl-units">+4 units</span></div>
+            <div class="rl-code">E024C</div>
+          </div>
         </div>
       </div>
     </div>
