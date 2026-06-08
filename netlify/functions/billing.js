@@ -236,7 +236,7 @@ Z202 (Splints & Casts): Hand splint/cast -- Only if no F or D code billed; Exact
 Z203 (Splints & Casts): Arm/forearm/wrist splint/cast -- Only if no F or D code billed; Exact fee $24.10 (MOH Jan 2025)
 Z213 (Splints & Casts): Below-knee splint/cast -- Only if no F or D code billed; Exact fee $24.10 (MOH Jan 2025)
 Z211 (Splints & Casts): Long leg splint/cast -- Only if no F or D code billed; Exact fee $28.80 (MOH Jan 2025)
-Z204 (Splints & Casts): Cast removal -- Exact fee $10.25 (MOH Jan 2025)``;
+Z204 (Splints & Casts): Cast removal -- Exact fee $10.25 (MOH Jan 2025)`;
 
 const SYSTEM_PROMPT = `You are an OHIP billing assistant for Emergency Department physicians in Ontario, Canada.
 
