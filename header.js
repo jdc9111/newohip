@@ -100,12 +100,13 @@ const HEADER_CSS = `
 `;
 
 const NAV_TABS = [
-  { key: 'billing',   href: 'index.html',    label: 'Billing Codes' },
-  { key: 'diag',      href: 'diag.html',     label: 'Diagnostic Codes' },
-  { key: 'diagref',   href: 'diagref.html',  label: 'Dx Quick Ref' },
-  { key: 'sedation',  href: 'sedation.html', label: 'Sedation',                beta: true },
-  { key: 'fractures', href: 'fractures.html',label: 'Fractures &amp; Dislocations' },
-  { key: 'calc',      href: 'calc.html',     label: 'Outside OHIP',            beta: true },
+  { key: 'billing',    href: 'index.html',      label: 'Billing Codes' },
+  { key: 'ai-billing', href: 'ai-billing.html', label: 'AI Billing',              beta: true },
+  { key: 'diag',       href: 'diag.html',       label: 'Diagnostic Codes' },
+  { key: 'diagref',    href: 'diagref.html',     label: 'Dx Quick Ref' },
+  { key: 'sedation',   href: 'sedation.html',   label: 'Sedation',                beta: true },
+  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations' },
+  { key: 'calc',       href: 'calc.html',       label: 'Outside OHIP',            beta: true },
 ];
 
 class AppHeader extends HTMLElement {

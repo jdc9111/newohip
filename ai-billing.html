@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Billing Search — ED OHIP</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YMK3RYM38R');
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f0f4f8; color: #1a202c;
+    min-height: 100vh; display: flex; flex-direction: column;
+  }
+  /* header/nav styles → header.js */
+
+  .search-bar {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid #dde3ed;
+    position: sticky; top: 0; z-index: 10;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  }
+  .search-wrap { max-width: 720px; margin: 0 auto; }
+  .ai-input-row { position: relative; }
+  .ai-input-row svg {
+    position: absolute; left: 14px; top: 50%;
+    transform: translateY(-50%); color: #b45309; pointer-events: none;
+  }
+  #ai-query {
+    width: 100%;
+    padding: 13px 14px 13px 44px;
+    font-size: 1rem;
+    border: 2px solid #fcd34d;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.15s;
+    background: #fffbeb;
+  }
+  #ai-query:focus { border-color: #f59e0b; background: white; }
+  #ai-query::placeholder { color: #a16207; opacity: 0.7; }
+  .search-actions {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 720px; margin: 8px auto 0; gap: 12px;
+  }
+  .ai-hint { font-size: 0.75rem; color: #92400e; }
+  .ai-search-btn {
+    padding: 10px 20px;
+    background: #1F4E79; color: white; border: none;
+    border-radius: 8px; font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; white-space: nowrap;
+    transition: background 0.15s;
+    display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+  }
+  .ai-search-btn:hover { background: #163d5e; }
+  .ai-search-btn:disabled { background: #93c5fd; cursor: not-allowed; }
+
+  main { flex: 1; max-width: 860px; margin: 24px auto; padding: 0 16px 60px; width: 100%; }
+
+  /* Examples */
+  .examples {
+    background: white; border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 20px 24px; margin-bottom: 20px;
+  }
+  .examples-title {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.07em; color: #718096; margin-bottom: 12px;
+  }
+  .example-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .example-chip {
+    background: #fffbeb; border: 1.5px solid #fcd34d;
+    border-radius: 20px; padding: 6px 14px;
+    font-size: 0.82rem; color: #92400e; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .example-chip:hover { background: #fef3c7; border-color: #f59e0b; }
+
+  /* Results */
+  .ai-results {
+    background: #fffbeb; border: 1.5px solid #fcd34d;
+    border-radius: 10px; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .ai-results-header {
+    background: #fef3c7; border-bottom: 1px solid #fcd34d;
+    padding: 10px 16px; font-size: 0.75rem; font-weight: 700;
+    color: #92400e; text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .ai-results table {
+    width: 100%; border-collapse: collapse;
+    background: white;
+  }
+  .ai-results thead th {
+    background: #1F4E79; color: white; font-size: 0.75rem;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 9px 14px; text-align: left;
+  }
+  .ai-results tbody tr { border-bottom: 1px solid #edf2f7; }
+  .ai-results tbody tr:last-child { border-bottom: none; }
+  .ai-results tbody tr:hover { background: #fef9e7; }
+  .ai-results td { padding: 10px 14px; font-size: 0.88rem; vertical-align: middle; }
+  .td-code { font-weight: 700; color: #1F4E79; white-space: nowrap; width: 90px; }
+  .td-reason { font-size: 0.78rem; color: #92400e; font-style: italic; }
+
+  .ai-spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid #fcd34d; border-top-color: #b45309;
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .disclaimer {
+    margin-top: 16px; padding: 10px 16px;
+    background: white; border-radius: 8px; border-left: 3px solid #cbd5e0;
+    font-size: 0.75rem; color: #718096;
+  }
+
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    text-align: center; padding: 8px 24px; font-size: 0.78rem;
+    color: #718096; background: white; border-top: 1px solid #dde3ed; z-index: 10;
+  }
+  footer a { color: #1F4E79; }
+</style>
+<script src="header.js"></script>
+</head>
+<body>
+
+<app-header active="ai-billing"></app-header>
+
+<div class="search-bar">
+  <div class="search-wrap">
+    <div class="ai-input-row">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M12 2a10 10 0 1 0 10 10"/><path d="m22 2-10 10"/><path d="M15 2h5v5"/>
+      </svg>
+      <input id="ai-query" type="text"
+        placeholder="Describe the encounter… e.g. complex lac repair Saturday night, shoulder reduction, septic workup weekday evening"
+        autocomplete="off" autofocus>
+    </div>
+    <div class="search-actions">
+      <span class="ai-hint">✨ Describe the encounter — AI suggests the full code bundle</span>
+      <button class="ai-search-btn" id="ai-btn" onclick="aiSearch()">
+        <span id="ai-btn-label">✨ AI Search</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div id="examples-panel" class="examples">
+    <div class="examples-title">Try an example</div>
+    <div class="example-chips">
+      <span class="example-chip" onclick="runExample(this)">Complex lac repair Saturday night</span>
+      <span class="example-chip" onclick="runExample(this)">Shoulder dislocation reduction weekday evening</span>
+      <span class="example-chip" onclick="runExample(this)">Septic patient, comprehensive workup, called in at midnight</span>
+      <span class="example-chip" onclick="runExample(this)">Minor injury assessment Sunday morning</span>
+      <span class="example-chip" onclick="runExample(this)">Foreign body removal Friday 6pm</span>
+      <span class="example-chip" onclick="runExample(this)">Hip dislocation reduction with sedation holiday</span>
+    </div>
+  </div>
+
+  <div id="ai-results-container" style="display:none"></div>
+
+  <div class="disclaimer">
+    ⚠️ AI suggestions should always be verified against current OHIP billing guidelines before submission.
+  </div>
+</main>
+
+<footer>
+  Please send feedback/suggestions to <a href="mailto:chisholm.mirror@gmail.com">chisholm.mirror@gmail.com</a>
+</footer>
+
+<script>
+function runExample(el) {
+  document.getElementById('ai-query').value = el.textContent;
+  aiSearch();
+}
+
+async function aiSearch() {
+  const query = document.getElementById('ai-query').value.trim();
+  if (!query) return;
+
+  const btn       = document.getElementById('ai-btn');
+  const label     = document.getElementById('ai-btn-label');
+  const container = document.getElementById('ai-results-container');
+  const examples  = document.getElementById('examples-panel');
+
+  btn.disabled = true;
+  label.innerHTML = '<span class="ai-spinner"></span> Searching...';
+  container.style.display = 'none';
+
+  try {
+    const res = await fetch('/.netlify/functions/billing', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query })
+    });
+
+    if (!res.ok) throw new Error('Function error ' + res.status);
+
+    const data = await res.json();
+    const results = data.results || [];
+
+    examples.style.display = 'none';
+
+    if (!results.length) {
+      container.innerHTML = '<div class="ai-results"><div class="ai-results-header">No suggestions found — try rephrasing</div></div>';
+    } else {
+      const rows = results.map(r =>
+        `<tr>
+          <td class="td-code">${r.code}</td>
+          <td>${r.description}</td>
+          <td class="td-reason">${r.reason || ''}</td>
+        </tr>`
+      ).join('');
+      container.innerHTML = `
+        <div class="ai-results">
+          <div class="ai-results-header">✨ AI Suggestions for &ldquo;${query}&rdquo;</div>
+          <table>
+            <thead><tr><th>Code</th><th>Description</th><th>Why</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }
+    container.style.display = '';
+
+  } catch (err) {
+    examples.style.display = 'none';
+    container.innerHTML = '<div class="ai-results"><div class="ai-results-header" style="color:#dc2626">AI search unavailable — please try again</div></div>';
+    container.style.display = '';
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    label.innerHTML = '✨ AI Search';
+  }
+}
+
+document.getElementById('ai-query').addEventListener('keydown', e => {
+  if (e.key === 'Enter') aiSearch();
+});
+</script>
+</body>
+</html>
