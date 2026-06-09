@@ -136,6 +136,7 @@ class AppHeader extends HTMLElement {
           <div class="header-subtitle">Emergency Department<br>OHIP Code Search</div>
         </div>
         <a href="updates.html" class="nav-link">April 1st Updates</a>
+        <a href="https://www.ontario.ca/files/2026-03/moh-schedule-benefit-2026-03-27.pdf" target="_blank" rel="noopener" class="nav-link">Schedule of Benefits ↗</a>
       </header>
       <div class="toggle-bar">
         ${tabs}
