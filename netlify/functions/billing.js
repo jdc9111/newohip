@@ -1,4 +1,4 @@
-'use strict';
+ï»¿'use strict';
 var https = require('https');
 
 var BILLING_CODES = [
@@ -126,7 +126,7 @@ var BILLING_CODES = [
   "G435 (Routine Procedures): Tonometry -- Exact fee $5.10 (MOH Jan 2025)",
   "Z432 (Routine Procedures): Exam under anaesthesia",
   "G552 (Routine Procedures): IUD removal (without sedation) -- Removal of intrauterine contraceptive device without sedation",
-  "Z756 (Routine Procedures): Rectal disimpaction / fecal disimpaction -- Was $36.80 ’ $46.00 April 2026",
+  "Z756 (Routine Procedures): Rectal disimpaction / fecal disimpaction -- Was $36.80 ï¿½ $46.00 April 2026",
   "H264 (Routine Procedures): ED pelvic exam with speculum -- NEW April 2026",
   "Z101 (Incision & Drainage): Abscess I&D -- one abscess (LA)",
   "Z226 (Incision & Drainage): Elbow bursa I&D",
@@ -136,7 +136,7 @@ var BILLING_CODES = [
   "Z714 (Incision & Drainage): Bartholin's cyst I&D (LA)",
   "Z174 (Incision & Drainage): Abscess I&D -- 3+ abscesses (LA)",
   "Z715 (Incision & Drainage): Bartholin's cyst I&D (GA)",
-  "Z104 (Incision & Drainage): Perianal abscess I&D (LA) -- Was $20.10 ’ $33.25 (+65%) April 2026",
+  "Z104 (Incision & Drainage): Perianal abscess I&D (LA) -- Was $20.10 ï¿½ $33.25 (+65%) April 2026",
   "Z140 (Incision & Drainage): Breast abscess I&D (LA)",
   "Z105 (Incision & Drainage): Perianal abscess I&D (GA)",
   "Z740 (Incision & Drainage): Breast abscess I&D (GA)",
@@ -196,8 +196,8 @@ var BILLING_CODES = [
   "F134 (Fractures  Lower Extremity): Pelvis fracture with pelvic binder -- with reduction -- No fee for no-reduction code; Exact fee $442.45 (MOH Jan 2025)",
   "F095 (Fractures  Lower Extremity): Femur fracture -- with reduction -- No fee for no-reduction code; Exact fee $407.35 (MOH Jan 2025)",
   "F085 (Fractures  Lower Extremity): Patella fracture (no cast) -- no reduction -- Exact fee $67.75 (MOH Jan 2025)",
-  "F078 (Fractures  Lower Extremity): Tibia ± fibula fracture -- no reduction -- Exact fee $115.95 (MOH Jan 2025)",
-  "F079 (Fractures  Lower Extremity): Tibia ± fibula fracture -- with reduction -- Exact fee $180.05 (MOH Jan 2025)",
+  "F078 (Fractures  Lower Extremity): Tibia ï¿½ fibula fracture -- no reduction -- Exact fee $115.95 (MOH Jan 2025)",
+  "F079 (Fractures  Lower Extremity): Tibia ï¿½ fibula fracture -- with reduction -- Exact fee $180.05 (MOH Jan 2025)",
   "F082 (Fractures  Lower Extremity): Fibula fracture -- no reduction -- Exact fee $67.75 (MOH Jan 2025)",
   "F083 (Fractures  Lower Extremity): Fibula fracture -- with reduction -- Exact fee $101.25 (MOH Jan 2025)",
   "F074 (Fractures  Lower Extremity): Ankle fracture -- no reduction -- Exact fee $67.75 (MOH Jan 2025)",
@@ -241,25 +241,21 @@ var BILLING_CODES = [
 ].join('\n');
 
 var SYSTEM_PROMPT =
-  'You are an OHIP billing assistant for Emergency Department physicians in Ontario, Canada.\n\n' +
-  'The user will describe a clinical encounter, procedure, or scenario. Your job is to identify the most relevant OHIP billing codes from the list below.\n\n' +
-  'Key billing rules:\n' +
-  '- Bill ONE assessment per visit -- choose time slot (Day/Eve Mon-Thu/Wkd+FriEve/Night) and complexity (Minor/Comprehensive/Multiple)\n' +
-  '- H15x (H151-H154) used on weekends and holidays instead of H10x/H13x/H12x\n' +
-  '- H113 stacks with assessments on weekends, holidays, and Friday evenings\n' +
-  '- H114 stacks with assessments on weekday evenings Mon-Thu -- NEW April 2026\n' +
-  '- E412 adds +20% to procedural fees on evenings, weekends, and holidays\n' +
-  '- E998C call-in codes apply when called in from home\n' +
-  '- Premiums stack ON TOP of the base assessment or procedure code\n\n' +
-  'Common abbreviations: lac=laceration, FB=foreign body, Fx=fracture, CVA=stroke, MI=myocardial infarction, SOB=shortness of breath\n\n' +
+  'You are an OHIP billing code lookup tool for Emergency Department physicians in Ontario, Canada.\n\n' +
+  'The user will type a procedure name, injury, assessment type, or medical abbreviation. ' +
+  'Return the 3 to 5 billing codes that best match what they typed -- nothing more.\n\n' +
+  'Do NOT suggest assessment codes (H10x, H13x, H15x, H12x), premium codes (H113, H114, E412, E998C), ' +
+  'or call-in codes unless the user specifically asks for them. ' +
+  'Focus only on the specific procedure, fracture, dislocation, laceration, or service code they are looking for.\n\n' +
+  'Common abbreviations: lac=laceration, FB=foreign body, Fx=fracture, I+D=incision and drainage, ' +
+  'disloc=dislocation, BPPV=vertigo, CVA=stroke, MI=myocardial infarction\n\n' +
   'Here are all available billing codes:\n' + BILLING_CODES + '\n\n' +
   'Rules:\n' +
   '- Return ONLY codes from the list above, never invent codes\n' +
-  '- Return up to 6 most relevant codes, ranked by importance\n' +
-  '- For most encounters include the assessment code and applicable premiums\n' +
-  '- For procedures include the procedure code, assessment, and applicable premiums\n' +
-  '- Respond ONLY with valid JSON: {"results": [{"code":"H102","description":"...","category":"...","reason":"..."}]}\n' +
-  '- reason = short phrase max 6 words explaining why code applies\n' +
+  '- Return 3 to 5 best matching codes, best match first\n' +
+  '- Respond ONLY with valid JSON in this exact format:\n' +
+  '  {"results": [{"code":"G552","description":"Laceration repair simple","category":"Lacerations","reason":"Simple lac repair"}]}\n' +
+  '- reason = very short phrase (max 5 words) explaining the match\n' +
   '- No explanation, no markdown, no extra text, just the JSON';
 
 function callOpenAI(apiKey, query) {
