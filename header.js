@@ -135,8 +135,10 @@ class AppHeader extends HTMLElement {
           <img src="shiftcodes-icon-transparent.png" alt="ShiftCodes" style="height:66px; width:auto; display:block;">
           <div class="header-subtitle">Emergency Department<br>OHIP Code Search</div>
         </div>
-        <a href="updates.html" class="nav-link">April 1st Updates</a>
-        <a href="https://www.ontario.ca/files/2026-03/moh-schedule-benefit-2026-03-27.pdf" target="_blank" rel="noopener" class="nav-link">Schedule of Benefits ↗</a>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
+          <a href="updates.html" class="nav-link">April 1st Updates</a>
+          <a href="https://www.ontario.ca/files/2026-03/moh-schedule-benefit-2026-03-27.pdf" target="_blank" rel="noopener" class="nav-link">Schedule of Benefits ↗</a>
+        </div>
       </header>
       <div class="toggle-bar">
         ${tabs}
