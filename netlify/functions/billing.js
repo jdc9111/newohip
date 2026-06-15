@@ -254,8 +254,8 @@ var SYSTEM_PROMPT =
   '- Return ONLY codes from the list above, never invent codes\n' +
   '- Return 3 to 5 best matching codes, best match first\n' +
   '- Respond ONLY with valid JSON in this exact format:\n' +
-  '  {"results": [{"code":"G552","description":"Laceration repair simple","category":"Lacerations","reason":"Simple lac repair"}]}\n' +
-  '- reason = very short phrase (max 5 words) explaining the match\n' +
+  '  {"results": [{"code":"D015","description":"Shoulder dislocation reduction -- no sedation","category":"Dislocation Reductions","fee":"$49.20"}]}\n' +
+  '- fee = extract the dollar amount from "Exact fee $X.XX" in the code description. If no exact fee is listed, use "See SOB"\n' +
   '- No explanation, no markdown, no extra text, just the JSON';
 
 function callOpenAI(apiKey, query) {

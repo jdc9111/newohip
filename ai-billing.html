@@ -108,7 +108,7 @@
   .ai-results tbody tr:hover { background: #fef9e7; }
   .ai-results td { padding: 10px 14px; font-size: 0.88rem; vertical-align: middle; }
   .td-code { font-weight: 700; color: #1F4E79; white-space: nowrap; width: 90px; }
-  .td-reason { font-size: 0.78rem; color: #92400e; font-style: italic; }
+  .td-fee { font-size: 0.88rem; color: #166534; font-weight: 600; white-space: nowrap; }
 
   .ai-spinner {
     display: inline-block; width: 14px; height: 14px;
@@ -219,14 +219,14 @@ async function aiSearch() {
         `<tr>
           <td class="td-code">${r.code}</td>
           <td>${r.description}</td>
-          <td class="td-reason">${r.reason || ''}</td>
+          <td class="td-fee">${r.fee || ''}</td>
         </tr>`
       ).join('');
       container.innerHTML = `
         <div class="ai-results">
           <div class="ai-results-header">✨ AI Suggestions for &ldquo;${query}&rdquo;</div>
           <table>
-            <thead><tr><th>Code</th><th>Description</th><th>Why</th></tr></thead>
+            <thead><tr><th>Code</th><th>Description</th><th>Fee</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
         </div>`;
