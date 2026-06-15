@@ -101,8 +101,9 @@ const HEADER_CSS = `
 
 const NAV_TABS = [
   { key: 'billing',    href: 'index.html',      label: 'Billing Codes' },
-  { key: 'ai-billing', href: 'ai-billing.html', label: 'AI Billing',              beta: true },
+  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Billing',     beta: true },
   { key: 'diag',       href: 'diag.html',       label: 'Diagnostic Codes' },
+  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Diag',        beta: true },
   { key: 'diagref',    href: 'diagref.html',     label: 'Dx Quick Ref' },
   { key: 'sedation',   href: 'sedation.html',   label: 'Sedation',                beta: true },
   { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations' },
