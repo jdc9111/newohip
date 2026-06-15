@@ -56,7 +56,7 @@ var BILLING_CODES = [
   "E420 (Critical Care  Imminent): Trauma ISS > 15 premium -- Add to critical care codes",
   "G395 (Critical Care  Potential): Potential life-threatening: 1st 15 min -- Other resuscitation; document times; exact fee $57.45 (MOH Jan 2025)",
   "G391 (Critical Care  Potential): Potential life-threatening: each addl 15 min (max 7) -- Bill for 2nd/3rd MD too; exact fee $30.60 (MOH Jan 2025)",
-  "Z437 (Critical Care  Other Procedures): Cardioversion (max 3/day) -- Allowed with G395 but NOT G521",
+  "Z437 (Critical Care  Other Procedures): Cardioversion (electrical and/or chemical, max 3/day) -- Allowed with G395 but NOT G521 -- Exact fee $92.45",
   "G269 (Critical Care  Other Procedures): Central line",
   "G211 (Critical Care  Other Procedures): Intubation -- Allowed with G395 but NOT G521; exact fee $38.35 (MOH Jan 2025)",
   "Z341 (Critical Care  Other Procedures): Chest tube",
