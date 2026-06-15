@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Billing Search — ED OHIP</title>
+<title>AI Diagnostic Search — ED OHIP</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R"></script>
 <script>
@@ -19,7 +19,6 @@
     background: #f0f4f8; color: #1a202c;
     min-height: 100vh; display: flex; flex-direction: column;
   }
-  /* header/nav styles → header.js */
 
   .search-bar {
     background: white;
@@ -64,7 +63,6 @@
 
   main { flex: 1; max-width: 860px; margin: 24px auto; padding: 0 16px 60px; width: 100%; }
 
-  /* Examples */
   .examples {
     background: white; border-radius: 10px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
@@ -83,7 +81,6 @@
   }
   .example-chip:hover { background: #fef3c7; border-color: #f59e0b; }
 
-  /* Results */
   .ai-results {
     background: #fffbeb; border: 1.5px solid #fcd34d;
     border-radius: 10px; overflow: hidden;
@@ -103,12 +100,12 @@
     font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
     padding: 9px 14px; text-align: left;
   }
+  .ai-results thead th:first-child { width: 90px; }
   .ai-results tbody tr { border-bottom: 1px solid #edf2f7; }
   .ai-results tbody tr:last-child { border-bottom: none; }
   .ai-results tbody tr:hover { background: #fef9e7; }
   .ai-results td { padding: 10px 14px; font-size: 0.88rem; vertical-align: middle; }
-  .td-code { font-weight: 700; color: #1F4E79; white-space: nowrap; width: 90px; }
-  .td-fee { font-size: 0.88rem; color: #166534; font-weight: 600; white-space: nowrap; }
+  .td-code { font-weight: 700; color: #1F4E79; white-space: nowrap; text-align: center; }
 
   .ai-spinner {
     display: inline-block; width: 14px; height: 14px;
@@ -134,7 +131,7 @@
 </head>
 <body>
 
-<app-header active="ai-billing"></app-header>
+<app-header active="ai-diag"></app-header>
 
 <div class="search-bar">
   <div class="search-wrap">
@@ -143,13 +140,13 @@
         <path d="M12 2a10 10 0 1 0 10 10"/><path d="m22 2-10 10"/><path d="M15 2h5v5"/>
       </svg>
       <input id="ai-query" type="text"
-        placeholder="e.g. shoulder dislocation, complex laceration, pulled elbow, hip reduction, FB removal..."
+        placeholder="e.g. afib, PE, shingles, BPPV, OD, chest pain, blocked bowel..."
         autocomplete="off" autofocus>
     </div>
     <div class="search-actions">
-      <span class="ai-hint">✨ Type a procedure, injury, or service — AI finds the right code</span>
+      <span class="ai-hint">&#10024; Understands abbreviations &amp; synonyms &mdash; powered by AI</span>
       <button class="ai-search-btn" id="ai-btn" onclick="aiSearch()">
-        <span id="ai-btn-label">✨ AI Search</span>
+        <span id="ai-btn-label">&#10024; AI Search</span>
       </button>
     </div>
   </div>
@@ -159,19 +156,19 @@
   <div id="examples-panel" class="examples">
     <div class="examples-title">Try an example</div>
     <div class="example-chips">
-      <span class="example-chip" onclick="runExample(this)">Shoulder dislocation reduction</span>
-      <span class="example-chip" onclick="runExample(this)">Complex laceration repair</span>
-      <span class="example-chip" onclick="runExample(this)">Pulled elbow</span>
-      <span class="example-chip" onclick="runExample(this)">Foreign body removal</span>
-      <span class="example-chip" onclick="runExample(this)">Hip dislocation with sedation</span>
-      <span class="example-chip" onclick="runExample(this)">I&amp;D abscess</span>
+      <span class="example-chip" onclick="runExample(this)">afib</span>
+      <span class="example-chip" onclick="runExample(this)">PE</span>
+      <span class="example-chip" onclick="runExample(this)">shingles</span>
+      <span class="example-chip" onclick="runExample(this)">BPPV</span>
+      <span class="example-chip" onclick="runExample(this)">acute abdomen</span>
+      <span class="example-chip" onclick="runExample(this)">drug overdose</span>
     </div>
   </div>
 
   <div id="ai-results-container" style="display:none"></div>
 
   <div class="disclaimer">
-    ⚠️ AI suggestions should always be verified against current OHIP billing guidelines before submission.
+    &#9888;&#65039; AI suggestions should always be verified against current OHIP billing guidelines before submission.
   </div>
 </main>
 
@@ -199,7 +196,7 @@ async function aiSearch() {
   container.style.display = 'none';
 
   try {
-    const res = await fetch('/.netlify/functions/billing', {
+    const res = await fetch('/.netlify/functions/diagnose', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query })
@@ -213,34 +210,30 @@ async function aiSearch() {
     examples.style.display = 'none';
 
     if (!results.length) {
-      container.innerHTML = '<div class="ai-results"><div class="ai-results-header">No suggestions found — try rephrasing</div></div>';
+      container.innerHTML = '<div class="ai-results"><div class="ai-results-header">No suggestions found &mdash; try rephrasing</div></div>';
     } else {
       const rows = results.map(r =>
-        `<tr>
-          <td class="td-code">${r.code}</td>
-          <td>${r.description}</td>
-          <td class="td-fee">${r.fee || ''}</td>
-        </tr>`
+        '<tr><td class="td-code">' + r.code + '</td><td>' + r.description + '</td></tr>'
       ).join('');
-      container.innerHTML = `
-        <div class="ai-results">
-          <div class="ai-results-header">✨ AI Suggestions for &ldquo;${query}&rdquo;</div>
-          <table>
-            <thead><tr><th>Code</th><th>Description</th><th>Fee</th></tr></thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </div>`;
+      container.innerHTML =
+        '<div class="ai-results">' +
+          '<div class="ai-results-header">&#10024; AI Suggestions for &ldquo;' + query + '&rdquo;</div>' +
+          '<table>' +
+            '<thead><tr><th>Code</th><th>Diagnosis</th></tr></thead>' +
+            '<tbody>' + rows + '</tbody>' +
+          '</table>' +
+        '</div>';
     }
     container.style.display = '';
 
   } catch (err) {
     examples.style.display = 'none';
-    container.innerHTML = '<div class="ai-results"><div class="ai-results-header" style="color:#dc2626">AI search unavailable — please try again</div></div>';
+    container.innerHTML = '<div class="ai-results"><div class="ai-results-header" style="color:#dc2626">AI search unavailable &mdash; please try again</div></div>';
     container.style.display = '';
     console.error(err);
   } finally {
     btn.disabled = false;
-    label.innerHTML = '✨ AI Search';
+    label.innerHTML = '&#10024; AI Search';
   }
 }
 
