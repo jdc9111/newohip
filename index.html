@@ -378,6 +378,7 @@ const DATA = [
   ["H989","On-call addl patient – Wkd/Hol",75,"On-Call","Max 10"],
   ["H987","On-call addl patient – Night",100,"On-Call","Unlimited"],
   ["K005","Mental health counselling",63,"Counselling / Forms","Min 20 min; document mental health dx + times"],
+  ["K061","Blood sample at request of police officer",35,"Counselling / Forms","Taking blood in hospital for forensic/legal purposes (e.g. impaired driving); exact fee ~$34.80"],
   ["K028","Needlestick or STI counselling/treatment",80,"Counselling / Forms","Per 30 min; document times. Fee updated April 1 2026"],
   ["K034","Telephone report of reportable disease to MOH",36,"Counselling / Forms","Max 1 per physician per patient per disease per 12 months; must be personally rendered by physician"],
   ["K015","Counsel family re: death/catastrophe",63,"Counselling / Forms","Min 20 min; document times"],
@@ -705,6 +706,11 @@ const EXTENDED_NOTES = {
     <li><strong>Limit:</strong> max 1 service per physician per patient per 2-week period.</li>
     <li>Exact fee: <strong>$21.40</strong> (OMA Jan 2025).</li>
     <li><strong>ED context:</strong> consider billing K071 when a patient without a family physician returns to the ED for follow-up after you arranged their home care (K070) — you are effectively supervising their acute home care episode.</li>
+  </ul>`,
+  "K061": `<ul>
+    <li>Billed when a physician takes a <strong>blood sample in hospital at the request of a police officer</strong> — typically for impaired driving investigations or other forensic/legal purposes.</li>
+    <li><strong>Fee:</strong> ~$34.80 (current reference; was $31.65 in 2023, $30.00 prior).</li>
+    <li>Categorized as a special procedure — requires police request; document the officer's name/badge number and time in the chart.</li>
   </ul>`,
   "K005": `<ul>
     <li>Minimum <strong>20 minutes</strong> of mental health counselling; document the mental health diagnosis and start/end times.</li>
