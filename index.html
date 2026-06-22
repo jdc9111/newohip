@@ -391,6 +391,7 @@ const DATA = [
   ["A320","MAID consultation",174,"Counselling / Forms","NEW April 2026; exact fee $174.25"],
   ["K101","Ground ambulance transfer with patient",60,"Transport","Per 15 min; physician attendance during ground ambulance transfer; fee updated April 1 2026"],
   ["K111","Air ambulance transfer with patient",60,"Transport","Per 15 min; physician attendance during air ambulance transfer; fee updated April 1 2026"],
+  ["K112","Return trip without patient to place of origin",25,"Transport","Per 30 min; air and ground ambulance; companion to K101/K111"],
   ["G521","Imminent life-threatening: 1st 15 min (1st MD)",112,"Critical Care – Imminent","Arrest/Trauma; document times; cannot see other pts simultaneously; exact fee $111.80 (MOH Jan 2025). <strong>E420 +50% trauma premium (ISS > 15)</strong>"],
   ["G523","Imminent life-threatening: 2nd 15 min (1st MD)",58,"Critical Care – Imminent","Arrest/Trauma; exact fee $57.65 (MOH Jan 2025)"],
   ["G522","Imminent life-threatening: each addl 15 min (max 6)",38,"Critical Care – Imminent","Arrest/Trauma; bill for 2nd/3rd MD too; exact fee $38.00 (MOH Jan 2025)"],
@@ -710,6 +711,12 @@ const EXTENDED_NOTES = {
     <li><strong>Fee:</strong> $60.00 per 15 min (updated April 1, 2026; was $42.10 in 2025).</li>
     <li>Requires physician to be physically present with the patient during transport.</li>
     <li>Specific to <strong>ground ambulance</strong> — does not apply to other vehicles.</li>
+  </ul>`,
+  "K112": `<ul>
+    <li>Billed for the physician's <strong>return trip without the patient</strong> to the place of origin, following an interhospital transfer.</li>
+    <li><strong>Fee:</strong> $25.05 per 30 min.</li>
+    <li>Applies to both <strong>ground and air ambulance</strong> return trips.</li>
+    <li>Companion code to K101 (ground transfer with patient) and K111 (air transfer with patient).</li>
   </ul>`,
   "K111": `<ul>
     <li>Billed for <strong>physician attendance during air ambulance patient transfer</strong> — per 15-minute increment.</li>
