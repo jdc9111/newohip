@@ -389,6 +389,8 @@ const DATA = [
   ["A777","Pronouncement + death certificate",34,"Counselling / Forms",""],
   ["H105","Interim admission orders",29,"Counselling / Forms",""],
   ["A320","MAID consultation",174,"Counselling / Forms","NEW April 2026; exact fee $174.25"],
+  ["K101","Ground ambulance transfer with patient",60,"Transport","Per 15 min; physician attendance during ground ambulance transfer; fee updated April 1 2026"],
+  ["K111","Air ambulance transfer with patient",60,"Transport","Per 15 min; physician attendance during air ambulance transfer; fee updated April 1 2026"],
   ["G521","Imminent life-threatening: 1st 15 min (1st MD)",112,"Critical Care – Imminent","Arrest/Trauma; document times; cannot see other pts simultaneously; exact fee $111.80 (MOH Jan 2025). <strong>E420 +50% trauma premium (ISS > 15)</strong>"],
   ["G523","Imminent life-threatening: 2nd 15 min (1st MD)",58,"Critical Care – Imminent","Arrest/Trauma; exact fee $57.65 (MOH Jan 2025)"],
   ["G522","Imminent life-threatening: each addl 15 min (max 6)",38,"Critical Care – Imminent","Arrest/Trauma; bill for 2nd/3rd MD too; exact fee $38.00 (MOH Jan 2025)"],
@@ -702,6 +704,18 @@ const EXTENDED_NOTES = {
     <li><strong>Limit:</strong> max 1 service per physician per patient per 2-week period.</li>
     <li>Exact fee: <strong>$21.40</strong> (OMA Jan 2025).</li>
     <li><strong>ED context:</strong> consider billing K071 when a patient without a family physician returns to the ED for follow-up after you arranged their home care (K070) — you are effectively supervising their acute home care episode.</li>
+  </ul>`,
+  "K101": `<ul>
+    <li>Billed for <strong>physician attendance during ground/land ambulance patient transfer</strong> — per 15-minute increment.</li>
+    <li><strong>Fee:</strong> $60.00 per 15 min (updated April 1, 2026; was $42.10 in 2025).</li>
+    <li>Requires physician to be physically present with the patient during transport.</li>
+    <li>Specific to <strong>ground ambulance</strong> — does not apply to other vehicles.</li>
+  </ul>`,
+  "K111": `<ul>
+    <li>Billed for <strong>physician attendance during air ambulance patient transfer</strong> — per 15-minute increment.</li>
+    <li><strong>Fee:</strong> $60.00 per 15 min (updated April 1, 2026; was $126.40 in 2025 — significant decrease).</li>
+    <li>Requires physician to be physically present with the patient during transport.</li>
+    <li>Specific to <strong>air ambulance</strong> transport.</li>
   </ul>`,
   "H112": `<ul>
     <li>Night premium billed <strong>per patient visit</strong> between midnight and 08:00.</li>
