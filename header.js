@@ -51,26 +51,25 @@ const HEADER_CSS = `
     background: #163d5e;
     display: flex;
     justify-content: center;
-    gap: 0;
+    gap: 6px;
     padding: 10px 24px;
     flex-wrap: wrap;
   }
   .toggle-btn {
-    padding: 8px 22px;
+    padding: 8px 18px;
     font-size: 0.9rem;
     font-weight: 600;
     text-decoration: none;
-    color: rgba(255,255,255,0.7);
-    background: transparent;
-    border: 2px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 7px;
     transition: all 0.15s;
     white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   }
-  .toggle-btn:first-child  { border-radius: 6px 0 0 6px; }
-  .toggle-btn:last-child   { border-radius: 0 6px 6px 0; border-left: none; }
-  .toggle-btn:not(:first-child) { border-left: none; }
-  .toggle-btn.active       { background: white; color: #1F4E79; border-color: white; }
-  .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.1); color: white; }
+  .toggle-btn.active       { background: white; color: #1F4E79; border-color: white; box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
+  .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.18); color: white; }
 
   .beta-badge {
     font-size: 0.65rem;
@@ -104,12 +103,12 @@ const HEADER_CSS = `
 const NAV_TABS = [
   { key: 'billing',    href: 'index.html',      label: 'Billing Codes' },
   { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Billing Codes' },
+  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations' },
   { key: 'diag',       href: 'diag.html',       label: 'Diagnostic Codes' },
   { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Diagnostic Codes' },
-  { key: 'diagref',    href: 'diagref.html',     label: 'Dx Quick Ref' },
+  { key: 'diagref',    href: 'diagref.html',     label: 'Common Diagnostic Codes' },
   { key: 'sedation',   href: 'sedation.html',   label: 'Sedation' },
-  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations' },
-  { key: 'calc',       href: 'calc.html',       label: 'Outside OHIP' },
+  { key: 'calc',       href: 'calc.html',       label: 'Outside OHIP Calculator' },
 ];
 
 class AppHeader extends HTMLElement {
