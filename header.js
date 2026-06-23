@@ -109,7 +109,7 @@ const NAV_TABS = [
   { key: 'diagref',    href: 'diagref.html',     label: 'Common Diagnostic Codes' },
   { key: 'sedation',   href: 'sedation.html',   label: 'Sedation' },
   { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations' },
-  { key: 'calc',       href: 'calc.html',       label: 'Outside OHIP' },
+  { key: 'calc',       href: 'calc.html',       label: 'Outside OHIP Calculator' },
 ];
 
 class AppHeader extends HTMLElement {
