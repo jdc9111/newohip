@@ -71,15 +71,15 @@ const HEADER_CSS = `
   .toggle-btn.active       { background: white; color: #1F4E79; border-color: white; box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
   .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.18); color: white; }
 
-  /* Billing group — amber tint */
-  .toggle-btn.grp-billing { border-color: rgba(251,191,36,0.55); background: rgba(251,191,36,0.1); color: rgba(255,235,180,0.9); }
-  .toggle-btn.grp-billing:not(.active):hover { background: rgba(251,191,36,0.22); color: white; }
-  .toggle-btn.grp-billing.active { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+  /* Billing group — sky blue */
+  .toggle-btn.grp-billing { border-color: rgba(56,189,248,0.45); background: rgba(56,189,248,0.12); color: rgba(186,230,255,0.9); }
+  .toggle-btn.grp-billing:not(.active):hover { background: rgba(56,189,248,0.22); color: white; }
+  .toggle-btn.grp-billing.active { background: #e0f2fe; color: #0c4a6e; border-color: #38bdf8; }
 
-  /* Diagnostic group — teal tint */
-  .toggle-btn.grp-diag { border-color: rgba(94,234,212,0.55); background: rgba(94,234,212,0.1); color: rgba(180,245,235,0.9); }
-  .toggle-btn.grp-diag:not(.active):hover { background: rgba(94,234,212,0.22); color: white; }
-  .toggle-btn.grp-diag.active { background: #ccfbf1; color: #134e4a; border-color: #5eead4; }
+  /* Diagnostic group — coral/rose */
+  .toggle-btn.grp-diag { border-color: rgba(251,113,133,0.45); background: rgba(251,113,133,0.12); color: rgba(254,205,211,0.9); }
+  .toggle-btn.grp-diag:not(.active):hover { background: rgba(251,113,133,0.22); color: white; }
+  .toggle-btn.grp-diag.active { background: #ffe4e6; color: #9f1239; border-color: #fb7185; }
 
   .beta-badge {
     font-size: 0.65rem;
