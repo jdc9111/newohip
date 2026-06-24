@@ -71,6 +71,16 @@ const HEADER_CSS = `
   .toggle-btn.active       { background: white; color: #1F4E79; border-color: white; box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
   .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.18); color: white; }
 
+  /* Billing group — amber tint */
+  .toggle-btn.grp-billing { border-color: rgba(251,191,36,0.55); background: rgba(251,191,36,0.1); color: rgba(255,235,180,0.9); }
+  .toggle-btn.grp-billing:not(.active):hover { background: rgba(251,191,36,0.22); color: white; }
+  .toggle-btn.grp-billing.active { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+
+  /* Diagnostic group — teal tint */
+  .toggle-btn.grp-diag { border-color: rgba(94,234,212,0.55); background: rgba(94,234,212,0.1); color: rgba(180,245,235,0.9); }
+  .toggle-btn.grp-diag:not(.active):hover { background: rgba(94,234,212,0.22); color: white; }
+  .toggle-btn.grp-diag.active { background: #ccfbf1; color: #134e4a; border-color: #5eead4; }
+
   .beta-badge {
     font-size: 0.65rem;
     font-weight: 700;
@@ -101,12 +111,12 @@ const HEADER_CSS = `
 `;
 
 const NAV_TABS = [
-  { key: 'billing',    href: 'index.html',      label: 'Billing Codes' },
-  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Billing Codes' },
-  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations' },
-  { key: 'diag',       href: 'diag.html',       label: 'Diagnostic Codes' },
-  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Diagnostic Codes' },
-  { key: 'diagref',    href: 'diagref.html',     label: 'Common Diagnostic Codes' },
+  { key: 'billing',    href: 'index.html',      label: 'Billing Codes',              group: 'billing' },
+  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Billing Codes',  group: 'billing' },
+  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations', group: 'billing' },
+  { key: 'diag',       href: 'diag.html',       label: 'Diagnostic Codes',           group: 'diag' },
+  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Diagnostic Codes', group: 'diag' },
+  { key: 'diagref',    href: 'diagref.html',     label: 'Common Diagnostic Codes',   group: 'diag' },
   { key: 'sedation',   href: 'sedation.html',   label: 'Sedation' },
   { key: 'calc',       href: 'calc.html',       label: 'Outside OHIP Calculator' },
 ];
@@ -128,7 +138,8 @@ class AppHeader extends HTMLElement {
       const badge = tab.beta
         ? ` <span class="beta-badge">Beta</span>`
         : '';
-      return `<a href="${tab.href}" class="toggle-btn${isActive ? ' active' : ''}">${tab.label}${badge}</a>`;
+      const grp = tab.group ? ` grp-${tab.group}` : '';
+      return `<a href="${tab.href}" class="toggle-btn${isActive ? ' active' : ''}${grp}">${tab.label}${badge}</a>`;
     }).join('\n      ');
 
     this.innerHTML = `
