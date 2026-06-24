@@ -74,7 +74,7 @@ const HEADER_CSS = `
   /* ── Group containers ── */
   .nav-group {
     display: flex; gap: 4px; align-items: center;
-    padding: 4px 6px; border-radius: 10px;
+    padding: 6px 10px; border-radius: 12px;
   }
   .nav-group.grp-billing { background: rgba(56,189,248,0.14); }
   .nav-group.grp-diag    { background: rgba(251,113,133,0.14); }
