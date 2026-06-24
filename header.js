@@ -71,15 +71,13 @@ const HEADER_CSS = `
   .toggle-btn.active       { background: white; color: #1F4E79; border-color: white; box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
   .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.18); color: white; }
 
-  /* Billing group — sky blue */
-  .toggle-btn.grp-billing { border-color: rgba(56,189,248,0.45); background: rgba(56,189,248,0.12); color: rgba(186,230,255,0.9); }
-  .toggle-btn.grp-billing:not(.active):hover { background: rgba(56,189,248,0.22); color: white; }
-  .toggle-btn.grp-billing.active { background: #e0f2fe; color: #0c4a6e; border-color: #38bdf8; }
-
-  /* Diagnostic group — coral/rose */
-  .toggle-btn.grp-diag { border-color: rgba(251,113,133,0.45); background: rgba(251,113,133,0.12); color: rgba(254,205,211,0.9); }
-  .toggle-btn.grp-diag:not(.active):hover { background: rgba(251,113,133,0.22); color: white; }
-  .toggle-btn.grp-diag.active { background: #ffe4e6; color: #9f1239; border-color: #fb7185; }
+  /* ── Group containers ── */
+  .nav-group {
+    display: flex; gap: 4px; align-items: center;
+    padding: 4px 6px; border-radius: 10px;
+  }
+  .nav-group.grp-billing { background: rgba(56,189,248,0.14); }
+  .nav-group.grp-diag    { background: rgba(251,113,133,0.14); }
 
   .beta-badge {
     font-size: 0.65rem;
@@ -99,6 +97,7 @@ const HEADER_CSS = `
     .header-brand { flex-direction: column; align-items: flex-start; gap: 4px; }
     .header-subtitle { font-size: 0.88rem; font-weight: 600; }
     .toggle-bar { flex-direction: column; padding: 8px 12px; gap: 6px; flex-wrap: nowrap; }
+    .nav-group { flex-direction: column; width: 100%; padding: 4px; }
     .toggle-btn {
       border-radius: 6px !important;
       border: 2px solid rgba(255,255,255,0.3) !important;
@@ -133,13 +132,25 @@ class AppHeader extends HTMLElement {
 
     const active = this.getAttribute('active') || '';
 
-    const tabs = NAV_TABS.map(tab => {
-      const isActive = tab.key === active;
-      const badge = tab.beta
-        ? ` <span class="beta-badge">Beta</span>`
-        : '';
-      const grp = tab.group ? ` grp-${tab.group}` : '';
-      return `<a href="${tab.href}" class="toggle-btn${isActive ? ' active' : ''}${grp}">${tab.label}${badge}</a>`;
+    // Build segments: consecutive tabs with the same group get wrapped together
+    const segments = [];
+    for (const tab of NAV_TABS) {
+      const last = segments[segments.length - 1];
+      if (last && last.group && last.group === tab.group) {
+        last.tabs.push(tab);
+      } else {
+        segments.push({ group: tab.group || null, tabs: [tab] });
+      }
+    }
+
+    const tabs = segments.map(seg => {
+      const btns = seg.tabs.map(tab => {
+        const isActive = tab.key === active;
+        return `<a href="${tab.href}" class="toggle-btn${isActive ? ' active' : ''}">${tab.label}</a>`;
+      }).join('');
+      return seg.group
+        ? `<div class="nav-group grp-${seg.group}">${btns}</div>`
+        : btns;
     }).join('\n      ');
 
     this.innerHTML = `
