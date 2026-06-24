@@ -78,6 +78,7 @@ const HEADER_CSS = `
   }
   .nav-group.grp-billing { background: rgba(56,189,248,0.14); }
   .nav-group.grp-diag    { background: rgba(251,113,133,0.14); }
+  .nav-group.grp-other   { background: rgba(255,255,255,0.08); }
 
   .beta-badge {
     font-size: 0.65rem;
@@ -116,8 +117,8 @@ const NAV_TABS = [
   { key: 'diag',       href: 'diag.html',       label: 'Diagnostic Codes',           group: 'diag' },
   { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Diagnostic Codes', group: 'diag' },
   { key: 'diagref',    href: 'diagref.html',     label: 'Common Diagnostic Codes',   group: 'diag' },
-  { key: 'sedation',   href: 'sedation.html',   label: 'Sedation' },
-  { key: 'calc',       href: 'calc.html',       label: 'Outside OHIP Calculator' },
+  { key: 'sedation',   href: 'sedation.html',   label: 'Sedation',                group: 'other' },
+  { key: 'calc',       href: 'calc.html',       label: 'Outside OHIP Calculator', group: 'other' },
 ];
 
 class AppHeader extends HTMLElement {
