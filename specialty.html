@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procedures by Specialty – ED OHIP</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YMK3RYM38R');
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a202c;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* header/nav styles → header.js */
+
+  main {
+    flex: 1;
+    max-width: 860px;
+    margin: 28px auto;
+    padding: 0 16px 80px;
+    width: 100%;
+  }
+
+  /* ── Section headers ── */
+  .specialty-section { margin-bottom: 36px; }
+  .specialty-title {
+    font-size: 1.15rem; font-weight: 800; color: #1F4E79;
+    border-bottom: 3px solid #1F4E79;
+    padding-bottom: 8px; margin-bottom: 14px;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Accordion ── */
+  .accordion { margin-bottom: 8px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  .accordion-header {
+    display: flex; align-items: center; justify-content: space-between;
+    background: white;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+    border: none; width: 100%; text-align: left;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .accordion-header:hover { background: #ebf3fb; }
+  .accordion-header.open { background: #1F4E79; color: white; }
+
+  .accordion-title { font-size: 0.95rem; font-weight: 700; }
+  .accordion-meta { font-size: 0.75rem; opacity: 0.65; margin-left: 10px; font-weight: 400; }
+  .accordion-chevron { font-size: 0.8rem; transition: transform 0.2s; flex-shrink: 0; margin-left: 12px; }
+  .accordion-header.open .accordion-chevron { transform: rotate(180deg); }
+
+  .accordion-body {
+    display: none;
+    background: white;
+    border-top: 1px solid #edf2f7;
+  }
+  .accordion-body.open { display: block; }
+
+  /* ── Code rows ── */
+  .code-row {
+    display: flex; align-items: baseline;
+    padding: 9px 16px;
+    border-bottom: 1px solid #f0f4f8;
+    gap: 10px;
+    font-size: 0.88rem;
+  }
+  .code-row:last-child { border-bottom: none; }
+  .code-row:nth-child(even) { background: #fafbfc; }
+
+  .row-code {
+    font-weight: 700; color: #1F4E79;
+    font-size: 0.9rem; letter-spacing: 0.03em;
+    min-width: 52px; flex-shrink: 0;
+  }
+  .row-desc { flex: 1; color: #2d3748; }
+  .row-note { font-size: 0.75rem; color: #718096; margin-top: 2px; }
+  .row-fee { font-weight: 600; color: #276749; white-space: nowrap; flex-shrink: 0; }
+
+  .row-indent { padding-left: 28px; background: #fefefe; }
+  .row-indent .row-code { color: #4a7ea5; }
+
+  .billing-note-row {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 10px 16px;
+  }
+  .billing-note-text {
+    font-size: 0.82rem;
+    color: #92400e;
+    font-weight: 600;
+  }
+
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    text-align: center; padding: 8px 24px;
+    font-size: 0.78rem; color: #718096;
+    background: white; border-top: 1px solid #dde3ed; z-index: 10;
+  }
+</style>
+<script src="header.js"></script>
+</head>
+<body>
+
+<app-header active="specialty"></app-header>
+
+<main>
+
+  <!-- ══════════════════════════════════════════════════════ AIRWAY & LINES -->
+  <div class="specialty-section">
+    <div class="specialty-title">🫁 Airway &amp; Vascular Access</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Airway</span><span class="accordion-meta">Intubation, cricothyrotomy &amp; airways</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">G211</span><div><div class="row-desc">Intubation</div><div class="row-note">Allowed with G395, not G521</div></div><span class="row-fee">$38.35</span></div>
+        <div class="code-row"><span class="row-code">Z325</span><div><div class="row-desc">Emergency tracheotomy</div><div class="row-note">Only billable for life-threatening emergencies where patient is not intubated</div></div><span class="row-fee">$474.65</span></div>
+        <div class="code-row row-indent"><span class="row-code">E639</span><div><div class="row-desc">↳ + Anterior cricoid split (add-on)</div></div><span class="row-fee">$78.50</span></div>
+        <div class="code-row"><span class="row-code">E013C</span><div><div class="row-desc">Anaesthetic management – acute upper airway obstruction (above carina, excl. choanal atresia)</div><div class="row-note">10 basic units ($159.60) · Do not bill other C-suffix procedure codes for the same procedure</div></div><span class="row-fee">$159.60</span></div>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">IV Lines &amp; Injections</span><span class="accordion-meta">Venipuncture, arterial &amp; central lines, IO, injections</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">G489</span><div><div class="row-desc">Venipuncture – adolescent or adult</div></div><span class="row-fee">$3.54</span></div>
+        <div class="code-row"><span class="row-code">G482</span><div><div class="row-desc">Venipuncture – child</div></div><span class="row-fee">$7.35</span></div>
+        <div class="code-row"><span class="row-code">G480</span><div><div class="row-desc">Venipuncture – infant</div></div><span class="row-fee">$9.90</span></div>
+        <div class="code-row"><span class="row-code">G380</span><div><div class="row-desc">IV cutdown including cannulation</div></div><span class="row-fee">$27.05</span></div>
+        <div class="code-row"><span class="row-code">G282</span><div><div class="row-desc">Umbilical vein catheterization (incl. blood sample)</div></div><span class="row-fee">$19.90</span></div>
+        <div class="code-row"><span class="row-code">G269</span><div><div class="row-desc">Central venous line (pressure monitoring or feeding)</div><div class="row-note">Not with right heart catheterization (Z439) or Swan-Ganz</div></div><span class="row-fee">$31.25</span></div>
+        <div class="code-row"><span class="row-code">G327</span><div><div class="row-desc">Femoral catheter insertion (dialysis)</div></div><span class="row-fee">$77.30</span></div>
+        <div class="code-row"><span class="row-code">Z459</span><div><div class="row-desc">Arterial puncture</div></div><span class="row-fee">$10.20</span></div>
+        <div class="code-row"><span class="row-code">G268</span><div><div class="row-desc">Arterial line – cannulation for pressure measurements (incl. cutdown)</div><div class="row-note">Not with G249, G259, G261, G176–178, G288, Z443 or Z440</div></div><span class="row-fee">$31.25</span></div>
+        <div class="code-row"><span class="row-code">G270</span><div><div class="row-desc">Intraosseous infusion</div></div><span class="row-fee">$23.90</span></div>
+        <div class="code-row"><span class="row-code">G379</span><div><div class="row-desc">IV injection – child, adolescent or adult</div></div><span class="row-fee">$6.15</span></div>
+        <div class="code-row"><span class="row-code">G376</span><div><div class="row-desc">IV injection – newborn or infant</div></div><span class="row-fee">$10.20</span></div>
+        <div class="code-row"><span class="row-code">G372</span><div><div class="row-desc">IM / SC / intradermal injection (with visit, each)</div></div><span class="row-fee">$3.89</span></div>
+        <div class="code-row"><span class="row-code">K061</span><div><div class="row-desc">Blood sample at request of police officer</div></div><span class="row-fee">$34.80</span></div>
+      </div>
+    </div>
+
+  </div><!-- end airway & vascular -->
+
+  <!-- ══════════════════════════════════════════════════════ SKIN & WOUND -->
+  <div class="specialty-section">
+    <div class="specialty-title">🩹 Skin, Wound &amp; Soft Tissue</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">I&amp;D – Hematoma &amp; Abscess</span><span class="accordion-meta">Incision &amp; drainage by site</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row billing-note-row"><span class="billing-note-text">Local Anaesthesia</span></div>
+        <div class="code-row"><span class="row-code">Z101</span><div><div class="row-desc">Subcutaneous abscess or haematoma – 1</div></div><span class="row-fee">$25.75</span></div>
+        <div class="code-row"><span class="row-code">Z173</span><div><div class="row-desc">Subcutaneous abscess or haematoma – 2</div></div><span class="row-fee">$30.35</span></div>
+        <div class="code-row"><span class="row-code">Z174</span><div><div class="row-desc">Subcutaneous abscess or haematoma – 3 or more</div></div><span class="row-fee">$40.80</span></div>
+        <div class="code-row"><span class="row-code">Z103</span><div><div class="row-desc">Palmar / plantar space I&amp;D</div></div><span class="row-fee">$44.35</span></div>
+        <div class="code-row"><span class="row-code">Z104</span><div><div class="row-desc">Perianal abscess I&amp;D</div></div><span class="row-fee">$20.10</span></div>
+        <div class="code-row"><span class="row-code">Z106</span><div><div class="row-desc">Ischiorectal or pilonidal I&amp;D</div></div><span class="row-fee">$44.35</span></div>
+        <div class="code-row"><span class="row-code">Z140</span><div><div class="row-desc">Breast abscess / haematoma I&amp;D</div></div><span class="row-fee">$33.00</span></div>
+        <div class="code-row"><span class="row-code">Z226</span><div><div class="row-desc">Soft tissue or bursa I&amp;D</div></div><span class="row-fee">$97.35</span></div>
+        <div class="code-row"><span class="row-code">Z227</span><div><div class="row-desc">Intramuscular abscess or haematoma I&amp;D</div></div><span class="row-fee">$101.65</span></div>
+        <div class="code-row"><span class="row-code">E318</span><div><div class="row-desc">Ear – extensive haematoma of pinna with packing &amp; compression dressing</div></div><span class="row-fee">$92.40</span></div>
+        <div class="code-row"><span class="row-code">Z854</span><div><div class="row-desc">Eyelid abscess I&amp;D</div></div><span class="row-fee">$60.00</span></div>
+        <div class="code-row"><span class="row-code">Z301</span><div><div class="row-desc">Nasal abscess or haematoma I&amp;D</div></div><span class="row-fee">$55.60</span></div>
+        <div class="code-row"><span class="row-code">Z506</span><div><div class="row-desc">Oral abscess or haematoma I&amp;D</div></div><span class="row-fee">$50.90</span></div>
+        <div class="code-row"><span class="row-code">Z510</span><div><div class="row-desc">Pharyngeal abscess or haematoma I&amp;D (incl. PTA)</div></div><span class="row-fee">$91.10</span></div>
+        <div class="code-row"><span class="row-code">Z545</span><div><div class="row-desc">Thrombosed haemorrhoid(s)</div></div><span class="row-fee">$25.25</span></div>
+        <div class="code-row"><span class="row-code">Z714</span><div><div class="row-desc">Vulvar, Bartholin or Skene's gland abscess I&amp;D</div></div><span class="row-fee">$25.40</span></div>
+        <div class="code-row"><span class="row-code">Z728</span><div><div class="row-desc">Vaginal cyst, abscess or haematoma I&amp;D</div></div><span class="row-fee">$97.20</span></div>
+        <div class="code-row"><span class="row-code">Z139</span><div><div class="row-desc">Aspiration of cyst</div></div><span class="row-fee">$37.20</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">With Sedation / General Anaesthetic</span></div>
+        <div class="code-row"><span class="row-code">Z102</span><div><div class="row-desc">Subcutaneous abscess or haematoma – 1</div></div><span class="row-fee">$44.35</span></div>
+        <div class="code-row"><span class="row-code">Z172</span><div><div class="row-desc">Subcutaneous abscess or haematoma – 2 or more</div></div><span class="row-fee">$66.60</span></div>
+        <div class="code-row"><span class="row-code">Z108</span><div><div class="row-desc">Palmar / plantar space I&amp;D</div></div><span class="row-fee">$72.00</span></div>
+        <div class="code-row"><span class="row-code">Z105</span><div><div class="row-desc">Perianal abscess I&amp;D</div></div><span class="row-fee">$66.00</span></div>
+        <div class="code-row"><span class="row-code">Z107</span><div><div class="row-desc">Ischiorectal or pilonidal I&amp;D</div></div><span class="row-fee">$108.00</span></div>
+        <div class="code-row"><span class="row-code">Z715</span><div><div class="row-desc">Vulvar, Bartholin or Skene's gland abscess I&amp;D</div></div><span class="row-fee">$56.70</span></div>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Foreign Body</span><span class="accordion-meta">Removal by site</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">Z114</span><div><div class="row-desc">Skin / subcutaneous tissue FB – local anaesthetic</div></div><span class="row-fee">$25.25</span></div>
+        <div class="code-row"><span class="row-code">Z115</span><div><div class="row-desc">Skin / subcutaneous tissue FB – with sedation</div></div><span class="row-fee">$88.80</span></div>
+        <div class="code-row"><span class="row-code">R517</span><div><div class="row-desc">Muscle – FB excision</div></div><span class="row-fee">$107.70</span></div>
+        <div class="code-row"><span class="row-code">Z915</span><div><div class="row-desc">Ear – FB removal, simple</div><div class="row-note">Payable at nil if sole purpose is cerumen removal</div></div><span class="row-fee">$10.55</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z866</span><div><div class="row-desc">↳ Complicated – general anaesthetic</div></div><span class="row-fee">$50.90</span></div>
+        <div class="code-row"><span class="row-code">Z847</span><div><div class="row-desc">Cornea FB – 1</div></div><span class="row-fee">$33.00</span></div>
+        <div class="code-row"><span class="row-code">Z848</span><div><div class="row-desc">Cornea FB – 2</div></div><span class="row-fee">$45.00</span></div>
+        <div class="code-row"><span class="row-code">Z852</span><div><div class="row-desc">Cornea FB – general anaesthetic</div></div><span class="row-fee">$74.20</span></div>
+        <div class="code-row"><span class="row-code">Z311</span><div><div class="row-desc">Nose – FB removal, local anaesthetic</div><div class="row-note">Add E839 $19.20 if flexible endoscope used</div></div><span class="row-fee">$10.55</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z312</span><div><div class="row-desc">↳ General anaesthetic</div></div><span class="row-fee">$50.90</span></div>
+        <div class="code-row"><span class="row-code">Z541</span><div><div class="row-desc">GI / rectal – dilation, disimpaction or FB removal (GA, sole procedure)</div></div><span class="row-fee">$58.15</span></div>
+        <div class="code-row"><span class="row-code">Z322</span><div><div class="row-desc">Larynx – FB removal with laryngoscopy</div></div><span class="row-fee">$106.45</span></div>
+        <div class="code-row"><span class="row-code">Z432</span><div><div class="row-desc">Vagina – EUA ± intubation, incl. FB removal</div><div class="row-note">Bill E023C for anaesthetic support</div></div><span class="row-fee">$54.10</span></div>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Lacerations</span><span class="accordion-meta">Simple, complex &amp; tendon repair</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row billing-note-row"><span class="billing-note-text">Simple Laceration · 50% fee for tissue adhesive or steri-strips</span></div>
+        <div class="code-row"><span class="row-code">Z176</span><div><div class="row-desc">Suture – up to 5 cm</div></div><span class="row-fee">$20.00</span></div>
+        <div class="code-row"><span class="row-code">Z175</span><div><div class="row-desc">Suture – 5.1 to 10 cm</div></div><span class="row-fee">$35.90</span></div>
+        <div class="code-row"><span class="row-code">Z179</span><div><div class="row-desc">Suture – 10.1 to 15 cm</div></div><span class="row-fee">$50.40</span></div>
+        <div class="code-row"><span class="row-code">Z191</span><div><div class="row-desc">Suture – more than 15 cm</div></div><span class="row-fee">$77.30</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Face / Bleeders / Layers · 50% fee for tissue adhesive or steri-strips</span></div>
+        <div class="code-row"><span class="row-code">Z154</span><div><div class="row-desc">Face / bleeders / layers – up to 5 cm</div></div><span class="row-fee">$35.90</span></div>
+        <div class="code-row"><span class="row-code">Z177</span><div><div class="row-desc">Face / bleeders / layers – 5.1 to 10 cm</div></div><span class="row-fee">$71.30</span></div>
+        <div class="code-row"><span class="row-code">Z190</span><div><div class="row-desc">Face / bleeders / layers – 10.1 to 15 cm</div></div><span class="row-fee">$101.45</span></div>
+        <div class="code-row"><span class="row-code">Z192</span><div><div class="row-desc">Face / bleeders / layers – more than 15 cm</div></div><span class="row-fee">$154.95</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Complex Laceration · Requires min. 20 min + qualifying criteria</span></div>
+        <div class="code-row"><span class="row-code">Z187</span><div><div class="row-desc">Complex lac – face</div><div class="row-note">Anatomical alignment (vermilion, eyebrow, eyelid, pinna) OR 3+ layers OR multiple bleeders</div></div><span class="row-fee">$92.30</span></div>
+        <div class="code-row"><span class="row-code">Z188</span><div><div class="row-desc">Complex lac – other than face</div><div class="row-note">3+ layers OR multiple bleeder ligation</div></div><span class="row-fee">$92.30</span></div>
+        <div class="code-row"><span class="row-code">Z189</span><div><div class="row-desc">Complex lac – digit, zone 1 repair (without soft tissue loss, per digit)</div></div><span class="row-fee">$92.30</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Miscellaneous</span></div>
+        <div class="code-row"><span class="row-code">R024</span><div><div class="row-desc">Acute earlobe laceration repair – unilateral</div></div><span class="row-fee">$100.65</span></div>
+        <div class="code-row"><span class="row-code">Z783</span><div><div class="row-desc">Secondary closure</div><div class="row-note">Only for delayed surgical closure of a wound; not for wound healing by secondary intention</div></div><span class="row-fee">$97.35</span></div>
+        <div class="code-row"><span class="row-code">R525</span><div><div class="row-desc">Muscle repair – simple (includes repair of involved skin)</div></div><span class="row-fee">$88.60</span></div>
+        <div class="code-row"><span class="row-code">R790</span><div><div class="row-desc">Suture of lacerated major artery – traumatic</div></div><span class="row-fee">$316.85</span></div>
+        <div class="code-row"><span class="row-code">R781</span><div><div class="row-desc">Ligation of artery – as sole procedure</div></div><span class="row-fee">$170.10</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Tendon Repair</span></div>
+        <div class="code-row"><span class="row-code">R578</span><div><div class="row-desc">Suture extensor tendon – single</div></div><span class="row-fee">$164.10</span></div>
+        <div class="code-row row-indent"><span class="row-code">E580</span><div><div class="row-desc">↳ Each additional extensor</div></div><span class="row-fee">+$70.95</span></div>
+        <div class="code-row"><span class="row-code">R585</span><div><div class="row-desc">Suture flexor tendon – single</div></div><span class="row-fee">$307.60</span></div>
+        <div class="code-row row-indent"><span class="row-code">E581</span><div><div class="row-desc">↳ Each additional flexor</div></div><span class="row-fee">+$128.95</span></div>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Plastic Surgery</span><span class="accordion-meta">Fingertip, nails, tendons, burns &amp; wound debridement</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row billing-note-row"><span class="billing-note-text">Soft Tissue &amp; Joint</span></div>
+        <div class="code-row"><span class="row-code">R629</span><div><div class="row-desc">Revision of amputated fingertip</div></div><span class="row-fee">$241.55</span></div>
+        <div class="code-row"><span class="row-code">R601</span><div><div class="row-desc">Metacarpophalangeal joint capsule repair</div></div><span class="row-fee">$316.75</span></div>
+        <div class="code-row"><span class="row-code">R517</span><div><div class="row-desc">Excision of foreign body – muscle</div></div><span class="row-fee">$107.70</span></div>
+        <div class="code-row"><span class="row-code">Z227</span><div><div class="row-desc">Intramuscular abscess or haematoma I&amp;D</div></div><span class="row-fee">$101.65</span></div>
+        <div class="code-row"><span class="row-code">Z226</span><div><div class="row-desc">Soft tissue or bursa I&amp;D</div></div><span class="row-fee">$97.35</span></div>
+        <div class="code-row"><span class="row-code">Z117</span><div><div class="row-desc">Chemical and/or cryotherapy – one or more lesions</div><div class="row-note">Max 1 per patient per physician per day</div></div><span class="row-fee">$11.65</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Nail</span></div>
+        <div class="code-row"><span class="row-code">Z128</span><div><div class="row-desc">Nail plate excision, partial or complete – 1 (requires anaesthesia)</div></div><span class="row-fee">$33.10</span></div>
+        <div class="code-row"><span class="row-code">Z129</span><div><div class="row-desc">Nail plate excision – multiple</div></div><span class="row-fee">$35.70</span></div>
+        <div class="code-row"><span class="row-code">Z130</span><div><div class="row-desc">Radical excision + nail bed destruction – 1</div></div><span class="row-fee">$62.75</span></div>
+        <div class="code-row"><span class="row-code">Z131</span><div><div class="row-desc">Radical excision + nail bed destruction – multiple</div></div><span class="row-fee">$82.65</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Tendon Repair</span></div>
+        <div class="code-row"><span class="row-code">R578</span><div><div class="row-desc">Suture extensor tendon – single</div></div><span class="row-fee">$164.10</span></div>
+        <div class="code-row row-indent"><span class="row-code">E580</span><div><div class="row-desc">↳ Each additional extensor</div></div><span class="row-fee">+$70.95</span></div>
+        <div class="code-row"><span class="row-code">R585</span><div><div class="row-desc">Suture flexor tendon – single</div></div><span class="row-fee">$307.60</span></div>
+        <div class="code-row row-indent"><span class="row-code">E581</span><div><div class="row-desc">↳ Each additional flexor</div></div><span class="row-fee">+$128.95</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Wound / Ulcer Debridement · Min. 10 min debridement required</span></div>
+        <div class="code-row"><span class="row-code">Z080</span><div><div class="row-desc">Debridement into subcutaneous tissue – 1 wound</div></div><span class="row-fee">$20.00</span></div>
+        <div class="code-row"><span class="row-code">Z081</span><div><div class="row-desc">Debridement into subcutaneous tissue – 2 wounds</div></div><span class="row-fee">$30.00</span></div>
+        <div class="code-row"><span class="row-code">Z082</span><div><div class="row-desc">Debridement into subcutaneous tissue – 3 wounds</div></div><span class="row-fee">$45.00</span></div>
+        <div class="code-row"><span class="row-code">Z083</span><div><div class="row-desc">Debridement into subcutaneous tissue – 4 or more wounds</div></div><span class="row-fee">$60.00</span></div>
+        <div class="code-row"><span class="row-code">Z084</span><div><div class="row-desc">Debridement into tendon / ligament / bursa / bone – 1 wound</div></div><span class="row-fee">$60.00</span></div>
+        <div class="code-row"><span class="row-code">Z085</span><div><div class="row-desc">Debridement into tendon / ligament / bursa / bone – 2 or more</div></div><span class="row-fee">$90.00</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Burn Debridement (outside OR) · R150–R153 not billable by ED physicians</span></div>
+        <div class="code-row"><span class="row-code">R637</span><div><div class="row-desc">Burn debridement – per % BSA (excl. hand, head, neck)</div></div><span class="row-fee">$29.65</span></div>
+        <div class="code-row"><span class="row-code">R660</span><div><div class="row-desc">Hand – each digit</div></div><span class="row-fee">$28.90</span></div>
+        <div class="code-row"><span class="row-code">R661</span><div><div class="row-desc">Hand – dorsum or palm, each</div></div><span class="row-fee">$47.95</span></div>
+        <div class="code-row"><span class="row-code">R662</span><div><div class="row-desc">Nose, cheek, lip, ear, forehead, scalp, neck or eyelid – each</div></div><span class="row-fee">$28.90</span></div>
+      </div>
+    </div>
+
+  </div><!-- end skin & wound -->
+
+  <!-- ══════════════════════════════════════════════════════ CARDIOVASCULAR & CHEST -->
+  <div class="specialty-section">
+    <div class="specialty-title">❤️ Cardiovascular &amp; Chest</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Cardiovascular</span><span class="accordion-meta">Cardioversion, pacing, pericardiocentesis &amp; thoracotomy</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">Z437</span><div><div class="row-desc">Cardioversion – electrical and/or chemical (max 3/day)</div><div class="row-note">Billable with G395, not with G521</div></div><span class="row-fee">$92.45</span></div>
+        <div class="code-row"><span class="row-code">G313</span><div><div class="row-desc">ECG – professional interpretation (12-lead)</div><div class="row-note">Must include written interpretation</div></div><span class="row-fee">$4.45</span></div>
+        <div class="code-row"><span class="row-code">G517</span><div><div class="row-desc">Doppler – ankle pressure determination (incl. ankle-arm index)</div></div><span class="row-fee">$10.05</span></div>
+        <div class="code-row"><span class="row-code">G115</span><div><div class="row-desc">External cardiac pacing – temporary transthoracic (once per 24h)</div><div class="row-note">Not billable with G521, G522, G523, G395 or G391</div></div><span class="row-fee">$46.30</span></div>
+        <div class="code-row"><span class="row-code">Z443</span><div><div class="row-desc">Pacemaker – insertion of temporary transvenous electrode</div></div><span class="row-fee">$154.10</span></div>
+        <div class="code-row"><span class="row-code">Z431</span><div><div class="row-desc">Pacemaker – repositioning of temporary transvenous electrode</div></div><span class="row-fee">$64.25</span></div>
+        <div class="code-row"><span class="row-code">Z401</span><div><div class="row-desc">Pericardiocentesis (aspiration of pericardium)</div></div><span class="row-fee">$131.70</span></div>
+        <div class="code-row"><span class="row-code">M137</span><div><div class="row-desc">Thoracotomy (with or without biopsy)</div></div><span class="row-fee">$390.65</span></div>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Chest &amp; Respirology</span><span class="accordion-meta">Chest tubes, thoracentesis, airway &amp; cardiac</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row billing-note-row"><span class="billing-note-text">Pleural Procedures</span></div>
+        <div class="code-row"><span class="row-code">Z341</span><div><div class="row-desc">Chest tube (tube thoracostomy for closed drainage)</div></div><span class="row-fee">$76.80</span></div>
+        <div class="code-row"><span class="row-code">Z363</span><div><div class="row-desc">Chest tube removal (incl. wound closure)</div><div class="row-note">Not billable same day as Z341</div></div><span class="row-fee">$22.60</span></div>
+        <div class="code-row"><span class="row-code">Z331</span><div><div class="row-desc">Thoracentesis – diagnostic aspiration</div></div><span class="row-fee">$37.35</span></div>
+        <div class="code-row"><span class="row-code">Z332</span><div><div class="row-desc">Thoracentesis – therapeutic drainage ± diagnostic sample / lavage</div></div><span class="row-fee">$68.10</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Airway</span></div>
+        <div class="code-row"><span class="row-code">G211</span><div><div class="row-desc">Intubation</div><div class="row-note">Allowed with G395, not G521</div></div><span class="row-fee">$38.35</span></div>
+        <div class="code-row"><span class="row-code">Z325</span><div><div class="row-desc">Emergency tracheotomy</div><div class="row-note">Only billable for life-threatening emergency where patient is not intubated</div></div><span class="row-fee">$474.65</span></div>
+        <div class="code-row row-indent"><span class="row-code">E639</span><div><div class="row-desc">↳ + Anterior cricoid split (add-on)</div></div><span class="row-fee">$78.50</span></div>
+        <div class="code-row"><span class="row-code">Z326</span><div><div class="row-desc">Tracheostomy tube change</div></div><span class="row-fee">$12.50</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Cardiac (see also Cardiovascular)</span></div>
+        <div class="code-row"><span class="row-code">Z437</span><div><div class="row-desc">Cardioversion – electrical and/or chemical (max 3/day)</div><div class="row-note">Billable with G395, not with G521</div></div><span class="row-fee">$92.45</span></div>
+        <div class="code-row"><span class="row-code">G313</span><div><div class="row-desc">ECG – professional interpretation (12-lead)</div><div class="row-note">Must include written interpretation</div></div><span class="row-fee">$4.45</span></div>
+        <div class="code-row"><span class="row-code">G517</span><div><div class="row-desc">Doppler – ankle pressure (incl. ankle-arm index)</div></div><span class="row-fee">$10.05</span></div>
+        <div class="code-row"><span class="row-code">G115</span><div><div class="row-desc">External cardiac pacing – temporary transthoracic (once per 24h)</div><div class="row-note">Not billable with G521, G522, G523, G395 or G391</div></div><span class="row-fee">$46.30</span></div>
+        <div class="code-row"><span class="row-code">Z443</span><div><div class="row-desc">Pacemaker – temporary transvenous insertion</div></div><span class="row-fee">$154.10</span></div>
+        <div class="code-row"><span class="row-code">Z401</span><div><div class="row-desc">Pericardiocentesis</div></div><span class="row-fee">$131.70</span></div>
+        <div class="code-row"><span class="row-code">M137</span><div><div class="row-desc">Thoracotomy (with or without biopsy)</div></div><span class="row-fee">$390.65</span></div>
+      </div>
+    </div>
+
+  </div><!-- end cardiovascular & chest -->
+
+  <!-- ══════════════════════════════════════════════════════ HEAD & NECK -->
+  <div class="specialty-section">
+    <div class="specialty-title">👂 Head &amp; Neck</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">ENT</span><span class="accordion-meta">Ear, nose, throat, larynx &amp; dental</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row billing-note-row"><span class="billing-note-text">Ear</span></div>
+        <div class="code-row"><span class="row-code">R024</span><div><div class="row-desc">Acute earlobe laceration – unilateral</div></div><span class="row-fee">$100.65</span></div>
+        <div class="code-row"><span class="row-code">G420</span><div><div class="row-desc">Ear syringing and/or extensive curetting / debridement – unilateral or bilateral</div><div class="row-note">Only insured for impacted wax with hearing loss unresponsive to cerumenolytics, or when needed to visualize TM</div></div><span class="row-fee">$13.15</span></div>
+        <div class="code-row"><span class="row-code">G403</span><div><div class="row-desc">Epley manoeuvre – benign paroxysmal positional vertigo</div></div><span class="row-fee">$21.15</span></div>
+        <div class="code-row"><span class="row-code">Z915</span><div><div class="row-desc">Ear – FB removal, simple</div><div class="row-note">Payable at nil if sole purpose is cerumen removal</div></div><span class="row-fee">$10.55</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z866</span><div><div class="row-desc">↳ Complicated – general anaesthetic</div></div><span class="row-fee">$50.90</span></div>
+        <div class="code-row"><span class="row-code">E318</span><div><div class="row-desc">Haematoma of pinna I&amp;D – extensive, with packing &amp; compression dressing</div></div><span class="row-fee">$92.40</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Nose</span></div>
+        <div class="code-row"><span class="row-code">Z311</span><div><div class="row-desc">Nose – FB removal, local anaesthetic</div><div class="row-note">Add E839 $19.20 if flexible endoscope used</div></div><span class="row-fee">$10.55</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z312</span><div><div class="row-desc">↳ General anaesthetic</div></div><span class="row-fee">$50.90</span></div>
+        <div class="code-row"><span class="row-code">Z301</span><div><div class="row-desc">Nasal abscess or haematoma I&amp;D</div></div><span class="row-fee">$55.60</span></div>
+        <div class="code-row"><span class="row-code">Z314</span><div><div class="row-desc">Epistaxis – nasal cautery, unilateral</div></div><span class="row-fee">$11.50</span></div>
+        <div class="code-row"><span class="row-code">Z315</span><div><div class="row-desc">Epistaxis – anterior packing, unilateral</div></div><span class="row-fee">$15.35</span></div>
+        <div class="code-row"><span class="row-code">Z316</span><div><div class="row-desc">Epistaxis – posterior packing, unilateral or bilateral</div></div><span class="row-fee">$35.50</span></div>
+        <div class="code-row"><span class="row-code">F136</span><div><div class="row-desc">Nasal fracture – closed reduction</div></div><span class="row-fee">$102.35</span></div>
+        <div class="code-row row-indent"><span class="row-code">F137</span><div><div class="row-desc">↳ Open reduction</div></div><span class="row-fee">$316.35</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Throat &amp; Larynx</span></div>
+        <div class="code-row"><span class="row-code">Z292</span><div><div class="row-desc">Direct laryngoscopy – without biopsy</div></div><span class="row-fee">$61.30</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z322</span><div><div class="row-desc">↳ With FB removal</div></div><span class="row-fee">$106.45</span></div>
+        <div class="code-row"><span class="row-code">Z324</span><div><div class="row-desc">Indirect laryngoscopy – with biopsy or FB removal</div></div><span class="row-fee">$44.70</span></div>
+        <div class="code-row"><span class="row-code">Z506</span><div><div class="row-desc">Oral abscess or haematoma I&amp;D</div></div><span class="row-fee">$50.90</span></div>
+        <div class="code-row"><span class="row-code">Z510</span><div><div class="row-desc">Peritonsillar / pharyngeal abscess or haematoma I&amp;D</div></div><span class="row-fee">$91.10</span></div>
+        <div class="code-row"><span class="row-code">S066</span><div><div class="row-desc">Post-tonsillectomy haemorrhage – cauterization or suture</div></div><span class="row-fee">$121.05</span></div>
+        <div class="code-row billing-note-row"><span class="billing-note-text">Jaw &amp; Dental</span></div>
+        <div class="code-row"><span class="row-code">D062</span><div><div class="row-desc">TMJ dislocation – reduction</div></div><span class="row-fee">$51.65</span></div>
+        <div class="code-row"><span class="row-code">S023</span><div><div class="row-desc">Tooth extraction – single (complete care)</div></div><span class="row-fee">$24.90</span></div>
+        <div class="code-row row-indent"><span class="row-code">E700</span><div><div class="row-desc">↳ Each additional tooth</div></div><span class="row-fee">$13.40</span></div>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Ophthalmology</span><span class="accordion-meta">Eye procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Cornea</span></div>
+        <div class="code-row"><span class="row-code">Z847</span><div><div class="row-desc">Corneal foreign body removal × 1</div></div><span class="row-fee">$33.00</span></div>
+        <div class="code-row"><span class="row-code">Z848</span><div><div class="row-desc">Corneal foreign body removal × 2</div></div><span class="row-fee">$45.00</span></div>
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Eyelid</span></div>
+        <div class="code-row"><span class="row-code">Z854</span><div><div class="row-desc">Eyelid abscess I&amp;D</div></div><span class="row-fee">$60.00</span></div>
+        <div class="code-row"><span class="row-code">Z874</span><div><div class="row-desc">Chalazion excision – LA, single or multiple</div></div><span class="row-fee">$70.00</span></div>
+        <div class="code-row"><span class="row-code">E199</span><div><div class="row-desc">Eyelid laceration, full thickness</div></div><span class="row-fee">$225.00</span></div>
+        <div class="code-row row-indent"><span class="row-code">E198</span><div><div class="row-desc">↳ Including lid margin</div></div><span class="row-fee">$300.00</span></div>
+        <div class="code-row"><span class="row-code">E235</span><div><div class="row-desc">Cantholysis – when primary procedure</div></div><span class="row-fee">$107.50</span></div>
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Other</span></div>
+        <div class="code-row"><span class="row-code">G435</span><div><div class="row-desc">Tonometry</div><div class="row-note">Not billable with ophthalmological consultation or specific assessment</div></div><span class="row-fee">$5.10</span></div>
+        <div class="code-row"><span class="row-code">E108</span><div><div class="row-desc">Enucleation, donor eye, post-mortem (one or both)</div></div><span class="row-fee">$131.25</span></div>
+
+      </div>
+    </div>
+
+  </div><!-- end head & neck -->
+
+  <!-- ══════════════════════════════════════════════════════ ABDOMINAL & GU -->
+  <div class="specialty-section">
+    <div class="specialty-title">🫀 Abdomen &amp; Genitourinary</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">GI</span><span class="accordion-meta">Abdominal &amp; gastrointestinal procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Tubes &amp; Access</span></div>
+        <div class="code-row"><span class="row-code">G349</span><div><div class="row-desc">Oesophageal tamponade – Blakemore bag insertion</div></div><span class="row-fee">$45.30</span></div>
+        <div class="code-row"><span class="row-code">G355</span><div><div class="row-desc">Nasogastric tube – diagnostic, with or without lavage</div></div><span class="row-fee">$9.60</span></div>
+        <div class="code-row row-indent"><span class="row-code">G356</span><div><div class="row-desc">↳ Therapeutic, with or without ice-water lavage</div></div><span class="row-fee">$33.80</span></div>
+        <div class="code-row"><span class="row-code">Z520</span><div><div class="row-desc">Gastrostomy tube change</div></div><span class="row-fee">$10.65</span></div>
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Abdominal</span></div>
+        <div class="code-row"><span class="row-code">Z564</span><div><div class="row-desc">Diagnostic peritoneal lavage (DPL) – open, without manual exploration</div></div><span class="row-fee">$73.60</span></div>
+        <div class="code-row"><span class="row-code">Z590</span><div><div class="row-desc">Paracentesis – diagnostic sample</div></div><span class="row-fee">$31.30</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z591</span><div><div class="row-desc">↳ Therapeutic drainage ± diagnostic sample</div></div><span class="row-fee">$57.65</span></div>
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Anorectal</span></div>
+        <div class="code-row"><span class="row-code">Z543</span><div><div class="row-desc">Anoscopy (proctoscopy)</div></div><span class="row-fee">$8.70</span></div>
+        <div class="code-row"><span class="row-code">Z535</span><div><div class="row-desc">Sigmoidoscopy with rigid scope, with or without anoscopy</div></div><span class="row-fee">$36.80</span></div>
+        <div class="code-row"><span class="row-code">Z756</span><div><div class="row-desc">Fecal disimpaction – no anaesthetic</div></div><span class="row-fee">$36.80</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z541</span><div><div class="row-desc">↳ Dilation, disimpaction or foreign body removal – general anaesthetic (sole procedure)</div></div><span class="row-fee">$58.15</span></div>
+        <div class="code-row"><span class="row-code">Z104</span><div><div class="row-desc">Perianal abscess I&amp;D – local anaesthetic</div></div><span class="row-fee">$20.10</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z105</span><div><div class="row-desc">↳ General anaesthetic</div></div><span class="row-fee">$66.00</span></div>
+        <div class="code-row"><span class="row-code">Z106</span><div><div class="row-desc">Ischiorectal or pilonidal I&amp;D – local anaesthetic</div></div><span class="row-fee">$44.35</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z107</span><div><div class="row-desc">↳ General anaesthetic</div></div><span class="row-fee">$108.00</span></div>
+        <div class="code-row"><span class="row-code">Z538</span><div><div class="row-desc">Reduction of prolapse</div></div><span class="row-fee">$25.25</span></div>
+        <div class="code-row"><span class="row-code">Z545</span><div><div class="row-desc">Thrombosed haemorrhoid(s)</div></div><span class="row-fee">$25.25</span></div>
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Other</span></div>
+        <div class="code-row"><span class="row-code">G004</span><div><div class="row-desc">Occult blood (hemoccult)</div></div><span class="row-fee">$1.58</span></div>
+
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Ob/Gyne</span><span class="accordion-meta">Obstetric &amp; gynecological procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Gynaecology</span></div>
+        <div class="code-row"><span class="row-code">K028</span><div><div class="row-desc">STD management</div><div class="row-note">Per unit · Not billable same day as consultation, assessment, or visit · Max 2 units/day, 4 units/year per patient</div></div><span class="row-fee">$70.10</span></div>
+        <div class="code-row"><span class="row-code">Z714</span><div><div class="row-desc">Abscess of vulva, Bartholin or Skene's gland – I&amp;D, local anaesthetic</div></div><span class="row-fee">$25.40</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z715</span><div><div class="row-desc">↳ General anaesthetic</div></div><span class="row-fee">$56.70</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z716</span><div><div class="row-desc">↳ Marsupialization of Bartholin's cyst or abscess</div></div><span class="row-fee">$89.80</span></div>
+        <div class="code-row"><span class="row-code">Z140</span><div><div class="row-desc">Breast abscess or haematoma I&amp;D – local anaesthetic</div></div><span class="row-fee">$33.00</span></div>
+        <div class="code-row row-indent"><span class="row-code">Z740</span><div><div class="row-desc">↳ General anaesthetic</div></div><span class="row-fee">$133.80</span></div>
+        <div class="code-row"><span class="row-code">Z728</span><div><div class="row-desc">Vaginal cyst, abscess or haematoma I&amp;D</div></div><span class="row-fee">$97.20</span></div>
+        <div class="code-row"><span class="row-code">G365</span><div><div class="row-desc">Collection of cervical cancer screening specimen(s)</div></div><span class="row-fee">$12.00</span></div>
+        <div class="code-row"><span class="row-code">Z735</span><div><div class="row-desc">Examination and/or dilatation with GA – as sole procedure (may include insertion/removal of IUD)</div></div><span class="row-fee">$56.70</span></div>
+        <div class="code-row"><span class="row-code">Z432</span><div><div class="row-desc">EUA ± removal of vaginal foreign body, with or without intubation</div><div class="row-note">Only E023C eligible for anaesthesia services with this code</div></div><span class="row-fee">$54.10</span></div>
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Obstetrics</span></div>
+        <div class="code-row"><span class="row-code">A813</span><div><div class="row-desc">Midwife-Requested Assessment (MAMRA)</div><div class="row-note">Max one per patient per physician per pregnancy</div></div><span class="row-fee">$111.70</span></div>
+        <div class="code-row"><span class="row-code">P006</span><div><div class="row-desc">Vaginal delivery</div></div><span class="row-fee">$498.70</span></div>
+        <div class="code-row row-indent"><span class="row-code">E411</span><div><div class="row-desc">↳ Sole delivery premium (add 100%)</div><div class="row-note">Max 25 sole delivery premiums per physician per fiscal year</div></div><span class="row-fee">+100%</span></div>
+        <div class="code-row"><span class="row-code">P009</span><div><div class="row-desc">Attendance at labour and delivery (non-Ob assist, anaesthetist, or newborn resuscitation)</div></div><span class="row-fee">$498.70</span></div>
+        <div class="code-row row-indent"><span class="row-code">E411</span><div><div class="row-desc">↳ Sole delivery premium (add 100%)</div></div><span class="row-fee">+100%</span></div>
+        <div class="code-row"><span class="row-code">P018</span><div><div class="row-desc">Caesarean section (incl. peri-mortem)</div></div><span class="row-fee">$579.80</span></div>
+        <div class="code-row"><span class="row-code">S768</span><div><div class="row-desc">Spontaneous abortion, incomplete – including D&amp;C</div></div><span class="row-fee">$113.40</span></div>
+        <div class="code-row"><span class="row-code">A920</span><div><div class="row-desc">Medical management of early pregnancy – initial service (admin of cytotoxic medication)</div><div class="row-note">Consultations, assessments, and counselling not billable same day</div></div><span class="row-fee">$161.15</span></div>
+        <div class="code-row"><span class="row-code">A922</span><div><div class="row-desc">Medical management of ectopic pregnancy – initial service</div><div class="row-note">Consultations, assessments, and counselling not billable same day</div></div><span class="row-fee">$207.80</span></div>
+
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Urology</span><span class="accordion-meta">Urological procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row"><span class="row-code">Z611</span><div><div class="row-desc">Foley catheter – hospital catheterization</div><div class="row-note">For acute retention, Foley/suprapubic tube change, or medication instillation only · Must be rendered personally by physician · Not billable with any surgical procedure</div></div><span class="row-fee">$8.55</span></div>
+        <div class="code-row"><span class="row-code">Z608</span><div><div class="row-desc">Manual catheter declotting and bladder irrigation</div></div><span class="row-fee">$58.65</span></div>
+        <div class="code-row"><span class="row-code">G900</span><div><div class="row-desc">Residual urine measurement by ultrasound (post-void residual)</div><div class="row-note">Not billable with pelvic or intracavitary ultrasound</div></div><span class="row-fee">$12.70</span></div>
+        <div class="code-row"><span class="row-code">K028</span><div><div class="row-desc">STI &amp; needlestick management</div><div class="row-note">Per unit · Not billable same day as consultation, assessment, or visit · Max 2 units/day, 4 units/year per patient</div></div><span class="row-fee">$70.10</span></div>
+      </div>
+    </div>
+
+  </div><!-- end abdominal & gu -->
+
+  <!-- ══════════════════════════════════════════════════════ NEURO & POCUS -->
+  <div class="specialty-section">
+    <div class="specialty-title">🧠 Neurology &amp; Diagnostics</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Neurology &amp; Nerve Blocks</span><span class="accordion-meta">LP, nerve blocks &amp; neurological procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Neurology</span></div>
+        <div class="code-row"><span class="row-code">G403</span><div><div class="row-desc">Particle repositioning manoeuvre for benign paroxysmal positional vertigo (Epley)</div></div><span class="row-fee">$21.15</span></div>
+        <div class="code-row"><span class="row-code">Z804</span><div><div class="row-desc">Lumbar puncture</div><div class="row-note">Not billable with C-suffix anaesthesia for surgical or obstetrical procedures, or with epidural services in the nerve block section</div></div><span class="row-fee">$150.00</span></div>
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Nerve Blocks – Neuraxial</span></div>
+        <div class="code-row"><span class="row-code">G125</span><div><div class="row-desc">Caudal/lumbar epidural with catheter</div></div><span class="row-fee">$100.00</span></div>
+
+        <div class="code-row billing-note-row"><span class="billing-note-text">Nerve Blocks – Peripheral &amp; Other <span style="font-weight:400;font-size:0.78rem;color:#92400e"> · Only for acute pain (&gt;4 hr duration) · Max 8 blocks/patient/day</span></span></div>
+        <div class="code-row"><span class="row-code">G218</span><div><div class="row-desc">Ilioinguinal and iliohypogastric nerves</div></div><span class="row-fee">$54.65</span></div>
+        <div class="code-row"><span class="row-code">G219</span><div><div class="row-desc">Infraorbital nerve</div></div><span class="row-fee">$34.20</span></div>
+        <div class="code-row"><span class="row-code">G220</span><div><div class="row-desc">Intercostal nerve</div></div><span class="row-fee">$34.20</span></div>
+        <div class="code-row row-indent"><span class="row-code">G221</span><div><div class="row-desc">↳ Each additional intercostal (add-on)</div></div><span class="row-fee">$16.95</span></div>
+        <div class="code-row"><span class="row-code">G225</span><div><div class="row-desc">Mental branch of mandibular nerve</div></div><span class="row-fee">$34.20</span></div>
+        <div class="code-row"><span class="row-code">G250</span><div><div class="row-desc">Maxillary or mandibular division of trigeminal nerve</div></div><span class="row-fee">$75.10</span></div>
+        <div class="code-row"><span class="row-code">G227</span><div><div class="row-desc">Other cranial nerve block</div></div><span class="row-fee">$54.65</span></div>
+        <div class="code-row"><span class="row-code">G231</span><div><div class="row-desc">Somatic or peripheral nerve block – not specifically listed (one nerve/site)</div></div><span class="row-fee">$34.10</span></div>
+        <div class="code-row"><span class="row-code">G258</span><div><div class="row-desc">Intrapleural block – single injection</div></div><span class="row-fee">$44.25</span></div>
+        <div class="code-row"><span class="row-code">G260</span><div><div class="row-desc">Major plexus block (brachial, lumbar, sacral, deep cervical plexus, or 3-in-1 hip block)</div></div><span class="row-fee">$80.00</span></div>
+        <div class="code-row"><span class="row-code">G060</span><div><div class="row-desc">Peripheral nerve block – major (radial, median, ulnar, femoral, sciatic, fascia iliaca, ankle block, etc.)</div></div><span class="row-fee">$55.00</span></div>
+        <div class="code-row"><span class="row-code">G061</span><div><div class="row-desc">Peripheral nerve block – minor (ilioinguinal, intercostal, TAP, superficial cervical plexus, etc.)</div></div><span class="row-fee">$30.00</span></div>
+        <div class="code-row"><span class="row-code">G224</span><div><div class="row-desc">Nerve block by same physician performing the procedure</div><div class="row-note">For post-operative pain control (&gt;4 hr duration) – use instead of individual block codes when performing the procedure yourself</div></div><span class="row-fee">$15.55</span></div>
+
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Ultrasound / POCUS</span><span class="accordion-meta">Point-of-care ultrasound</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <div class="code-row billing-note-row"><span class="billing-note-text">⚠ ED Physician restriction: Only H100 and J149 are billable. All other ultrasound services in the SoB are not eligible for payment by an ED physician.</span></div>
+        <div class="code-row"><span class="row-code">H100</span><div><div class="row-desc">Emergency department investigative ultrasound (bedside POCUS)</div><div class="row-note">Only for life-threatening conditions: pericardial tamponade, cardiac standstill, intraperitoneal hemorrhage (trauma), ruptured AAA, ruptured ectopic pregnancy · Max 2/patient/day (2nd must be follow-up for same condition)</div></div><span class="row-fee">$19.65</span></div>
+        <div class="code-row"><span class="row-code">J149P</span><div><div class="row-desc">Ultrasound guidance for biopsy, aspiration, or drainage – professional component</div><div class="row-note">J138 and J161 rendered same visit as J149 are payable at nil</div></div><span class="row-fee">$36.85</span></div>
+      </div>
+    </div>
+
+  </div><!-- end neuro & diagnostics -->
+
+</main>
+
+<footer>
+  Please send feedback/suggestions to <a href="mailto:chisholm.mirror@gmail.com" style="color:#1F4E79;">chisholm.mirror@gmail.com</a>
+</footer>
+
+<script>
+function toggle(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+</script>
+</body>
+</html>
