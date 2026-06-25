@@ -114,6 +114,7 @@ const NAV_TABS = [
   { key: 'billing',    href: 'index.html',      label: 'Billing Codes',              group: 'billing' },
   { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Billing Codes',  group: 'billing' },
   { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations', group: 'billing' },
+  { key: 'specialty',  href: 'specialty.html',  label: 'Procedures by Specialty',     group: 'billing' },
   { key: 'diag',       href: 'diag.html',       label: 'Diagnostic Codes',           group: 'diag' },
   { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Diagnostic Codes', group: 'diag' },
   { key: 'diagref',    href: 'diagref.html',     label: 'Common Diagnostic Codes',   group: 'diag' },

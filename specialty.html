@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Procedures by Specialty – ED OHIP</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YMK3RYM38R');
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a202c;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* header/nav styles → header.js */
+
+  main {
+    flex: 1;
+    max-width: 860px;
+    margin: 28px auto;
+    padding: 0 16px 80px;
+    width: 100%;
+  }
+
+  /* ── Section headers ── */
+  .specialty-section { margin-bottom: 36px; }
+  .specialty-title {
+    font-size: 1.15rem; font-weight: 800; color: #1F4E79;
+    border-bottom: 3px solid #1F4E79;
+    padding-bottom: 8px; margin-bottom: 14px;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Accordion ── */
+  .accordion { margin-bottom: 8px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  .accordion-header {
+    display: flex; align-items: center; justify-content: space-between;
+    background: white;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+    border: none; width: 100%; text-align: left;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .accordion-header:hover { background: #ebf3fb; }
+  .accordion-header.open { background: #1F4E79; color: white; }
+
+  .accordion-title { font-size: 0.95rem; font-weight: 700; }
+  .accordion-meta { font-size: 0.75rem; opacity: 0.65; margin-left: 10px; font-weight: 400; }
+  .accordion-chevron { font-size: 0.8rem; transition: transform 0.2s; flex-shrink: 0; margin-left: 12px; }
+  .accordion-header.open .accordion-chevron { transform: rotate(180deg); }
+
+  .accordion-body {
+    display: none;
+    background: white;
+    border-top: 1px solid #edf2f7;
+  }
+  .accordion-body.open { display: block; }
+
+  /* ── Code rows ── */
+  .code-row {
+    display: flex; align-items: baseline;
+    padding: 9px 16px;
+    border-bottom: 1px solid #f0f4f8;
+    gap: 10px;
+    font-size: 0.88rem;
+  }
+  .code-row:last-child { border-bottom: none; }
+  .code-row:nth-child(even) { background: #fafbfc; }
+
+  .row-code {
+    font-weight: 700; color: #1F4E79;
+    font-size: 0.9rem; letter-spacing: 0.03em;
+    min-width: 52px; flex-shrink: 0;
+  }
+  .row-desc { flex: 1; color: #2d3748; }
+  .row-note { font-size: 0.75rem; color: #718096; margin-top: 2px; }
+  .row-fee { font-weight: 600; color: #276749; white-space: nowrap; flex-shrink: 0; }
+
+  .row-indent { padding-left: 28px; background: #fefefe; }
+  .row-indent .row-code { color: #4a7ea5; }
+
+  .billing-note-row {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 10px 16px;
+  }
+  .billing-note-text {
+    font-size: 0.82rem;
+    color: #92400e;
+    font-weight: 600;
+  }
+
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    text-align: center; padding: 8px 24px;
+    font-size: 0.78rem; color: #718096;
+    background: white; border-top: 1px solid #dde3ed; z-index: 10;
+  }
+</style>
+<script src="header.js"></script>
+</head>
+<body>
+
+<app-header active="specialty"></app-header>
+
+<main>
+
+  <!-- ══════════════════════════════════════════════════════ AIRWAY & LINES -->
+  <div class="specialty-section">
+    <div class="specialty-title">🫁 Airway &amp; Vascular Access</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Airway</span><span class="accordion-meta">Intubation, cricothyrotomy &amp; airways</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">IV Lines &amp; Injections</span><span class="accordion-meta">Central lines, IO, blocks &amp; infusions</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+  </div><!-- end airway & vascular -->
+
+  <!-- ══════════════════════════════════════════════════════ SKIN & WOUND -->
+  <div class="specialty-section">
+    <div class="specialty-title">🩹 Skin, Wound &amp; Soft Tissue</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">I&amp;D – Hematoma &amp; Abscess</span><span class="accordion-meta">Incision &amp; drainage</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Foreign Body</span><span class="accordion-meta">Removal of foreign bodies</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Lacerations</span><span class="accordion-meta">Repair &amp; closure</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Plastic Surgery</span><span class="accordion-meta">Nails, tendons, burns &amp; wounds</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+  </div><!-- end skin & wound -->
+
+  <!-- ══════════════════════════════════════════════════════ CARDIOVASCULAR & CHEST -->
+  <div class="specialty-section">
+    <div class="specialty-title">❤️ Cardiovascular &amp; Chest</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Cardiovascular</span><span class="accordion-meta">Pacemakers, cardioversion &amp; cardiac procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Chest &amp; Respirology</span><span class="accordion-meta">Chest tubes, thoracentesis &amp; airways</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+  </div><!-- end cardiovascular & chest -->
+
+  <!-- ══════════════════════════════════════════════════════ HEAD & NECK -->
+  <div class="specialty-section">
+    <div class="specialty-title">👂 Head &amp; Neck</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">ENT</span><span class="accordion-meta">Ear, nose &amp; throat</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Ophthalmology</span><span class="accordion-meta">Eye procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+  </div><!-- end head & neck -->
+
+  <!-- ══════════════════════════════════════════════════════ ABDOMINAL & GU -->
+  <div class="specialty-section">
+    <div class="specialty-title">🫀 Abdomen &amp; Genitourinary</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">GI</span><span class="accordion-meta">Abdominal &amp; gastrointestinal procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Ob/Gyne</span><span class="accordion-meta">Obstetric &amp; gynecological procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Urology</span><span class="accordion-meta">Urological procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+  </div><!-- end abdominal & gu -->
+
+  <!-- ══════════════════════════════════════════════════════ NEURO & POCUS -->
+  <div class="specialty-section">
+    <div class="specialty-title">🧠 Neurology &amp; Diagnostics</div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Neurology &amp; Nerve Blocks</span><span class="accordion-meta">LP, nerve blocks &amp; neurological procedures</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+    <div class="accordion">
+      <button class="accordion-header" onclick="toggle(this)">
+        <span><span class="accordion-title">Ultrasound / POCUS</span><span class="accordion-meta">Point-of-care ultrasound</span></span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body">
+        <!-- codes to be added -->
+      </div>
+    </div>
+
+  </div><!-- end neuro & diagnostics -->
+
+</main>
+
+<footer>
+  Please send feedback/suggestions to <a href="mailto:chisholm.mirror@gmail.com" style="color:#1F4E79;">chisholm.mirror@gmail.com</a>
+</footer>
+
+<script>
+function toggle(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+</script>
+</body>
+</html>
