@@ -329,8 +329,7 @@ var BILLING_CODES = [
   "G227 (Nerve Blocks): Nerve block - other cranial nerve -- For acute pain management only (>4 hr duration) -- Exact fee $54.65",
   "G258 (Nerve Blocks): Nerve block - intrapleural, single injection -- For acute pain management only (>4 hr duration) -- Exact fee $44.25",
   "J149P (Routine Procedures): Ultrasound guidance - professional component (aspiration or drainage procedures) -- J138 and J161 rendered same visit are payable at nil -- Exact fee $36.85"
-].join('
-');
+].join('\n');
 
 var SYSTEM_PROMPT =
   'You are an OHIP billing code lookup tool for Emergency Department physicians in Ontario, Canada.\n\n' +
