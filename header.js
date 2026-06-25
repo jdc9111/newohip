@@ -72,6 +72,12 @@ const HEADER_CSS = `
   .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.18); color: white; }
 
   /* ── Group containers ── */
+  .nav-group-wrap { display: flex; flex-direction: column; gap: 3px; }
+  .nav-group-label {
+    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; color: rgba(255,255,255,0.45);
+    padding-left: 2px;
+  }
   .nav-group {
     display: flex; gap: 4px; align-items: center;
     padding: 6px 10px; border-radius: 12px;
@@ -110,16 +116,22 @@ const HEADER_CSS = `
   }
 `;
 
+const GROUP_LABELS = {
+  billing: 'Billing',
+  diag: 'Diagnostic',
+  other: 'Tools',
+};
+
 const NAV_TABS = [
-  { key: 'billing',    href: 'index.html',      label: 'Billing Codes',              group: 'billing' },
-  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Billing Codes',  group: 'billing' },
-  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations', group: 'billing' },
-  { key: 'specialty',  href: 'specialty.html',  label: 'Procedures by Specialty',     group: 'billing' },
-  { key: 'diag',       href: 'diag.html',       label: 'Diagnostic Codes',           group: 'diag' },
-  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Diagnostic Codes', group: 'diag' },
-  { key: 'diagref',    href: 'diagref.html',     label: 'Common Diagnostic Codes',   group: 'diag' },
-  { key: 'sedation',   href: 'sedation.html',   label: 'Sedation',                group: 'other' },
-  { key: 'calc',       href: 'calc.html',       label: 'Outside OHIP Calculator', group: 'other' },
+  { key: 'billing',    href: 'index.html',      label: 'Codes',              group: 'billing' },
+  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Codes',  group: 'billing' },
+  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures',          group: 'billing' },
+  { key: 'specialty',  href: 'specialty.html',  label: 'Specialty',          group: 'billing' },
+  { key: 'diag',       href: 'diag.html',       label: 'Codes',              group: 'diag' },
+  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Codes',  group: 'diag' },
+  { key: 'diagref',    href: 'diagref.html',    label: 'Common',             group: 'diag' },
+  { key: 'sedation',   href: 'sedation.html',   label: 'Sedation',           group: 'other' },
+  { key: 'calc',       href: 'calc.html',       label: 'OHIP Calc',          group: 'other' },
 ];
 
 class AppHeader extends HTMLElement {
@@ -150,9 +162,12 @@ class AppHeader extends HTMLElement {
         const isActive = tab.key === active;
         return `<a href="${tab.href}" class="toggle-btn${isActive ? ' active' : ''}">${tab.label}</a>`;
       }).join('');
-      return seg.group
-        ? `<div class="nav-group grp-${seg.group}">${btns}</div>`
-        : btns;
+      if (!seg.group) return btns;
+      const groupLabel = GROUP_LABELS[seg.group] || '';
+      return `<div class="nav-group-wrap">
+        <span class="nav-group-label">${groupLabel}</span>
+        <div class="nav-group grp-${seg.group}">${btns}</div>
+      </div>`;
     }).join('\n      ');
 
     this.innerHTML = `
