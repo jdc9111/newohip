@@ -591,81 +591,517 @@ const DATA = [
   ["Z213","Below-knee splint/cast",24,"Splints & Casts","Only if no F or D code billed; Exact fee $24.10 (MOH Jan 2025)"],
   ["Z211","Long leg splint/cast",29,"Splints & Casts","Only if no F or D code billed; Exact fee $28.80 (MOH Jan 2025)"],
   ["Z204","Cast removal",10,"Splints & Casts","Exact fee $10.25 (MOH Jan 2025)"],
+
   ["G489","Venipuncture - adolescent or adult",3.54,"IV Lines & Injections",""],
   ["G482","Venipuncture - child",7.35,"IV Lines & Injections",""],
-  ["G480","Venipuncture - infant",9.9,"IV Lines & Injections",""],
+  ["G480","Venipuncture - infant",9.90,"IV Lines & Injections",""],
   ["G380","IV cutdown including cannulation",27.05,"IV Lines & Injections",""],
-  ["G282","Umbilical vein catheterization (incl. blood sample)",19.9,"IV Lines & Injections",""],
-  ["G327","Femoral catheter insertion (dialysis)",77.3,"IV Lines & Injections",""],
-  ["Z459","Arterial puncture",10.2,"IV Lines & Injections",""],
-  ["G270","Intraosseous infusion",23.9,"IV Lines & Injections",""],
+  ["G282","Umbilical vein catheterization (incl. blood sample)",19.90,"IV Lines & Injections",""],
+  ["G327","Femoral catheter insertion (dialysis)",77.30,"IV Lines & Injections",""],
+  ["Z459","Arterial puncture",10.20,"IV Lines & Injections",""],
+  ["G270","Intraosseous infusion",23.90,"IV Lines & Injections",""],
   ["G379","IV injection - child, adolescent or adult",6.15,"IV Lines & Injections",""],
-  ["G376","IV injection - newborn or infant",10.2,"IV Lines & Injections",""],
+  ["G376","IV injection - newborn or infant",10.20,"IV Lines & Injections",""],
   ["G372","IM / SC / intradermal injection (with visit, each)",3.89,"IV Lines & Injections",""],
   ["Z103","Palmar / plantar space I&D - local anaesthetic",44.35,"Incision & Drainage",""],
-  ["Z854","Eyelid abscess I&D",60,"Incision & Drainage",""],
-  ["Z728","Vaginal cyst, abscess or haematoma I&D",97.2,"Incision & Drainage",""],
-  ["Z139","Aspiration of cyst",37.2,"Incision & Drainage",""],
-  ["Z172","Subcutaneous abscess or haematoma - 2 or more (GA)",66.6,"Incision & Drainage",""],
-  ["Z108","Palmar / plantar space I&D - general anaesthetic",72,"Incision & Drainage",""],
+  ["Z854","Eyelid abscess I&D",60.00,"Incision & Drainage",""],
+  ["Z728","Vaginal cyst, abscess or haematoma I&D",97.20,"Incision & Drainage",""],
+  ["Z139","Aspiration of cyst",37.20,"Incision & Drainage",""],
+  ["Z172","Subcutaneous abscess or haematoma - 2 or more (GA)",66.60,"Incision & Drainage",""],
+  ["Z108","Palmar / plantar space I&D - general anaesthetic",72.00,"Incision & Drainage",""],
   ["Z783","Secondary closure",97.35,"Complex Lacerations","Only for delayed surgical closure of a wound; not for routine wound care"],
   ["R790","Suture of lacerated major artery - traumatic",316.85,"Complex Lacerations",""],
-  ["R781","Ligation of artery - as sole procedure",170.1,"Complex Lacerations",""],
+  ["R781","Ligation of artery - as sole procedure",170.10,"Complex Lacerations",""],
   ["E580","Extensor tendon repair - each additional (add-on to R578)",70.95,"Complex Lacerations","Add-on to R578"],
-  ["R585","Suture flexor tendon - single",307.6,"Complex Lacerations",""],
+  ["R585","Suture flexor tendon - single",307.60,"Complex Lacerations",""],
   ["E581","Flexor tendon repair - each additional (add-on to R585)",128.95,"Complex Lacerations","Add-on to R585"],
   ["R629","Revision of amputated fingertip",241.55,"Complex Lacerations",""],
   ["R601","Metacarpophalangeal joint capsule repair",316.75,"Complex Lacerations",""],
   ["Z117","Chemical and/or cryotherapy - one or more lesions",11.65,"Plastic Surgery","Max 1 per patient per physician per day"],
-  ["Z129","Nail plate excision - multiple",35.7,"Plastic Surgery",""],
+  ["Z129","Nail plate excision - multiple",35.70,"Plastic Surgery",""],
   ["Z131","Radical nail excision + nail bed destruction - multiple",82.65,"Plastic Surgery",""],
-  ["Z081","Wound debridement into subcutaneous tissue - 2 wounds",30,"Wound Debridement",""],
-  ["Z082","Wound debridement into subcutaneous tissue - 3 wounds",45,"Wound Debridement",""],
-  ["Z083","Wound debridement into subcutaneous tissue - 4+ wounds",60,"Wound Debridement",""],
-  ["Z084","Wound debridement into tendon/ligament/bursa/bone - 1-2 wounds",60,"Wound Debridement",""],
-  ["Z085","Wound debridement into tendon/ligament/bursa/bone - 3+ wounds",90,"Wound Debridement",""],
+  ["Z081","Wound debridement into subcutaneous tissue - 2 wounds",30.00,"Wound Debridement",""],
+  ["Z082","Wound debridement into subcutaneous tissue - 3 wounds",45.00,"Wound Debridement",""],
+  ["Z083","Wound debridement into subcutaneous tissue - 4+ wounds",60.00,"Wound Debridement",""],
+  ["Z084","Wound debridement into tendon/ligament/bursa/bone - 1-2 wounds",60.00,"Wound Debridement",""],
+  ["Z085","Wound debridement into tendon/ligament/bursa/bone - 3+ wounds",90.00,"Wound Debridement",""],
   ["R637","Burn debridement - per % BSA (excl. hand, head, neck, eyelid)",29.65,"Wound Debridement",""],
-  ["R660","Burn debridement - hand, each digit",28.9,"Wound Debridement",""],
+  ["R660","Burn debridement - hand, each digit",28.90,"Wound Debridement",""],
   ["R661","Burn debridement - hand, dorsum or palm",47.95,"Wound Debridement",""],
-  ["R662","Burn debridement - face/neck (nose, cheek, lip, ear, forehead, scalp, neck or eyelid)",28.9,"Wound Debridement",""],
+  ["R662","Burn debridement - face/neck (nose, cheek, lip, ear, forehead, scalp, neck or eyelid)",28.90,"Wound Debridement",""],
   ["G517","Doppler - ankle pressure (incl. ankle-arm index)",10.05,"Critical Care – Other Procedures",""],
-  ["G115","External cardiac pacing - temporary transthoracic",46.3,"Critical Care – Other Procedures","Not billable with G521, G522, G523, G395 or G391"],
-  ["Z401","Pericardiocentesis",131.7,"Critical Care – Other Procedures",""],
+  ["G115","External cardiac pacing - temporary transthoracic",46.30,"Critical Care – Other Procedures","Not billable with G521, G522, G523, G395 or G391"],
+  ["Z401","Pericardiocentesis",131.70,"Critical Care – Other Procedures",""],
   ["M137","Thoracotomy (with or without biopsy)",390.65,"Critical Care – Other Procedures",""],
-  ["Z326","Tracheostomy tube change",12.5,"ENT",""],
+  ["Z326","Tracheostomy tube change",12.50,"ENT",""],
   ["F137","Nasal fracture - open reduction",316.35,"ENT",""],
-  ["Z292","Direct laryngoscopy - without biopsy",61.3,"ENT",""],
+  ["Z292","Direct laryngoscopy - without biopsy",61.30,"ENT",""],
   ["S066","Post-tonsillectomy haemorrhage - cauterization or suture",121.05,"ENT",""],
-  ["S023","Tooth extraction - single (complete care)",24.9,"ENT",""],
-  ["E700","Tooth extraction - each additional",13.4,"ENT","Add-on to S023"],
-  ["Z874","Chalazion excision - local anaesthetic, single or multiple",70,"Ophthalmology",""],
-  ["E199","Eyelid laceration - full thickness repair",225,"Ophthalmology",""],
-  ["E198","Eyelid laceration - full thickness including lid margin",300,"Ophthalmology","Add-on / alternative to E199 when lid margin involved"],
-  ["E235","Cantholysis - when primary procedure",107.5,"Ophthalmology",""],
+  ["S023","Tooth extraction - single (complete care)",24.90,"ENT",""],
+  ["E700","Tooth extraction - each additional",13.40,"ENT","Add-on to S023"],
+  ["Z874","Chalazion excision - local anaesthetic, single or multiple",70.00,"Ophthalmology",""],
+  ["E199","Eyelid laceration - full thickness repair",225.00,"Ophthalmology",""],
+  ["E198","Eyelid laceration - full thickness including lid margin",300.00,"Ophthalmology","Add-on / alternative to E199 when lid margin involved"],
+  ["E235","Cantholysis - when primary procedure",107.50,"Ophthalmology",""],
   ["E108","Enucleation, donor eye, post-mortem (one or both)",131.25,"Ophthalmology",""],
-  ["G349","Oesophageal tamponade - Blakemore bag insertion",45.3,"GI Procedures",""],
-  ["G355","Nasogastric tube - diagnostic, with or without lavage",9.6,"GI Procedures",""],
-  ["Z564","Diagnostic peritoneal lavage (DPL) - open, without manual exploration",73.6,"GI Procedures",""],
-  ["Z535","Sigmoidoscopy - rigid scope, with or without anoscopy",36.8,"GI Procedures",""],
+  ["G349","Oesophageal tamponade - Blakemore bag insertion",45.30,"GI Procedures",""],
+  ["G355","Nasogastric tube - diagnostic, with or without lavage",9.60,"GI Procedures",""],
+  ["Z564","Diagnostic peritoneal lavage (DPL) - open, without manual exploration",73.60,"GI Procedures",""],
+  ["Z535","Sigmoidoscopy - rigid scope, with or without anoscopy",36.80,"GI Procedures",""],
   ["G004","Occult blood (hemoccult)",1.58,"GI Procedures",""],
-  ["Z716","Marsupialization of Bartholin cyst or abscess - GA",89.8,"Obstetrics & Gynaecology",""],
-  ["G365","Cervical cancer screening specimen collection",12,"Obstetrics & Gynaecology",""],
-  ["A813","Midwife-Requested Assessment (MAMRA)",111.7,"Obstetrics & Gynaecology","Max one per patient per physician per pregnancy"],
-  ["P006","Vaginal delivery",498.7,"Obstetrics & Gynaecology",""],
+  ["Z716","Marsupialization of Bartholin cyst or abscess - GA",89.80,"Obstetrics & Gynaecology",""],
+  ["G365","Cervical cancer screening specimen collection",12.00,"Obstetrics & Gynaecology",""],
+  ["A813","Midwife-Requested Assessment (MAMRA)",111.70,"Obstetrics & Gynaecology","Max one per patient per physician per pregnancy"],
+  ["P006","Vaginal delivery",498.70,"Obstetrics & Gynaecology",""],
   ["E411","Sole delivery premium - add 100% to P006 or P009",0,"Obstetrics & Gynaecology","Add 100% when sole delivery that day; max 25 per physician per fiscal year"],
-  ["P009","Attendance at labour and delivery (non-Ob assist, anaesthetist, or newborn resuscitation)",498.7,"Obstetrics & Gynaecology",""],
-  ["P018","Caesarean section (incl. peri-mortem)",579.8,"Obstetrics & Gynaecology",""],
-  ["S768","Spontaneous abortion, incomplete - including D&C",113.4,"Obstetrics & Gynaecology",""],
-  ["A922","Medical management of ectopic pregnancy - initial service",207.8,"Obstetrics & Gynaecology","Consultations, assessments, and counselling not billable same day"],
-  ["G900","Residual urine measurement by ultrasound (post-void residual)",12.7,"Urology","Not billable with pelvic or intracavitary ultrasound"],
-  ["G125","Caudal/lumbar epidural with catheter",100,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
+  ["P009","Attendance at labour and delivery (non-Ob assist, anaesthetist, or newborn resuscitation)",498.70,"Obstetrics & Gynaecology",""],
+  ["P018","Caesarean section (incl. peri-mortem)",579.80,"Obstetrics & Gynaecology",""],
+  ["S768","Spontaneous abortion, incomplete - including D&C",113.40,"Obstetrics & Gynaecology",""],
+  ["A922","Medical management of ectopic pregnancy - initial service",207.80,"Obstetrics & Gynaecology","Consultations, assessments, and counselling not billable same day"],
+  ["G900","Residual urine measurement by ultrasound (post-void residual)",12.70,"Urology","Not billable with pelvic or intracavitary ultrasound"],
+  ["G125","Caudal/lumbar epidural with catheter",100.00,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["G218","Nerve block - ilioinguinal and iliohypogastric nerves",54.65,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
-  ["G219","Nerve block - infraorbital nerve",34.2,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
-  ["G220","Nerve block - intercostal nerve",34.2,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
+  ["G219","Nerve block - infraorbital nerve",34.20,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
+  ["G220","Nerve block - intercostal nerve",34.20,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["G221","Nerve block - each additional intercostal (add-on to G220)",16.95,"Nerve Blocks","Add-on to G220"],
-  ["G225","Nerve block - mental branch of mandibular nerve",34.2,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
-  ["G250","Nerve block - maxillary or mandibular division of trigeminal nerve",75.1,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
+  ["G225","Nerve block - mental branch of mandibular nerve",34.20,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
+  ["G250","Nerve block - maxillary or mandibular division of trigeminal nerve",75.10,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["G227","Nerve block - other cranial nerve",54.65,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["G258","Nerve block - intrapleural, single injection",44.25,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["J149P","Ultrasound guidance - professional component (aspiration or drainage procedures)",36.85,"Routine Procedures","J138 and J161 rendered same visit are payable at nil"]
 ];
+
+// ── pre-build search tokens per row ─────────────────────────────────────────
+const SEARCH_TOKENS = DATA.map(r =>
+  (r[0] + " " + r[1] + " " + r[3] + " " + r[4]).toLowerCase()
+);
+
+// ── fuzzy score: higher = better match ───────────────────────────────────────
+function score(haystack, needle) {
+  if (!needle) return 1;
+  const h = haystack.toLowerCase();
+  const n = needle.toLowerCase();
+
+  // exact substring → highest score
+  if (h.includes(n)) return 100 + (n.length / h.length) * 50;
+
+  // word-by-word partial match
+  const words = n.split(/\s+/).filter(Boolean);
+  let hits = 0;
+  for (const w of words) {
+    if (h.includes(w)) hits++;
+  }
+  if (hits === words.length) return 60 + hits * 5;
+  if (hits > 0) return 30 + hits * 10;
+
+  return 0;
+}
+
+// ── highlight matching substrings ────────────────────────────────────────────
+function highlight(text, query) {
+  if (!query) return esc(text);
+  const q = query.trim();
+  if (!q) return esc(text);
+  // try to highlight the longest matching substring
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if (idx !== -1) {
+    return esc(text.slice(0, idx))
+      + "<mark>" + esc(text.slice(idx, idx + q.length)) + "</mark>"
+      + esc(text.slice(idx + q.length));
+  }
+  // highlight individual words
+  let result = esc(text);
+  q.split(/\s+/).filter(Boolean).forEach(w => {
+    const re = new RegExp(escRe(w), "gi");
+    result = result.replace(re, m => "<mark>" + m + "</mark>");
+  });
+  return result;
+}
+
+function esc(s) {
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function escRe(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// ── render ────────────────────────────────────────────────────────────────────
+const tbody  = document.getElementById("tbody");
+const status = document.getElementById("status");
+const empty  = document.getElementById("empty");
+const tbl    = document.getElementById("tbl");
+
+// ── Extended billing notes ────────────────────────────────────────────────────
+const CONSULTATION_NOTE = `<ul>
+    <li>Provided upon a <strong>written request</strong> from a referring physician requesting an opinion, or because another opinion was requested by the patient.</li>
+    <li>Consultant must perform a general or specific assessment, including review of all relevant data.</li>
+    <li>Consultant must submit findings, opinions, and recommendations <strong>in writing to the referring physician.</strong></li>
+    <li>A copy of the written request must be maintained in the medical record.</li>
+    <li><strong>No written request?</strong> Fee is reduced to the amount payable for an assessment.</li>
+    <li>Cannot be claimed when a patient presents without a referral from their primary physician.</li>
+  </ul>`;
+
+const REASSESSMENT_NOTE = `<ul>
+    <li><strong>Max 3</strong> reassessments per patient per day</li>
+    <li><strong>Max 2</strong> reassessments per physician per patient per day</li>
+    <li>Must be <strong>at least 2 hours apart</strong> from previous assessment</li>
+    <li>Must involve a <strong>new order</strong> — not admission or discharge (e.g. Gravol, repeat vitals, walk test, imaging, labs)</li>
+  </ul>`;
+
+const EXTENDED_NOTES = {
+  "H104": REASSESSMENT_NOTE,
+  "H134": REASSESSMENT_NOTE,
+  "H154": REASSESSMENT_NOTE,
+  "H124": REASSESSMENT_NOTE,
+  "E420": `<ul>
+    <li>ISS &gt; 15 if patient is ≥ 16 years old</li>
+    <li>ISS &gt; 12 if patient is &lt; 16 years old</li>
+    <li>ISS must be recorded on the chart</li>
+  </ul>`,
+  "G521": `<ul>
+    <li>Patient must have a critical illness or injury that acutely impairs one or more vital organs or systems such that <strong>imminent life-threatening deterioration is highly probable.</strong></li>
+    <li><strong>Excludes:</strong> intubation, lines, defibrillation, cardioversion, ABGs, Foleys, NGTs</li>
+    <li>Does <em>not</em> exclude other procedure codes (fractures, lacerations, etc.)</li>
+    <li><strong>Examples:</strong> STEMI, CHF with intubation or BiPAP, severe sepsis/shock, true anaphylaxis (epi given), status epilepticus, trauma with unstable vitals, croup requiring epi</li>
+  </ul>`,
+  "H055": CONSULTATION_NOTE,
+  "H065": CONSULTATION_NOTE,
+  "K734": `<ul>
+    <li>Providing advice re: management &amp; treatment — discussion must be <strong>&gt;10 minutes.</strong></li>
+    <li><strong>Must document:</strong> start and stop time of discussion, name of consultant MD, reason for consult, and opinion/recommendations of the consultant MD.</li>
+    <li><strong>Not payable</strong> if the phone consultation leads to a face-to-face assessment by the consultant physician either the same day or the day following the call.</li>
+  </ul>`,
+  "K035": `<ul>
+    <li>Mandatory report to the Ministry of Transportation (MOT) for medical conditions that may impair driving ability.</li>
+    <li><strong>Cognitive Impairment</strong> — disorder affecting attention, judgment/problem-solving, planning/sequencing, memory, insight, reaction time, or visuospatial perception; substantial limitation in daily activities (e.g., dementia).</li>
+    <li><strong>Epilepsy</strong> — uncontrolled seizures; non-epileptic spells resembling seizures.</li>
+    <li><strong>Cardiac Conditions</strong> — syncope/heart conditions causing loss of consciousness or equivalent incapacitation.</li>
+    <li><strong>Psychiatric Disorders</strong> — severe non-organic conditions (e.g., psychosis, bipolar mania) with poor compliance, poor insight, or substance dependence.</li>
+    <li><strong>Sleep Disorders</strong> — narcolepsy/cataplexy; sleep apnea with excessive daytime somnolence.</li>
+    <li><strong>Vision Impairment</strong> — visual acuity worse than 20/30 (best-corrected, better eye); visual field &lt;120° continuous horizontally.</li>
+  </ul>`,
+  "K034": `<ul>
+    <li>Telephone report of a <strong>specified reportable disease</strong> to a Medical Officer of Health (MOH), as required under Ontario's Health Protection and Promotion Act (HPPA).</li>
+    <li>Applies only to diseases listed in <strong>Ontario Regulation 559/91</strong> (communicable diseases requiring public health notification).</li>
+    <li>Must be <strong>personally rendered by the physician</strong> — cannot be delegated.</li>
+    <li><strong>Limit:</strong> 1 per physician, per patient, per specified reportable disease, within a 12-month period.</li>
+    <li>Distinct from K080 (patient telephone calls) — K034 is specifically for MOH reporting obligations.</li>
+  </ul>`,
+  "K071": `<ul>
+    <li>Billed for supervision of a patient during the <strong>first 12 weeks following admission to a home care program.</strong></li>
+    <li><strong>Limit:</strong> max 1 service per physician per patient per 2-week period.</li>
+    <li>Exact fee: <strong>$21.40</strong> (OMA Jan 2025).</li>
+    <li><strong>ED context:</strong> consider billing K071 when a patient without a family physician returns to the ED for follow-up after you arranged their home care (K070) — you are effectively supervising their acute home care episode.</li>
+  </ul>`,
+  "K061": `<ul>
+    <li>Billed when a physician takes a <strong>blood sample in hospital at the request of a police officer</strong> — typically for impaired driving investigations or other forensic/legal purposes.</li>
+    <li>Categorized as a special procedure — requires police request; document the officer's name/badge number and time in the chart.</li>
+  </ul>`,
+  "K005": `<ul>
+    <li>Minimum <strong>20 minutes</strong> of mental health counselling; document the mental health diagnosis and start/end times.</li>
+    <li><strong>2 diagnoses required when billing alongside an H code</strong> — the mental health diagnosis (for K005) plus a separate presenting diagnosis (for the H assessment).</li>
+    <li>Both diagnoses must be documented in the chart.</li>
+  </ul>`,
+  "K101": `<ul>
+    <li>Billed for <strong>physician attendance during ground/land ambulance patient transfer</strong> — per 15-minute increment.</li>
+    <li><strong>Fee:</strong> $60.00 per 15 min (updated April 1, 2026; was $42.10 in 2025).</li>
+    <li>Requires physician to be physically present with the patient during transport.</li>
+    <li>Specific to <strong>ground ambulance</strong> — does not apply to other vehicles.</li>
+  </ul>`,
+  "K112": `<ul>
+    <li>Billed for the physician's <strong>return trip without the patient</strong> to the place of origin, following an interhospital transfer.</li>
+    <li><strong>Fee:</strong> $25.05 per 30 min.</li>
+    <li>Applies to both <strong>ground and air ambulance</strong> return trips.</li>
+    <li>Companion code to K101 (ground transfer with patient) and K111 (air transfer with patient).</li>
+  </ul>`,
+  "K111": `<ul>
+    <li>Billed for <strong>physician attendance during air ambulance patient transfer</strong> — per 15-minute increment.</li>
+    <li><strong>Fee:</strong> $60.00 per 15 min (updated April 1, 2026; was $126.40 in 2025 — significant decrease).</li>
+    <li>Requires physician to be physically present with the patient during transport.</li>
+    <li>Specific to <strong>air ambulance</strong> transport.</li>
+  </ul>`,
+  "H112": `<ul>
+    <li>Night premium billed <strong>per patient visit</strong> between midnight and 08:00.</li>
+    <li><strong>Bill with:</strong> G or K codes (e.g. G521, G395, K005, K028).</li>
+    <li><strong>Do not bill with:</strong> H assessment codes (H101–H154) — the night premium is already built into the H121/H122/H123/H124 night-tier fees.</li>
+  </ul>`,
+  "H113": `<ul>
+    <li>Weekend/Holiday + Friday evening premium billed <strong>per patient visit</strong>.</li>
+    <li>Applies to: <strong>Saturdays, Sundays, Ontario statutory holidays</strong> (all hours), and <strong>Friday evenings 17:00–24:00</strong>.</li>
+    <li><strong>Bill with:</strong> G or K codes (e.g. G521, G395, K005, K028).</li>
+    <li><strong>Do not bill with:</strong> H assessment codes (H101–H154) — the weekend/holiday premium is already built into the H15x weekend-tier fees.</li>
+  </ul>`,
+  "E412": `<ul>
+    <li>After-hours procedural premium for <strong>Emergency Department physicians</strong> — adds <strong>+20%</strong> to the procedural fee.</li>
+    <li><strong>Evenings (Mon–Fri):</strong> 17:00 – 24:00</li>
+    <li><strong>Saturdays:</strong> daytime and evening hours</li>
+    <li><strong>Holidays:</strong> all hours</li>
+  </ul>`,
+  "G395": `<ul>
+    <li>Where there is a potential threat to life or limb, physician provides resuscitation in order to address the high probability of loss of limb or requirement for "life threatening" critical care.</li>
+    <li><strong>Excludes:</strong> intubation, lines, ABGs, catheters</li>
+    <li>Does <em>not</em> exclude cardioversion, defibrillation, or other procedure codes (fractures, dislocations, lacerations, etc.)</li>
+    <li><strong>Examples:</strong> Backboard/collar with imaging, chest pain requiring intervention, abdo pain requiring intervention, head injury requiring CT, OD/intoxication with decreased LOC, extremity requiring immediate reduction</li>
+  </ul>`,
+};
+
+function toggleExtNote(btn) {
+  const panel = btn.nextElementSibling;
+  const open  = panel.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.title = open ? 'Hide details' : 'Show details';
+}
+
+function render(query) {
+  const q = (query || "").trim();
+
+  tbody.innerHTML = "";
+
+  if (!q) {
+    tbl.style.display = "none";
+    empty.style.display = "none";
+    status.textContent = "";
+    return;
+  }
+
+  const results = DATA
+    .map((r, i) => ({ r, s: score(SEARCH_TOKENS[i], q) }))
+    .filter(x => x.s > 0)
+    .sort((a, b) => b.s - a.s);
+
+  if (results.length === 0) {
+    tbl.style.display = "none";
+    empty.style.display = "block";
+    status.textContent = "";
+    return;
+  }
+
+  tbl.style.display = "";
+  empty.style.display = "none";
+  status.textContent = `${results.length} result${results.length === 1 ? "" : "s"} for "${q}"`;
+
+
+  const frag = document.createDocumentFragment();
+  for (const { r } of results) {
+    const [code, desc, fee, cat, notes] = r;
+    const tr = document.createElement("tr");
+    const feeStr = fee !== null ? "$" + fee : "—";
+
+    const extNote = EXTENDED_NOTES[code] || "";
+    tr.innerHTML = `
+      <td>${highlight(code, q)}</td>
+      <td>
+        ${highlight(desc, q)}${extNote ? `<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">i</button><div class="ext-note">${extNote}</div>` : ""}
+        <div class="cat-pill">${highlight(cat, q)}</div>
+        ${notes ? `<div class="note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
+      </td>
+      <td>${feeStr}</td>`;
+    frag.appendChild(tr);
+  }
+  tbody.appendChild(frag);
+}
+
+// ── debounced input handler ───────────────────────────────────────────────────
+let timer;
+document.getElementById("query").addEventListener("input", e => {
+  clearTimeout(timer);
+  timer = setTimeout(() => render(e.target.value), 120);
+});
+
+// initial render
+render("");
+
+// ── Code-of-the-Day ──────────────────────────────────────────────────────────
+// Add codes here that are worth remembering — rarely billed, high-value, or easily forgotten.
+const FLAGGED_CODES = [
+  "E420",   // Trauma ISS premium — frequently missed
+  "H113",   // Weekend/holiday + Fri eve premium
+  "H114",   // Weekday evening premium — new, often missed
+  "H264",   // ED pelvic exam with speculum — new, underused
+  "Z756",   // Rectal/fecal disimpaction — often forgotten
+  "G552",   // IUD removal without sedation
+  "Z363",   // Chest tube removal — separate billable code
+  "K034",   // Telephone report of reportable disease to MOH
+  "K035",   // Medical conditions report to MOT
+  "Z756",   // Rectal/fecal disimpaction — often forgotten
+  "Z104",   // Perianal abscess I&D — significant fee increase April 2026
+  "K071",   // Acute Home Care Supervision — often missed for ED follow-ups
+];
+
+function openCOTD() {
+  const code = FLAGGED_CODES[Math.floor(Math.random() * FLAGGED_CODES.length)];
+  const row  = DATA.find(r => r[0] === code);
+  if (!row) return;
+
+  const [c, desc, fee, cat, notes] = row;
+  const feeStr   = fee !== null ? '$' + fee.toFixed(2) : '—';
+  const extNote  = EXTENDED_NOTES[c] || "";
+  const noteHtml = notes
+    ? `<div class="cotd-note">${/[<>]/.test(notes) ? notes : esc(notes)}</div>`
+    : "";
+  const extHtml  = extNote ? `<div class="cotd-ext">${extNote}</div>` : "";
+
+  const overlay = document.getElementById('cotd-overlay');
+  overlay.innerHTML = `
+    <div class="cotd-card" role="dialog" aria-modal="true">
+      <div class="cotd-header">
+        <span class="cotd-header-icon">💡</span>
+        <div class="cotd-header-text">
+          <div class="cotd-header-label">Code of the Day</div>
+          <div class="cotd-header-title">Worth remembering</div>
+        </div>
+      </div>
+      <div class="cotd-body">
+        <div class="cotd-code-row">
+          <span class="cotd-code">${esc(c)}</span>
+          <span class="cotd-fee">${feeStr}</span>
+        </div>
+        <div class="cotd-desc">${esc(desc)}</div>
+        <span class="cotd-cat">${esc(cat)}</span>
+        ${noteHtml}
+        ${extHtml}
+      </div>
+      <div class="cotd-footer">
+        <button class="cotd-btn-optout" onclick="closeCOTD(true)">Disable Code of the Day</button>
+        <button class="cotd-btn-search" onclick="closeCOTD();document.getElementById('query').value='${esc(c)}';document.getElementById('query').dispatchEvent(new Event('input'));document.getElementById('query').focus()">Search this code</button>
+        <button class="cotd-btn-dismiss" onclick="closeCOTD()">Got it</button>
+      </div>
+    </div>`;
+  overlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCOTD(optOut) {
+  if (optOut) localStorage.setItem('cotd_optout', '1');
+  document.getElementById('cotd-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCOTD(); });
+
+// Show once per session, unless permanently opted out
+if (!localStorage.getItem('cotd_optout') && !sessionStorage.getItem('cotd_shown')) {
+  sessionStorage.setItem('cotd_shown', '1');
+  openCOTD();
+}
+
+// ── Time-based billing reminders ─────────────────────────────────────────────
+(function() {
+  const now  = new Date();
+  const day  = now.getDay();   // 0=Sun,1=Mon,...,5=Fri,6=Sat
+  const hour = now.getHours(); // 0–23
+  const isEvening = hour >= 17; // 5pm–midnight (midnight = next day, hour 0)
+
+  // Ontario OHIP statutory holidays — treated as weekend/holiday billing
+  const OHIP_HOLIDAYS = {
+    // 2026
+    "2026-01-01": "New Year's Day",
+    "2026-02-16": "Family Day",
+    "2026-04-03": "Good Friday",
+    "2026-05-18": "Victoria Day",
+    "2026-07-01": "Canada Day",
+    "2026-08-03": "Civic Holiday",
+    "2026-09-07": "Labour Day",
+    "2026-10-12": "Thanksgiving",
+    // 2026 Festive Season (Dec 25 – Jan 1)
+    "2026-12-25": "Christmas Day",
+    "2026-12-26": "Boxing Day",
+    "2026-12-27": "Festive Season",
+    "2026-12-28": "Festive Season",
+    "2026-12-29": "Festive Season",
+    "2026-12-30": "Festive Season",
+    "2026-12-31": "New Year's Eve",
+    // 2027
+    "2027-01-01": "New Year's Day",
+    "2027-02-15": "Family Day",
+    "2027-03-26": "Good Friday",
+    "2027-05-24": "Victoria Day",
+    "2027-07-01": "Canada Day",
+    "2027-08-02": "Civic Holiday",
+    "2027-09-06": "Labour Day",
+    "2027-10-11": "Thanksgiving",
+    // 2027 Festive Season (Dec 25 – Jan 1)
+    "2027-12-25": "Christmas Day",
+    "2027-12-26": "Boxing Day",
+    "2027-12-27": "Festive Season",
+    "2027-12-28": "Festive Season",
+    "2027-12-29": "Festive Season",
+    "2027-12-30": "Festive Season",
+    "2027-12-31": "New Year's Eve",
+    "2028-01-01": "New Year's Day",
+  };
+
+  // Today's date as YYYY-MM-DD in local time
+  const yyyy = now.getFullYear();
+  const mm   = String(now.getMonth() + 1).padStart(2, '0');
+  const dd   = String(now.getDate()).padStart(2, '0');
+  const todayStr = `${yyyy}-${mm}-${dd}`;
+  const holidayName = OHIP_HOLIDAYS[todayStr] || null;
+
+  let reminder = null;
+
+  if (holidayName) {
+    // Statutory holiday — H15x assessments + H113 holiday premium + E412 after-hours premium apply all day
+    reminder = {
+      title: `🎉 Today is ${holidayName} — Holiday Billing Applies!`,
+      body:  "Remember to bill holiday codes where applicable:",
+      codes: [
+        { code: "H15x", label: "H15x – Wkd/Hol assessments (H151–H154)", search: "H15" },
+        { code: "H113", label: "H113 – Wkd/Hol + Fri eve premium", search: "H113" },
+        { code: "E412", label: "E412 – After-hours procedural premium (+20%)", search: "E412" },
+      ]
+    };
+  } else if (day === 0 || day === 6) {
+    // Saturday or Sunday
+    reminder = {
+      title: "It’s the Weekend!",
+      body:  "Remember to bill where applicable:",
+      codes: [
+        { code: "H15x", label: "H15x – Wkd/Hol assessments (H151–H154)", search: "H15" },
+        { code: "H113", label: "H113 – Wkd/Hol + Fri eve premium", search: "H113" },
+      ]
+    };
+  } else if (day === 5 && isEvening) {
+    // Friday evening 5pm–midnight
+    reminder = {
+      title: "It’s Friday Evening!",
+      body:  "Remember to bill where applicable:",
+      codes: [
+        { code: "H15x", label: "H15x – Wkd/Hol assessments (H151–H154)", search: "H15" },
+        { code: "H113", label: "H113 – Wkd/Hol + Fri eve premium", search: "H113" },
+      ]
+    };
+  } else if (day >= 1 && day <= 4 && isEvening) {
+    // Monday–Thursday evening 5pm–midnight
+    reminder = {
+      title: "It’s a Weekday Evening (Mon–Thu)!",
+      body:  "Remember to bill evening codes where applicable:",
+      codes: [
+        { code: "H114", label: "H114 – Weekday eve premium (NEW Apr 2026)" },
+      ]
+    };
+  }
+
+  if (!reminder) return;
+
+  const codesHtml = reminder.codes.map(c =>
+    `<code title="${c.label}" onclick="document.getElementById('query').value='${c.search||c.code}';document.getElementById('query').dispatchEvent(new Event('input'));document.getElementById('query').focus()">${c.code}</code>`
+  ).join('');
+
+  const banner = document.getElementById('reminder-banner');
+  banner.className = 'reminder-banner';
+  banner.innerHTML = `
+    <span class="reminder-icon">🔔</span>
+    <div class="reminder-body">
+      <div class="reminder-title">${reminder.title}</div>
+      <div class="reminder-codes">${reminder.body} ${codesHtml}</div>
+    </div>
+    <button class="reminder-dismiss" onclick="this.closest('#reminder-banner').style.display='none'" title="Dismiss">✕</button>
+  `;
+  banner.style.display = '';
+})();
+
+// }, { capture: true });
+</script>
+</body>
+</html>
