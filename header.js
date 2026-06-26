@@ -104,14 +104,15 @@ const HEADER_CSS = `
     .header-brand { flex-direction: column; align-items: flex-start; gap: 4px; }
     .header-subtitle { font-size: 0.88rem; font-weight: 600; }
     .toggle-bar { flex-direction: column; padding: 8px 12px; gap: 6px; flex-wrap: nowrap; }
-    .nav-group { flex-direction: column; width: 100%; padding: 4px; }
+    .nav-group { flex-direction: row; flex-wrap: wrap; width: 100%; padding: 4px; gap: 4px; }
     .toggle-btn {
       border-radius: 6px !important;
       border: 2px solid rgba(255,255,255,0.3) !important;
       text-align: center;
-      width: 100%;
-      padding: 13px 22px;
-      font-size: 0.95rem;
+      flex: 1 1 auto;
+      padding: 12px 8px;
+      font-size: 0.88rem;
+      min-width: 0;
     }
   }
 `;

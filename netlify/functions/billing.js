@@ -175,7 +175,7 @@ var BILLING_CODES = [
   "G403 (ENT): Epley manoeuvre -- Exact fee $21.00",
   "Z315 (ENT): Anterior nasal pack -- Exact fee $15.00",
   "Z321 (ENT): Direct laryngoscopy -- Exact fee $61.00",
-  "Z316 (ENT): Posterior nasal pack -- Exact fee $36.00",
+  "Z316 (ENT): Posterior nasal pack -- Unilateral or bilateral -- Exact fee $36.00",
   "Z322 (ENT): Direct laryngoscopy with FB removal -- Exact fee $106.00",
   "Z314 (ENT): Nasal cautery -- Exact fee $12.00",
   "Z301 (ENT): Nasal abscess or haematoma I&D -- Exact fee $55.60 -- Exact fee $56.00",
