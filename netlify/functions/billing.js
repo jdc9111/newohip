@@ -171,7 +171,7 @@ var BILLING_CODES = [
   "Z432A (Foreign Bodies): Foreign body removal – vagina (GA) -- Exact fee $54.00",
   "S547 (Foreign Bodies): Foreign body removal – urethra -- Exact fee $171.00",
   "E023C (Foreign Bodies): Foreign body removal – vagina with sedation -- 6 anaesthesia units",
-  "G420 (ENT): Ear syringe/irrigation -- Exact fee $11.00",
+  "G420 (ENT): Ear syringe/irrigation -- Insured only if: (a) impacted wax causing hearing loss unresponsive to topical cerumenolytics; or (b) immediate removal needed to visualize TM or ear canal for diagnostic/therapeutic purposes -- Exact fee $11.00",
   "G403 (ENT): Epley manoeuvre -- Exact fee $21.00",
   "Z315 (ENT): Anterior nasal pack -- Exact fee $15.00",
   "Z321 (ENT): Direct laryngoscopy -- Exact fee $61.00",
