@@ -67,6 +67,11 @@ const HEADER_CSS = `
     transition: all 0.15s;
     white-space: nowrap;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
   }
   .toggle-btn.active       { background: white; color: #1F4E79; border-color: white; box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
   .toggle-btn:not(.active):hover { background: rgba(255,255,255,0.18); color: white; }
@@ -79,7 +84,7 @@ const HEADER_CSS = `
     padding-left: 2px;
   }
   .nav-group {
-    display: flex; gap: 4px; align-items: center;
+    display: flex; gap: 4px; align-items: stretch;
     padding: 6px 10px; border-radius: 12px;
   }
   .nav-group.grp-billing { background: rgba(56,189,248,0.14); }
@@ -126,13 +131,13 @@ const GROUP_LABELS = {
 const NAV_TABS = [
   { key: 'billing',    href: 'index.html',      label: 'Codes',              group: 'billing' },
   { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Codes',  group: 'billing' },
-  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures',          group: 'billing' },
+  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">& Dislocations</span>', group: 'billing' },
   { key: 'specialty',  href: 'specialty.html',  label: 'Specialty',          group: 'billing' },
   { key: 'diag',       href: 'diag.html',       label: 'Codes',              group: 'diag' },
   { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Codes',  group: 'diag' },
   { key: 'diagref',    href: 'diagref.html',    label: 'Common',             group: 'diag' },
   { key: 'sedation',   href: 'sedation.html',   label: 'Sedation',           group: 'other' },
-  { key: 'calc',       href: 'calc.html',       label: 'OHIP Calc',          group: 'other' },
+  { key: 'calc',       href: 'calc.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Outside</span>OHIP Billing', group: 'other' },
 ];
 
 class AppHeader extends HTMLElement {
