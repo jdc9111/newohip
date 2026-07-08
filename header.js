@@ -179,8 +179,11 @@ class AppHeader extends HTMLElement {
     this.innerHTML = `
       <header>
         <div class="header-brand">
-          <img src="shiftcodes-icon-transparent.png" alt="ShiftCodes" style="height:66px; width:auto; display:block;">
-          <div class="header-subtitle">Emergency Department<br>OHIP Code Search</div>
+          <img src="shiftcodes-icon-transparent.png" alt="ShiftCodes" style="height:48px; width:auto; display:block;">
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <span class="header-subtitle" style="font-size:1.35rem;letter-spacing:-0.01em;">ShiftCodes</span>
+            <span style="font-size:0.72rem;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:0.06em;text-transform:uppercase;">Emergency · OHIP Billing</span>
+          </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
           <a href="updates.html" class="nav-link">April 1st Updates</a>
