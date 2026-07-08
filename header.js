@@ -106,6 +106,8 @@ const HEADER_CSS = `
 
   /* ── Mobile ── */
   @media (max-width: 640px) {
+    .header-brand img { display: none !important; }
+    .header-brand .header-subtitle-sub { display: none !important; }
     .header-brand { flex-direction: column; align-items: flex-start; gap: 4px; }
     .header-subtitle { font-size: 0.88rem; font-weight: 600; }
     .toggle-bar { flex-direction: column; padding: 8px 12px; gap: 6px; flex-wrap: nowrap; }
@@ -182,7 +184,7 @@ class AppHeader extends HTMLElement {
           <img src="shiftcodes-icon-transparent.png" alt="ShiftCodes" style="height:48px; width:auto; display:block;">
           <div style="display:flex;flex-direction:column;gap:2px;">
             <span class="header-subtitle" style="font-size:1.35rem;letter-spacing:-0.01em;">ShiftCodes</span>
-            <span style="font-size:0.72rem;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:0.06em;text-transform:uppercase;">Emergency · OHIP Billing</span>
+            <span class="header-subtitle-sub" style="font-size:0.72rem;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:0.06em;text-transform:uppercase;">Emergency · OHIP Billing</span>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
