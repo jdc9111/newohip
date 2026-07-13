@@ -79,8 +79,8 @@ const HEADER_CSS = `
   /* ── Group containers ── */
   .nav-group-wrap { display: flex; flex-direction: column; gap: 3px; }
   .nav-group-label {
-    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.07em;
-    text-transform: uppercase; color: rgba(255,255,255,0.45);
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; color: rgba(255,255,255,0.8);
     padding-left: 2px;
   }
   .nav-group {
