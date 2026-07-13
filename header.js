@@ -131,11 +131,11 @@ const GROUP_LABELS = {
 };
 
 const NAV_TABS = [
-  { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">basic</span>Search', group: 'billing' },
+  { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'billing' },
   { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search',  group: 'billing' },
   { key: 'fractures',  href: 'fractures.html',  label: 'Fractures<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">& Dislocations</span>', group: 'billing' },
   { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty',       group: 'billing' },
-  { key: 'diag',       href: 'diag.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">basic</span>Search', group: 'diag' },
+  { key: 'diag',       href: 'diag.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'diag' },
   { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Search',  group: 'diag' },
   { key: 'diagref',    href: 'diagref.html',    label: 'By Specialty',       group: 'diag' },
   { key: 'sedation',   href: 'sedation.html',   label: 'Sedation<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Billing</span>', group: 'other' },
