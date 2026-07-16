@@ -227,15 +227,24 @@ class AppHeader extends HTMLElement {
 
 customElements.define('app-header', AppHeader);
 
-// Scroll hint: hide the › arrow once the nav bar is scrolled to the end
+// Scroll hint + scroll active tab into view on mobile
 document.addEventListener('DOMContentLoaded', () => {
   const bar = document.querySelector('.toggle-bar');
   const container = document.querySelector('.nav-scroll-container');
   if (!bar || !container) return;
+
   const update = () => {
     const atEnd = bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 4;
     container.classList.toggle('at-end', atEnd);
   };
   bar.addEventListener('scroll', update, { passive: true });
+
+  // Scroll active button into view (centered) so it's always visible on load
+  const activeBtn = bar.querySelector('.toggle-btn.active');
+  if (activeBtn) {
+    const btnCenter = activeBtn.offsetLeft + activeBtn.offsetWidth / 2;
+    bar.scrollLeft = btnCenter - bar.clientWidth / 2;
+  }
+
   update();
 });
