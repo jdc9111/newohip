@@ -126,6 +126,7 @@ const HEADER_CSS = `
       transition: opacity 0.25s;
     }
     .nav-scroll-container.at-end::after { opacity: 0; }
+    .nav-link-sob { display: none !important; }
     .toggle-bar {
       flex-direction: row; flex-wrap: nowrap;
       overflow-x: auto; justify-content: flex-start;
@@ -213,7 +214,7 @@ class AppHeader extends HTMLElement {
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
           <a href="updates.html" class="nav-link">April 1st Updates</a>
-          <a href="https://www.ontario.ca/files/2026-03/moh-schedule-benefit-2026-03-27.pdf" target="_blank" rel="noopener" class="nav-link">Schedule of Benefits ↗</a>
+          <a href="https://www.ontario.ca/files/2026-03/moh-schedule-benefit-2026-03-27.pdf" target="_blank" rel="noopener" class="nav-link nav-link-sob">Schedule of Benefits ↗</a>
         </div>
       </header>
       <div class="nav-scroll-container">
