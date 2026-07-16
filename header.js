@@ -110,16 +110,24 @@ const HEADER_CSS = `
     .header-brand .header-subtitle-sub { display: none !important; }
     .header-brand { flex-direction: column; align-items: flex-start; gap: 4px; }
     .header-subtitle { font-size: 0.88rem; font-weight: 600; }
-    .toggle-bar { flex-direction: column; padding: 8px 12px; gap: 6px; flex-wrap: nowrap; }
-    .nav-group { flex-direction: row; flex-wrap: wrap; width: 100%; padding: 4px; gap: 4px; }
+    .toggle-bar {
+      flex-direction: row; flex-wrap: nowrap;
+      overflow-x: auto; justify-content: flex-start;
+      padding: 8px 10px; gap: 6px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .toggle-bar::-webkit-scrollbar { display: none; }
+    .nav-group-wrap { flex-shrink: 0; }
+    .nav-group { flex-wrap: nowrap; padding: 4px 8px; gap: 4px; }
     .toggle-btn {
-      border-radius: 6px !important;
-      border: 2px solid rgba(255,255,255,0.3) !important;
-      text-align: center;
-      flex: 1 1 auto;
-      padding: 12px 8px;
-      font-size: 0.88rem;
-      min-width: 0;
+      flex-shrink: 0;
+      height: auto;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      border-radius: 20px !important;
+      border: 1.5px solid rgba(255,255,255,0.3) !important;
+      white-space: nowrap;
     }
   }
 `;
