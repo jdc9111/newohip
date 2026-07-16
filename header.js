@@ -121,7 +121,7 @@ const HEADER_CSS = `
       justify-content: center;
       background: linear-gradient(to right, transparent, #163d5e 65%);
       color: rgba(255,255,255,0.85);
-      font-size: 1.5rem;
+      font-size: 2rem;
       pointer-events: none;
       transition: opacity 0.25s;
     }
