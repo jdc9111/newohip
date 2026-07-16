@@ -210,6 +210,66 @@
   #empty svg { margin-bottom: 12px; opacity: 0.4; }
   #empty p { font-size: 0.95rem; }
 
+  #cards { display: none; }
+
+  @media (max-width: 640px) {
+    table { display: none !important; }
+    #cards { display: flex; flex-direction: column; gap: 8px; }
+
+    .result-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      padding: 13px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1px;
+    }
+    .card-code {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1F4E79;
+      letter-spacing: 0.03em;
+    }
+    .card-fee {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #276749;
+    }
+    .card-desc { font-size: 0.9rem; color: #1a202c; line-height: 1.4; }
+    .card-cat {
+      display: inline-block;
+      font-size: 0.68rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: #1F4E79; background: #BDD7EE;
+      border-radius: 4px; padding: 2px 6px;
+      margin-top: 5px; align-self: flex-start;
+    }
+    .card-note { font-size: 0.78rem; color: #718096; margin-top: 3px; }
+    .card-details-btn {
+      background: none; border: none; padding: 0;
+      margin-top: 8px; font-size: 0.82rem;
+      color: #1F4E79; font-weight: 600;
+      cursor: pointer; text-align: left;
+    }
+    .card-details-btn:hover { text-decoration: underline; }
+    .card-ext-note {
+      display: none; margin-top: 8px; padding: 10px 12px;
+      background: #f0f7ff; border-left: 3px solid #1F4E79;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.78rem; color: #2d3748; line-height: 1.6;
+    }
+    .card-ext-note.open { display: block; }
+    .card-ext-note ul { margin: 4px 0 0 14px; }
+    .card-ext-note li { margin-bottom: 2px; }
+  }
+
   /* ── Code-of-the-Day banner ── */
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   #cotd-banner {
@@ -280,6 +340,7 @@
     </thead>
     <tbody id="tbody"></tbody>
   </table>
+  <div id="cards"></div>
   <div id="empty">
     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -710,6 +771,13 @@ const tbody  = document.getElementById("tbody");
 const status = document.getElementById("status");
 const empty  = document.getElementById("empty");
 const tbl    = document.getElementById("tbl");
+const cards  = document.getElementById("cards");
+
+function toggleCardNote(btn) {
+  const panel = btn.nextElementSibling;
+  const open = panel.classList.toggle('open');
+  btn.textContent = open ? 'Hide billing details ‹' : 'Show billing details ›';
+}
 
 // ── Extended billing notes ────────────────────────────────────────────────────
 const CONSULTATION_NOTE = `<ul>
@@ -837,6 +905,8 @@ function render(query) {
 
   tbody.innerHTML = "";
 
+  cards.innerHTML = "";
+
   if (!q) {
     tbl.style.display = "none";
     empty.style.display = "none";
@@ -864,10 +934,11 @@ function render(query) {
   const frag = document.createDocumentFragment();
   for (const { r } of results) {
     const [code, desc, fee, cat, notes] = r;
-    const tr = document.createElement("tr");
     const feeStr = fee !== null ? "$" + fee : "—";
-
     const extNote = EXTENDED_NOTES[code] || "";
+
+    // Desktop table row
+    const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${highlight(code, q)}</td>
       <td>
@@ -877,6 +948,20 @@ function render(query) {
       </td>
       <td>${feeStr}</td>`;
     frag.appendChild(tr);
+
+    // Mobile card
+    const card = document.createElement("div");
+    card.className = "result-card";
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="card-code">${highlight(code, q)}</span>
+        <span class="card-fee">${feeStr}</span>
+      </div>
+      <div class="card-desc">${highlight(desc, q)}</div>
+      <span class="card-cat">${highlight(cat, q)}</span>
+      ${notes ? `<div class="card-note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
+      ${extNote ? `<button class="card-details-btn" onclick="toggleCardNote(this)">Show billing details ›</button><div class="card-ext-note">${extNote}</div>` : ""}`;
+    cards.appendChild(card);
   }
   tbody.appendChild(frag);
   // showCOTDBanner(); // disabled
