@@ -210,96 +210,44 @@
   #empty svg { margin-bottom: 12px; opacity: 0.4; }
   #empty p { font-size: 0.95rem; }
 
-  /* ── Code-of-the-Day modal ── */
-  .cotd-overlay {
-    position: fixed; inset: 0; z-index: 1000;
-    background: rgba(15,23,42,0.55);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
+  /* ── Code-of-the-Day banner ── */
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  #cotd-banner {
+    display: none; margin: 0 0 14px;
+    background: #f0f7ff; border: 1px solid #bee3f8;
+    border-left: 4px solid #1F4E79; border-radius: 8px;
+    padding: 12px 36px 12px 16px;
+    gap: 12px; align-items: flex-start; position: relative;
     animation: fadeIn 0.2s ease;
   }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .cotd-card {
-    background: white;
-    border-radius: 14px;
-    max-width: 520px; width: 100%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-    overflow: hidden;
-    animation: slideUp 0.25s ease;
+  #cotd-banner.visible { display: flex; }
+  .cotd-b-label {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; color: #1F4E79; white-space: nowrap; padding-top: 2px;
   }
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
+  .cotd-b-body { flex: 1; min-width: 0; }
+  .cotd-b-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+  .cotd-b-code { font-size: 1rem; font-weight: 800; color: #1F4E79; }
+  .cotd-b-fee { font-size: 0.88rem; font-weight: 700; color: #276749; }
+  .cotd-b-desc { font-size: 0.88rem; color: #2d3748; }
+  .cotd-b-actions { display: flex; gap: 10px; align-items: center; margin-top: 7px; flex-wrap: wrap; }
+  .cotd-b-search {
+    font-size: 0.78rem; font-weight: 600; color: #1F4E79;
+    background: none; border: 1.5px solid #1F4E79; border-radius: 5px;
+    padding: 3px 10px; cursor: pointer;
   }
-  .cotd-header {
-    background: #1F4E79;
-    color: white;
-    padding: 14px 20px;
-    display: flex; align-items: center; gap: 10px;
+  .cotd-b-search:hover { background: #ebf3fb; }
+  .cotd-b-optout { font-size: 0.75rem; color: #a0aec0; background: none; border: none; cursor: pointer; padding: 0; }
+  .cotd-b-optout:hover { color: #718096; text-decoration: underline; }
+  .cotd-b-close {
+    position: absolute; top: 8px; right: 10px;
+    background: none; border: none; font-size: 1rem; color: #a0aec0; cursor: pointer; line-height: 1;
   }
-  .cotd-header-icon { font-size: 1.3rem; }
-  .cotd-header-text { flex: 1; }
-  .cotd-header-label {
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; opacity: 0.75;
-  }
-  .cotd-header-title { font-size: 1rem; font-weight: 700; }
-  .cotd-body { padding: 20px; }
-  .cotd-code-row {
-    display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px;
-  }
-  .cotd-code {
-    font-size: 1.5rem; font-weight: 800; color: #1F4E79; letter-spacing: 0.04em;
-  }
-  .cotd-fee {
-    font-size: 1rem; font-weight: 700; color: #276749;
-  }
-  .cotd-desc {
-    font-size: 1rem; font-weight: 600; color: #1a202c; margin-bottom: 8px;
-  }
-  .cotd-cat {
-    display: inline-block; font-size: 0.68rem; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.05em;
-    color: #1F4E79; background: #BDD7EE;
-    border-radius: 4px; padding: 2px 8px; margin-bottom: 10px;
-  }
-  .cotd-note {
-    font-size: 0.8rem; color: #4a5568;
-    border-top: 1px solid #e2e8f0; padding-top: 10px; margin-top: 6px;
-  }
-  .cotd-ext {
-    margin-top: 10px; padding: 10px 12px;
-    background: #f0f7ff; border-left: 3px solid #1F4E79;
-    border-radius: 0 6px 6px 0;
-    font-size: 0.8rem; color: #2d3748; line-height: 1.6;
-  }
-  .cotd-ext ul { margin: 4px 0 0 14px; }
-  .cotd-ext li { margin-bottom: 3px; }
-  .cotd-footer {
-    padding: 14px 20px;
-    border-top: 1px solid #edf2f7;
-    display: flex; justify-content: flex-end; gap: 10px;
-  }
-  .cotd-btn-optout {
-    padding: 8px 18px; border-radius: 7px; font-size: 0.88rem; font-weight: 600;
-    border: none; background: none; color: #a0aec0; cursor: pointer;
-    margin-right: auto;
-  }
-  .cotd-btn-optout:hover { color: #718096; text-decoration: underline; }
-  .cotd-btn-search {
-    padding: 8px 18px; border-radius: 7px; font-size: 0.88rem; font-weight: 600;
-    border: 2px solid #1F4E79; color: #1F4E79; background: white; cursor: pointer;
-  }
-  .cotd-btn-search:hover { background: #ebf3fb; }
-  .cotd-btn-dismiss {
-    padding: 8px 18px; border-radius: 7px; font-size: 0.88rem; font-weight: 600;
-    border: none; background: #1F4E79; color: white; cursor: pointer;
-  }
-  .cotd-btn-dismiss:hover { background: #163d5e; }
+  .cotd-b-close:hover { color: #4a5568; }
 
  }
 </style>
-<script src="header.js"></script>
+<script src="header.js?v=3"></script>
 </head>
 <body>
 
@@ -320,6 +268,7 @@
 
 <main>
     
+<div id="cotd-banner"></div>
 <div id="status"></div>
   <table id="tbl">
     <thead>
@@ -339,8 +288,6 @@
   </div>
 </main>
 
-<!-- Code-of-the-Day modal (injected by JS) -->
-<div id="cotd-overlay" class="cotd-overlay" style="display:none" onclick="if(event.target===this)closeCOTD()"></div>
 
 <footer style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:8px 24px;font-size:0.78rem;color:#718096;background:white;border-top:1px solid #dde3ed;z-index:10;">
   Please send feedback/suggestions to <a href="mailto:chisholm.mirror@gmail.com" style="color:#1F4E79;">chisholm.mirror@gmail.com</a>
@@ -932,6 +879,7 @@ function render(query) {
     frag.appendChild(tr);
   }
   tbody.appendChild(frag);
+  // showCOTDBanner(); // disabled
 }
 
 // ── debounced input handler ───────────────────────────────────────────────────
@@ -961,61 +909,45 @@ const FLAGGED_CODES = [
   "K071",   // Acute Home Care Supervision — often missed for ED follow-ups
 ];
 
-function openCOTD() {
+let cotdBannerReady = false;
+
+function showCOTDBanner() {
+  if (cotdBannerReady) return;
+  if (localStorage.getItem('cotd_optout')) return;
+  if (sessionStorage.getItem('cotd_shown')) return;
+
   const code = FLAGGED_CODES[Math.floor(Math.random() * FLAGGED_CODES.length)];
   const row  = DATA.find(r => r[0] === code);
   if (!row) return;
 
-  const [c, desc, fee, cat, notes] = row;
-  const feeStr   = fee !== null ? '$' + fee.toFixed(2) : '—';
-  const extNote  = EXTENDED_NOTES[c] || "";
-  const noteHtml = notes
-    ? `<div class="cotd-note">${/[<>]/.test(notes) ? notes : esc(notes)}</div>`
-    : "";
-  const extHtml  = extNote ? `<div class="cotd-ext">${extNote}</div>` : "";
+  cotdBannerReady = true;
+  sessionStorage.setItem('cotd_shown', '1');
 
-  const overlay = document.getElementById('cotd-overlay');
-  overlay.innerHTML = `
-    <div class="cotd-card" role="dialog" aria-modal="true">
-      <div class="cotd-header">
-        <span class="cotd-header-icon">💡</span>
-        <div class="cotd-header-text">
-          <div class="cotd-header-label">Code of the Day</div>
-          <div class="cotd-header-title">Worth remembering</div>
-        </div>
+  const [c, desc, fee] = row;
+  const feeStr = fee !== null ? '$' + fee.toFixed(2) : '—';
+
+  const banner = document.getElementById('cotd-banner');
+  banner.innerHTML = `
+    <button class="cotd-b-close" onclick="dismissCOTD(false)" aria-label="Dismiss">✕</button>
+    <div class="cotd-b-label">💡 Code of the Day</div>
+    <div class="cotd-b-body">
+      <div class="cotd-b-row">
+        <span class="cotd-b-code">${esc(c)}</span>
+        <span class="cotd-b-fee">${feeStr}</span>
       </div>
-      <div class="cotd-body">
-        <div class="cotd-code-row">
-          <span class="cotd-code">${esc(c)}</span>
-          <span class="cotd-fee">${feeStr}</span>
-        </div>
-        <div class="cotd-desc">${esc(desc)}</div>
-        <span class="cotd-cat">${esc(cat)}</span>
-        ${noteHtml}
-        ${extHtml}
-      </div>
-      <div class="cotd-footer">
-        <button class="cotd-btn-optout" onclick="closeCOTD(true)">Disable Code of the Day</button>
-        <button class="cotd-btn-search" onclick="closeCOTD();document.getElementById('query').value='${esc(c)}';document.getElementById('query').dispatchEvent(new Event('input'));document.getElementById('query').focus()">Search this code</button>
-        <button class="cotd-btn-dismiss" onclick="closeCOTD()">Got it</button>
+      <div class="cotd-b-desc">${esc(desc)}</div>
+      <div class="cotd-b-actions">
+        <button class="cotd-b-search" onclick="dismissCOTD(false);document.getElementById('query').value='${esc(c)}';document.getElementById('query').dispatchEvent(new Event('input'))">Search this code →</button>
+        <button class="cotd-b-optout" onclick="dismissCOTD(true)">Don't show again</button>
       </div>
     </div>`;
-  overlay.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+  banner.classList.add('visible');
 }
 
-function closeCOTD(optOut) {
+function dismissCOTD(optOut) {
   if (optOut) localStorage.setItem('cotd_optout', '1');
-  document.getElementById('cotd-overlay').style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCOTD(); });
-
-// Show once per session, unless permanently opted out
-if (!localStorage.getItem('cotd_optout') && !sessionStorage.getItem('cotd_shown') && window.innerWidth > 640) {
-  sessionStorage.setItem('cotd_shown', '1');
-  openCOTD();
+  const banner = document.getElementById('cotd-banner');
+  banner.classList.remove('visible');
 }
 
 // ── Time-based billing reminders ─────────────────────────────────────────────

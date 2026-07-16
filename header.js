@@ -110,16 +110,40 @@ const HEADER_CSS = `
     .header-brand .header-subtitle-sub { display: none !important; }
     .header-brand { flex-direction: column; align-items: flex-start; gap: 4px; }
     .header-subtitle { font-size: 0.88rem; font-weight: 600; }
-    .toggle-bar { flex-direction: column; padding: 8px 12px; gap: 6px; flex-wrap: nowrap; }
-    .nav-group { flex-direction: row; flex-wrap: wrap; width: 100%; padding: 4px; gap: 4px; }
+    .nav-scroll-container { position: relative; }
+    .nav-scroll-container::after {
+      content: '›';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to right, transparent, #163d5e 65%);
+      color: rgba(255,255,255,0.85);
+      font-size: 1.5rem;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .nav-scroll-container.at-end::after { opacity: 0; }
+    .toggle-bar {
+      flex-direction: row; flex-wrap: nowrap;
+      overflow-x: auto; justify-content: flex-start;
+      padding: 8px 10px; gap: 6px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .toggle-bar::-webkit-scrollbar { display: none; }
+    .nav-group-wrap { flex-shrink: 0; }
+    .nav-group { flex-wrap: nowrap; padding: 4px 8px; gap: 4px; }
     .toggle-btn {
-      border-radius: 6px !important;
-      border: 2px solid rgba(255,255,255,0.3) !important;
-      text-align: center;
-      flex: 1 1 auto;
-      padding: 12px 8px;
-      font-size: 0.88rem;
-      min-width: 0;
+      flex-shrink: 0;
+      height: auto;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      border-radius: 20px !important;
+      border: 1.5px solid rgba(255,255,255,0.3) !important;
+      white-space: nowrap;
     }
   }
 `;
@@ -192,10 +216,25 @@ class AppHeader extends HTMLElement {
           <a href="https://www.ontario.ca/files/2026-03/moh-schedule-benefit-2026-03-27.pdf" target="_blank" rel="noopener" class="nav-link">Schedule of Benefits ↗</a>
         </div>
       </header>
-      <div class="toggle-bar">
-        ${tabs}
+      <div class="nav-scroll-container">
+        <div class="toggle-bar">
+          ${tabs}
+        </div>
       </div>`;
   }
 }
 
 customElements.define('app-header', AppHeader);
+
+// Scroll hint: hide the › arrow once the nav bar is scrolled to the end
+document.addEventListener('DOMContentLoaded', () => {
+  const bar = document.querySelector('.toggle-bar');
+  const container = document.querySelector('.nav-scroll-container');
+  if (!bar || !container) return;
+  const update = () => {
+    const atEnd = bar.scrollLeft + bar.clientWidth >= bar.scrollWidth - 4;
+    container.classList.toggle('at-end', atEnd);
+  };
+  bar.addEventListener('scroll', update, { passive: true });
+  update();
+});
