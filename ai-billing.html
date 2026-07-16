@@ -129,6 +129,29 @@
     font-size: 0.75rem; color: #718096;
   }
 
+  .ai-cards { display: none; padding: 8px; gap: 8px; flex-direction: column; }
+
+  @media (max-width: 640px) {
+    .ai-results table { display: none !important; }
+    .ai-cards { display: flex; }
+
+    .result-card {
+      background: white;
+      border-radius: 10px;
+      padding: 13px 16px;
+      display: flex; flex-direction: column; gap: 3px;
+      border-bottom: 1px solid #fcd34d;
+    }
+    .result-card:last-child { border-bottom: none; }
+    .card-top {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 1px;
+    }
+    .card-code { font-size: 1.05rem; font-weight: 700; color: #1F4E79; letter-spacing: 0.03em; }
+    .card-fee  { font-size: 1.05rem; font-weight: 700; color: #276749; }
+    .card-desc { font-size: 0.9rem; color: #1a202c; line-height: 1.4; }
+  }
+
   footer {
     position: fixed; bottom: 0; left: 0; right: 0;
     text-align: center; padding: 8px 24px; font-size: 0.78rem;
@@ -228,6 +251,15 @@ async function aiSearch() {
           <td class="td-fee">${r.fee || ''}</td>
         </tr>`
       ).join('');
+      const cardItems = results.map(r =>
+        `<div class="result-card">
+          <div class="card-top">
+            <span class="card-code">${r.code}</span>
+            <span class="card-fee">${r.fee || '—'}</span>
+          </div>
+          <div class="card-desc">${r.description}</div>
+        </div>`
+      ).join('');
       container.innerHTML = `
         <div class="ai-results">
           <div class="ai-results-header">✨ AI Suggestions for &ldquo;${query}&rdquo;</div>
@@ -235,6 +267,7 @@ async function aiSearch() {
             <thead><tr><th>Code</th><th>Description</th><th>Fee</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
+          <div class="ai-cards">${cardItems}</div>
         </div>`;
     }
     container.style.display = '';
