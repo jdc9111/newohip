@@ -89,7 +89,8 @@ const HEADER_CSS = `
   }
   .nav-group.grp-billing { background: rgba(56,189,248,0.14); }
   .nav-group.grp-diag    { background: rgba(251,113,133,0.14); }
-  .nav-group.grp-other   { background: rgba(255,255,255,0.08); }
+  .nav-group.grp-other   { background: rgba(45,212,191,0.16); }
+  .nav-group-wrap:has(.grp-other) .nav-group-label { color: #5eead4; }
 
   .beta-badge {
     font-size: 0.65rem;
