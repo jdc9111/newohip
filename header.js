@@ -87,7 +87,8 @@ const HEADER_CSS = `
     display: flex; gap: 4px; align-items: stretch;
     padding: 6px 10px; border-radius: 12px;
   }
-  .nav-group.grp-billing { background: rgba(56,189,248,0.14); }
+  .nav-group.grp-billing       { background: rgba(167,139,250,0.16); }
+  .nav-group.grp-billingsearch { background: rgba(56,189,248,0.14); }
   .nav-group.grp-diag    { background: rgba(251,113,133,0.14); }
   .nav-group.grp-other   { background: rgba(45,212,191,0.16); }
   .nav-group-wrap:has(.grp-other) .nav-group-label { color: #5eead4; }
@@ -152,15 +153,17 @@ const HEADER_CSS = `
 
 const GROUP_LABELS = {
   billing: 'Billing',
+  billingsearch: 'Billing Search',
   diag: 'Diagnostic',
   other: 'Tools',
 };
 
 const NAV_TABS = [
-  { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'billing' },
-  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search',  group: 'billing' },
-  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">& Dislocations</span>', group: 'billing' },
+  { key: 'assessment', href: 'assessment.html', label: 'Assessment<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Counselling &amp; Forms</span>', group: 'billing' },
   { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty',       group: 'billing' },
+  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">& Dislocations</span>', group: 'billing' },
+  { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'billingsearch' },
+  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search',  group: 'billingsearch' },
   { key: 'diag',       href: 'diag.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'diag' },
   { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Search',  group: 'diag' },
   { key: 'diagref',    href: 'diagref.html',    label: 'By Specialty',       group: 'diag' },

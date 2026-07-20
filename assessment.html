@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assessment, Counselling &amp; Forms OHIP Codes | ShiftCodes</title>
+<meta name="description" content="OHIP billing codes for ED assessments, premiums, critical care, admissions, consults, counselling and forms in the Ontario emergency department.">
+<meta property="og:site_name" content="ShiftCodes">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Assessment, Counselling &amp; Forms OHIP Codes | ShiftCodes">
+<meta property="og:description" content="OHIP billing codes for ED assessments, premiums, critical care, admissions, consults, counselling and forms in the Ontario emergency department.">
+<meta property="og:url" content="https://newohipcodes.netlify.app/assessment.html">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YMK3RYM38R');
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a202c;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* header/nav styles → header.js */
+
+  main {
+    flex: 1;
+    max-width: 860px;
+    margin: 28px auto;
+    padding: 0 16px 80px;
+    width: 100%;
+  }
+
+  /* ── Accordion ── */
+  .accordion { margin-bottom: 8px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  .accordion-header {
+    display: flex; align-items: center; justify-content: space-between;
+    background: white;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+    border: none; width: 100%; text-align: left;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .accordion-header:hover { background: #ebf3fb; }
+  .accordion-header.open { background: #1F4E79; color: white; }
+
+  .accordion-title {
+    font-size: 0.95rem; font-weight: 700;
+  }
+  .accordion-meta {
+    font-size: 0.75rem; opacity: 0.65; margin-left: 10px; font-weight: 400;
+  }
+  .accordion-chevron {
+    font-size: 0.8rem; transition: transform 0.2s; flex-shrink: 0; margin-left: 12px;
+  }
+  .accordion-header.open .accordion-chevron { transform: rotate(180deg); }
+
+  .accordion-body {
+    display: none;
+    background: white;
+    border-top: 1px solid #edf2f7;
+  }
+  .accordion-body.open { display: block; }
+
+  /* ── Time-period subheadings within Assessment Codes ── */
+  .time-subhead {
+    padding: 8px 16px;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #1F4E79;
+    background: #ebf3fb;
+    border-bottom: 1px solid #dce8f5;
+  }
+
+  /* ── Code rows ── */
+  .code-row {
+    display: flex; align-items: baseline;
+    padding: 9px 16px;
+    border-bottom: 1px solid #f0f4f8;
+    gap: 10px;
+    font-size: 0.88rem;
+  }
+  .code-row:last-child { border-bottom: none; }
+  .code-row:nth-child(even) { background: #fafbfc; }
+
+  .row-code {
+    font-weight: 700; color: #1F4E79;
+    font-size: 0.9rem; letter-spacing: 0.03em;
+    min-width: 52px; flex-shrink: 0;
+  }
+  .row-desc {
+    flex: 1; color: #2d3748;
+  }
+  .row-note {
+    font-size: 0.75rem; color: #718096; margin-top: 2px;
+  }
+  .row-fee {
+    font-weight: 600; color: #276749;
+    white-space: nowrap; flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    text-align: center; padding: 8px 24px;
+    font-size: 0.78rem; color: #718096;
+    background: white; border-top: 1px solid #dde3ed; z-index: 10;
+  }
+</style>
+<script src="header.js?v=8"></script>
+</head>
+<body>
+
+<app-header active="assessment"></app-header>
+
+<main>
+
+  <!-- ══════════════════════════════════════════════════════ ASSESSMENT CODES -->
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggle(this)">
+      <span><span class="accordion-title">Assessment Codes</span><span class="accordion-meta">Minor, comprehensive, multi-system &amp; reassessment</span></span>
+      <span class="accordion-chevron">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="time-subhead">Daytime (8am–5pm)</div>
+      <div class="code-row"><span class="row-code">H101</span><div><div class="row-desc">Minor assessment</div></div><span class="row-fee">$23.00</span></div>
+      <div class="code-row"><span class="row-code">H102</span><div><div class="row-desc">Comprehensive assessment</div></div><span class="row-fee">$57.00</span></div>
+      <div class="code-row"><span class="row-code">H103</span><div><div class="row-desc">Multiple assessment</div></div><span class="row-fee">$47.00</span></div>
+      <div class="code-row"><span class="row-code">H104</span><div><div class="row-desc">Reassessment</div><div class="row-note">&gt;2h, change mgmt, not d/c or referral; max 3/pt/day</div></div><span class="row-fee">$23.00</span></div>
+
+      <div class="time-subhead">Evenings Mon–Thu (5pm–Midnight)</div>
+      <div class="code-row"><span class="row-code">H131</span><div><div class="row-desc">Minor assessment</div></div><span class="row-fee">$30.00</span></div>
+      <div class="code-row"><span class="row-code">H132</span><div><div class="row-desc">Comprehensive assessment</div></div><span class="row-fee">$75.00</span></div>
+      <div class="code-row"><span class="row-code">H133</span><div><div class="row-desc">Multiple assessment</div></div><span class="row-fee">$62.00</span></div>
+      <div class="code-row"><span class="row-code">H134</span><div><div class="row-desc">Reassessment</div><div class="row-note">&gt;2h, change mgmt; max 3/pt/day</div></div><span class="row-fee">$30.00</span></div>
+
+      <div class="time-subhead">Weekends &amp; Holidays (8am–Midnight)</div>
+      <div class="code-row"><span class="row-code">H151</span><div><div class="row-desc">Minor assessment</div><div class="row-note">Incl Fri eve 5pm–midnight</div></div><span class="row-fee">$34.00</span></div>
+      <div class="code-row"><span class="row-code">H152</span><div><div class="row-desc">Comprehensive assessment</div><div class="row-note">Incl Fri eve 5pm–midnight</div></div><span class="row-fee">$86.00</span></div>
+      <div class="code-row"><span class="row-code">H153</span><div><div class="row-desc">Multiple assessment</div><div class="row-note">Incl Fri eve 5pm–midnight</div></div><span class="row-fee">$70.00</span></div>
+      <div class="code-row"><span class="row-code">H154</span><div><div class="row-desc">Reassessment</div><div class="row-note">Incl Fri eve 5pm–midnight; max 3/pt/day</div></div><span class="row-fee">$34.00</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ PREMIUM CODES -->
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggle(this)">
+      <span><span class="accordion-title">Premium Codes</span><span class="accordion-meta">Per-visit premiums when assessments can't be claimed</span></span>
+      <span class="accordion-chevron">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="code-row"><span class="row-code">H112</span><div><div class="row-desc">Night premium (midnight–8am)</div><div class="row-note">Per patient visit</div></div><span class="row-fee">$51.00</span></div>
+      <div class="code-row"><span class="row-code">H113</span><div><div class="row-desc">Wkd/Hol + Fri eve premium</div><div class="row-note">Per patient visit; incl Fri eve 5pm–midnight</div></div><span class="row-fee">$32.00</span></div>
+      <div class="code-row"><span class="row-code">H114</span><div><div class="row-desc">Weekday eve premium (Mon–Thu)</div><div class="row-note">Per patient visit; NEW April 2026</div></div><span class="row-fee">$24.00</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ CRITICAL CARE -->
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggle(this)">
+      <span><span class="accordion-title">Critical Care</span><span class="accordion-meta">Imminent &amp; potential life-threatening resuscitation</span></span>
+      <span class="accordion-chevron">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="time-subhead">Imminent Life-Threatening</div>
+      <div class="code-row"><span class="row-code">G521</span><div><div class="row-desc">1st 15 min (1st MD)</div><div class="row-note">Arrest/Trauma; document times; cannot see other pts simultaneously</div></div><span class="row-fee">$111.80</span></div>
+      <div class="code-row"><span class="row-code">G523</span><div><div class="row-desc">2nd 15 min (1st MD)</div><div class="row-note">Arrest/Trauma</div></div><span class="row-fee">$57.65</span></div>
+      <div class="code-row"><span class="row-code">G522</span><div><div class="row-desc">Each addl 15 min (max 6)</div><div class="row-note">Arrest/Trauma; bill for 2nd/3rd MD too</div></div><span class="row-fee">$38.00</span></div>
+      <div class="code-row"><span class="row-code">E420</span><div><div class="row-desc">Trauma ISS &gt; 15 premium</div><div class="row-note">Add-on to imminent life-threatening codes</div></div><span class="row-fee">+50%</span></div>
+
+      <div class="time-subhead">Potential Life-Threatening</div>
+      <div class="code-row"><span class="row-code">G395</span><div><div class="row-desc">1st 15 min</div><div class="row-note">Other resuscitation; document times</div></div><span class="row-fee">$57.45</span></div>
+      <div class="code-row"><span class="row-code">G391</span><div><div class="row-desc">Each addl 15 min (max 7)</div><div class="row-note">Bill for 2nd/3rd MD too</div></div><span class="row-fee">$30.60</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ ADMISSIONS -->
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggle(this)">
+      <span><span class="accordion-title">Admissions</span><span class="accordion-meta">Interim orders</span></span>
+      <span class="accordion-chevron">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="code-row"><span class="row-code">H105</span><div><div class="row-desc">Interim admission orders</div></div><span class="row-fee">$29.00</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ CONSULTS -->
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggle(this)">
+      <span><span class="accordion-title">Consults</span><span class="accordion-meta">ED consultations &amp; phone consults</span></span>
+      <span class="accordion-chevron">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="code-row"><span class="row-code">H055</span><div><div class="row-desc">Consultation to ED – FRCPC</div><div class="row-note">Must record referring MD billing # or contact info</div></div><span class="row-fee">$126.00</span></div>
+      <div class="code-row"><span class="row-code">H065</span><div><div class="row-desc">Consultation to ED – CFPC</div><div class="row-note">Must record referring MD billing # or contact info</div></div><span class="row-fee">$96.00</span></div>
+      <div class="code-row"><span class="row-code">K734</span><div><div class="row-desc">Phone consult – referring physician</div><div class="row-note">≥10 min; cannot lead to follow-up</div></div><span class="row-fee">$31.00</span></div>
+      <div class="code-row"><span class="row-code">K735</span><div><div class="row-desc">Phone consult – consultant physician</div><div class="row-note">≥10 min; cannot lead to follow-up</div></div><span class="row-fee">$40.00</span></div>
+      <div class="code-row"><span class="row-code">K736</span><div><div class="row-desc">CritiCall telephone consultation – referring physician</div></div><span class="row-fee">$32.45</span></div>
+      <div class="code-row"><span class="row-code">A320</span><div><div class="row-desc">MAID consultation</div><div class="row-note">NEW April 2026</div></div><span class="row-fee">$174.25</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ COUNSELLING AND MENTAL HEALTH -->
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggle(this)">
+      <span><span class="accordion-title">Counselling and Mental Health</span><span class="accordion-meta">Mental health, STI &amp; bereavement counselling</span></span>
+      <span class="accordion-chevron">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="code-row"><span class="row-code">K005</span><div><div class="row-desc">Mental health counselling</div><div class="row-note">Min 20 min; document mental health dx + times</div></div><span class="row-fee">$63.00</span></div>
+      <div class="code-row"><span class="row-code">K028</span><div><div class="row-desc">Needlestick or STI counselling/treatment</div><div class="row-note">Per 30 min; document times. Fee updated April 1 2026</div></div><span class="row-fee">$80.00</span></div>
+      <div class="code-row"><span class="row-code">K015</span><div><div class="row-desc">Counsel family re: death/catastrophe</div><div class="row-note">Min 20 min; document times</div></div><span class="row-fee">$63.00</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ FORMS -->
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggle(this)">
+      <span><span class="accordion-title">Forms</span><span class="accordion-meta">Certificates, reports &amp; applications</span></span>
+      <span class="accordion-chevron">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="code-row"><span class="row-code">K623</span><div><div class="row-desc">Form 1 – psychiatric assessment</div></div><span class="row-fee">$105.00</span></div>
+      <div class="code-row"><span class="row-code">K070</span><div><div class="row-desc">Homecare application</div></div><span class="row-fee">$32.00</span></div>
+      <div class="code-row"><span class="row-code">K071</span><div><div class="row-desc">Acute Home Care Supervision</div><div class="row-note">Max 1 per physician per patient per 2 weeks; first 12 weeks following admission to home care program</div></div><span class="row-fee">$21.40</span></div>
+      <div class="code-row"><span class="row-code">K035</span><div><div class="row-desc">Medical conditions report</div><div class="row-note">Mandatory report to MOT</div></div><span class="row-fee">$36.25</span></div>
+      <div class="code-row"><span class="row-code">K034</span><div><div class="row-desc">Telephone report of reportable disease to MOH</div><div class="row-note">Max 1 per physician per patient per disease per 12 months; must be personally rendered by physician</div></div><span class="row-fee">$36.00</span></div>
+      <div class="code-row"><span class="row-code">A771</span><div><div class="row-desc">Death certificate</div></div><span class="row-fee">$34.00</span></div>
+      <div class="code-row"><span class="row-code">A777</span><div><div class="row-desc">Pronouncement + death certificate</div></div><span class="row-fee">$34.00</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════ DETENTION IN AMBULANCE -->
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggle(this)">
+      <span><span class="accordion-title">Detention in Ambulance</span><span class="accordion-meta">Physician attendance during transfer</span></span>
+      <span class="accordion-chevron">▼</span>
+    </button>
+    <div class="accordion-body">
+      <div class="code-row"><span class="row-code">K101</span><div><div class="row-desc">Ground ambulance transfer with patient</div><div class="row-note">Per 15 min; physician attendance during ground ambulance transfer; fee updated April 1 2026</div></div><span class="row-fee">$60.00</span></div>
+      <div class="code-row"><span class="row-code">K111</span><div><div class="row-desc">Air ambulance transfer with patient</div><div class="row-note">Per 15 min; physician attendance during air ambulance transfer; fee updated April 1 2026</div></div><span class="row-fee">$60.00</span></div>
+      <div class="code-row"><span class="row-code">K112</span><div><div class="row-desc">Return trip without patient to place of origin</div><div class="row-note">Per 30 min; air and ground ambulance; companion to K101/K111</div></div><span class="row-fee">$25.00</span></div>
+    </div>
+  </div>
+
+</main>
+
+
+<script>
+function toggle(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+</script>
+</body>
+</html>
