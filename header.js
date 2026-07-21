@@ -31,11 +31,24 @@ const HEADER_CSS = `
     min-width: 0;
   }
   .header-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.55rem;
     color: rgba(255,255,255,0.92);
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.16);
+  }
+  .brand-codes {
+    color: #a9e5fb;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+  .brand-tagline {
+    font-size: 0.7rem;
+    font-weight: 650;
+    color: rgba(255,255,255,0.72);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
   }
   header a.nav-link {
     font-size: 0.82rem;
@@ -166,7 +179,7 @@ const HEADER_CSS = `
 const GROUP_LABELS = {
   billing: 'Billing',
   billingsearch: 'Billing Search',
-  diag: 'Diagnostic',
+  diag: 'Diagnostic Codes',
   other: 'Tools',
 };
 
@@ -223,9 +236,9 @@ class AppHeader extends HTMLElement {
       <header>
         <div class="header-brand">
           <img src="shiftcodes-icon-transparent.png" alt="ShiftCodes" style="height:48px; width:auto; display:block;">
-          <div style="display:flex;flex-direction:column;gap:2px;">
-            <span class="header-subtitle" style="font-size:1.35rem;letter-spacing:-0.01em;">ShiftCodes</span>
-            <span class="header-subtitle-sub" style="font-size:0.72rem;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:0.06em;text-transform:uppercase;">Emergency · OHIP Billing</span>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <span class="header-subtitle">Shift<span class="brand-codes">Codes</span></span>
+            <span class="header-subtitle-sub brand-tagline">Emergency · OHIP Billing</span>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
