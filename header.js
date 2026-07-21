@@ -9,14 +9,18 @@
 const HEADER_CSS = `
   /* ── Header ── */
   header {
-    background: #1F4E79;
+    background:
+      radial-gradient(circle at 82% 18%, rgba(56,189,248,0.28), transparent 28%),
+      radial-gradient(circle at 14% 120%, rgba(167,139,250,0.30), transparent 34%),
+      linear-gradient(120deg, #163d5e 0%, #1F4E79 54%, #27678f 100%);
     color: white;
     padding: 14px 24px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px 16px;
-    min-height: 84px;
+    min-height: 88px;
+    border-bottom: 1px solid rgba(255,255,255,0.16);
   }
   .header-brand {
     display: flex;
@@ -38,17 +42,18 @@ const HEADER_CSS = `
     color: white;
     opacity: 0.85;
     text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.45);
-    border-radius: 5px;
-    padding: 4px 12px;
+    border: 1px solid rgba(255,255,255,0.52);
+    border-radius: 999px;
+    padding: 5px 13px;
+    background: rgba(255,255,255,0.09);
     white-space: nowrap;
     flex-shrink: 0;
   }
-  header a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+  header a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.18); }
 
   /* ── Nav bar ── */
   .toggle-bar {
-    background: #163d5e;
+    background: linear-gradient(90deg, #123650, #163d5e 48%, #1b4767);
     display: flex;
     justify-content: center;
     gap: 6px;
@@ -91,6 +96,13 @@ const HEADER_CSS = `
   .nav-group.grp-billingsearch { background: rgba(56,189,248,0.14); }
   .nav-group.grp-diag    { background: rgba(251,113,133,0.14); }
   .nav-group.grp-other   { background: rgba(45,212,191,0.16); }
+  .nav-group.grp-billing       { border: 1px solid rgba(167,139,250,0.22); }
+  .nav-group.grp-billingsearch { border: 1px solid rgba(56,189,248,0.20); }
+  .nav-group.grp-diag          { border: 1px solid rgba(251,113,133,0.20); }
+  .nav-group.grp-other         { border: 1px solid rgba(45,212,191,0.22); }
+  .nav-group-wrap:has(.grp-billing) .nav-group-label { color: #d8ccff; }
+  .nav-group-wrap:has(.grp-billingsearch) .nav-group-label { color: #a9e5fb; }
+  .nav-group-wrap:has(.grp-diag) .nav-group-label { color: #fecdd3; }
   .nav-group-wrap:has(.grp-other) .nav-group-label { color: #5eead4; }
 
   .beta-badge {
