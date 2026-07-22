@@ -136,7 +136,7 @@ const HEADER_CSS = `
     .header-brand img { display: none !important; }
     .header-brand .header-subtitle-sub { display: none !important; }
     .header-brand { flex-direction: column; align-items: flex-start; gap: 4px; }
-    .header-subtitle { font-size: 0.88rem; font-weight: 600; }
+    .header-subtitle { font-size: 1.5rem; font-weight: 600; }
     .nav-scroll-container { position: relative; }
     .nav-scroll-container::after {
       content: '›';
