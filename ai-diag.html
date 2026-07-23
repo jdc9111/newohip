@@ -152,7 +152,8 @@
       </svg>
       <input id="ai-query" type="text"
         placeholder="e.g. afib, PE, shingles, BPPV, OD, chest pain, blocked bowel..."
-        autocomplete="off" autofocus>
+        autocomplete="off">
+      <script>if (matchMedia('(min-width: 641px)').matches) document.getElementById('ai-query').focus();</script>
     </div>
     <div class="search-actions">
       <span class="ai-hint">&#10024; Understands abbreviations &amp; synonyms &mdash; powered by AI</span>
