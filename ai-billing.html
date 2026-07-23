@@ -175,7 +175,8 @@
         </svg>
         <input id="ai-query" type="text"
           placeholder="Describe a procedure or injury…"
-          autocomplete="off" autofocus>
+          autocomplete="off">
+        <script>if (matchMedia('(min-width: 641px)').matches) document.getElementById('ai-query').focus();</script>
       </div>
       <button class="ai-search-btn" id="ai-btn" onclick="aiSearch()">
         <span id="ai-btn-label">✨ Search</span>
