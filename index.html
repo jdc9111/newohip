@@ -144,6 +144,12 @@
   .search-chip:nth-child(3n+2) { background: #f2edff; border-color: #d8ccff; }
   .search-chip:nth-child(3n) { background: #e7f8f6; border-color: #a8e4dc; }
   .search-chip:hover { background: #d9ebf8; border-color: #7fb4dc; color: #163d5e; transform: translateY(-1px); }
+  .chip-toggle { display: none; font-weight: 700; }
+  @media (max-width: 640px) {
+    .chip-extra { display: none; }
+    .chip-toggle { display: block; }
+    .search-examples.expanded .chip-extra { display: block; }
+  }
 
   main {
     flex: 1;
@@ -354,13 +360,14 @@
     <input id="query" type="search" placeholder="Search code or clinical term…" autocomplete="off">
     <script>if (matchMedia('(min-width: 641px)').matches) document.getElementById('query').focus();</script>
   </div>
-  <div class="search-examples">
+  <div class="search-examples" id="searchExamples">
     <span class="search-chip" onclick="setQuery('night premium')">night premium</span>
-    <span class="search-chip" onclick="setQuery('abscess')">abscess</span>
     <span class="search-chip" onclick="setQuery('G521')">G521</span>
     <span class="search-chip" onclick="setQuery('fracture reduction')">fracture reduction</span>
-    <span class="search-chip" onclick="setQuery('critical care')">critical care</span>
-    <span class="search-chip" onclick="setQuery('sedation')">sedation</span>
+    <span class="search-chip chip-toggle" onclick="toggleChips(this)">Examples</span>
+    <span class="search-chip chip-extra" onclick="setQuery('abscess')">abscess</span>
+    <span class="search-chip chip-extra" onclick="setQuery('critical care')">critical care</span>
+    <span class="search-chip chip-extra" onclick="setQuery('sedation')">sedation</span>
   </div>
 </div>
   
@@ -1008,6 +1015,11 @@ function setQuery(text) {
   input.value = text;
   input.dispatchEvent(new Event('input'));
   input.focus();
+}
+
+function toggleChips(btn) {
+  const expanded = document.getElementById('searchExamples').classList.toggle('expanded');
+  btn.textContent = expanded ? 'Hide' : 'Examples';
 }
 
 // ── debounced input handler ───────────────────────────────────────────────────
