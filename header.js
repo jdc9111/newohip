@@ -131,48 +131,67 @@ const HEADER_CSS = `
   }
   .toggle-btn.active .beta-badge { background: #d97706; }
 
+  /* ── Mobile collapsed nav (menu button + bottom sheet) ── */
+  .mobile-menu-bar { display: none; }
+  .mobile-menu-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 20px; padding: 6px 12px 6px 10px; color: white;
+    font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    font-family: inherit;
+  }
+  .mobile-menu-current { font-size: 0.75rem; color: rgba(255,255,255,0.55); font-weight: 600; }
+
+  .mobile-sheet-backdrop {
+    display: none;
+    position: fixed; inset: 0; background: rgba(10,16,26,0.45);
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    z-index: 998;
+  }
+  .mobile-sheet-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  .mobile-nav-sheet {
+    display: none;
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: #142c42;
+    border-radius: 18px 18px 0 0;
+    padding: 14px 16px calc(22px + env(safe-area-inset-bottom, 0px));
+    transform: translateY(100%);
+    transition: transform 0.28s cubic-bezier(.32,.72,.35,1);
+    z-index: 999;
+    max-height: 78vh;
+    overflow-y: auto;
+    box-shadow: 0 -12px 30px rgba(0,0,0,0.35);
+  }
+  .mobile-nav-sheet.open { transform: translateY(0); }
+  .mobile-sheet-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 4px; margin: 0 auto 14px; }
+  .mobile-sheet-close {
+    position: absolute; top: 12px; right: 14px;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(255,255,255,0.1); color: white; border: none;
+    font-size: 0.9rem; cursor: pointer; line-height: 1;
+  }
+  .mobile-nav-sheet .nav-group-wrap { margin-bottom: 12px; }
+  .mobile-nav-sheet .nav-group-wrap:last-child { margin-bottom: 0; }
+  .mobile-nav-sheet .nav-group { flex-wrap: wrap; }
+  .mobile-nav-sheet .toggle-btn { white-space: normal; height: auto; }
+
   /* ── Mobile ── */
   @media (max-width: 640px) {
     .header-brand img { display: none !important; }
     .header-brand .header-subtitle-sub { display: none !important; }
     .header-brand { flex-direction: column; align-items: flex-start; gap: 4px; }
     .header-subtitle { font-size: 1.5rem; font-weight: 600; }
-    .nav-scroll-container { position: relative; }
-    .nav-scroll-container::after {
-      content: '›';
-      position: absolute;
-      right: 0; top: 0; bottom: 0;
-      width: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(to right, transparent, #163d5e 65%);
-      color: rgba(255,255,255,0.85);
-      font-size: 2rem;
-      pointer-events: none;
-      transition: opacity 0.25s;
-    }
-    .nav-scroll-container.at-end::after { opacity: 0; }
     .nav-link-sob { display: none !important; }
-    .toggle-bar {
-      flex-direction: row; flex-wrap: nowrap;
-      overflow-x: auto; justify-content: flex-start;
-      padding: 8px 10px; gap: 6px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+    .nav-scroll-container { display: none; }
+
+    .mobile-menu-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(90deg, #123650, #163d5e 48%, #1b4767);
+      padding: 9px 16px;
     }
-    .toggle-bar::-webkit-scrollbar { display: none; }
-    .nav-group-wrap { flex-shrink: 0; }
-    .nav-group { flex-wrap: nowrap; padding: 4px 8px; gap: 4px; }
-    .toggle-btn {
-      flex-shrink: 0;
-      height: auto;
-      padding: 6px 12px;
-      font-size: 0.82rem;
-      border-radius: 20px !important;
-      border: 1.5px solid rgba(255,255,255,0.3) !important;
-      white-space: nowrap;
-    }
+    .mobile-sheet-backdrop { display: block; }
+    .mobile-nav-sheet { display: block; }
   }
 `;
 
@@ -184,16 +203,16 @@ const GROUP_LABELS = {
 };
 
 const NAV_TABS = [
-  { key: 'assessment', href: 'assessment.html', label: 'Assessment<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Counselling &amp; Forms</span>', group: 'billing' },
-  { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty',       group: 'billing' },
-  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">& Dislocations</span>', group: 'billing' },
-  { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'billingsearch' },
-  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search',  group: 'billingsearch' },
-  { key: 'diag',       href: 'diag.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'diag' },
-  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Search',  group: 'diag' },
-  { key: 'diagref',    href: 'diagref.html',    label: 'By Specialty',       group: 'diag' },
-  { key: 'sedation',   href: 'sedation.html',   label: 'Sedation<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Billing</span>', group: 'other' },
-  { key: 'calc',       href: 'calc.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Outside</span>OHIP Billing', group: 'other' },
+  { key: 'assessment', href: 'assessment.html', label: 'Assessment<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Counselling &amp; Forms</span>', group: 'billing', plain: 'Assessment · Counselling & Forms' },
+  { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty',       group: 'billing', plain: 'By Specialty' },
+  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">& Dislocations</span>', group: 'billing', plain: 'Fractures & Dislocations' },
+  { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'billingsearch', plain: 'Basic Search' },
+  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search',  group: 'billingsearch', plain: 'AI Search' },
+  { key: 'diag',       href: 'diag.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'diag', plain: 'Basic Search' },
+  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Search',  group: 'diag', plain: 'AI Search' },
+  { key: 'diagref',    href: 'diagref.html',    label: 'By Specialty',       group: 'diag', plain: 'By Specialty' },
+  { key: 'sedation',   href: 'sedation.html',   label: 'Sedation<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Billing</span>', group: 'other', plain: 'Sedation Billing' },
+  { key: 'calc',       href: 'calc.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Outside</span>OHIP Billing', group: 'other', plain: 'Outside OHIP Billing' },
 ];
 
 class AppHeader extends HTMLElement {
@@ -232,6 +251,9 @@ class AppHeader extends HTMLElement {
       </div>`;
     }).join('\n      ');
 
+    const activeTab = NAV_TABS.find(t => t.key === active);
+    const currentLabel = activeTab ? activeTab.plain : '';
+
     this.innerHTML = `
       <header>
         <div class="header-brand">
@@ -250,7 +272,45 @@ class AppHeader extends HTMLElement {
         <div class="toggle-bar">
           ${tabs}
         </div>
+      </div>
+      <div class="mobile-menu-bar">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileNavSheet">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+          Menu
+        </button>
+        <span class="mobile-menu-current">${currentLabel}</span>
+      </div>
+      <div class="mobile-sheet-backdrop" id="mobileSheetBackdrop"></div>
+      <div class="mobile-nav-sheet" id="mobileNavSheet">
+        <button class="mobile-sheet-close" id="mobileSheetClose" aria-label="Close menu">✕</button>
+        <div class="mobile-sheet-handle"></div>
+        ${tabs}
       </div>`;
+
+    const menuBtn = this.querySelector('#mobileMenuBtn');
+    const sheet = this.querySelector('#mobileNavSheet');
+    const backdrop = this.querySelector('#mobileSheetBackdrop');
+    const sheetClose = this.querySelector('#mobileSheetClose');
+
+    const openSheet = () => {
+      sheet.classList.add('open');
+      backdrop.classList.add('open');
+      menuBtn.setAttribute('aria-expanded', 'true');
+    };
+    const closeSheet = () => {
+      sheet.classList.remove('open');
+      backdrop.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    };
+
+    menuBtn.addEventListener('click', () => {
+      sheet.classList.contains('open') ? closeSheet() : openSheet();
+    });
+    backdrop.addEventListener('click', closeSheet);
+    sheetClose.addEventListener('click', closeSheet);
+    sheet.addEventListener('click', e => {
+      if (e.target.closest('a.toggle-btn')) closeSheet();
+    });
   }
 }
 
