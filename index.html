@@ -149,6 +149,10 @@
     .chip-extra { display: none; }
     .chip-toggle { display: block; }
     .search-examples.expanded .chip-extra { display: block; }
+
+    .search-bar { padding: 12px; }
+    #query { padding: 13px 14px 13px 44px; }
+    .search-bar.scrolled .search-examples { display: none; }
   }
 
   main {
@@ -1020,6 +1024,14 @@ function setQuery(text) {
 function toggleChips(btn) {
   const expanded = document.getElementById('searchExamples').classList.toggle('expanded');
   btn.textContent = expanded ? 'Hide' : 'Examples';
+}
+
+// ── hide example chips once scrolled, mobile only ──────────────────────────────
+if (matchMedia('(max-width: 640px)').matches) {
+  const searchBarEl = document.querySelector('.search-bar');
+  window.addEventListener('scroll', () => {
+    searchBarEl.classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive: true });
 }
 
 // ── debounced input handler ───────────────────────────────────────────────────

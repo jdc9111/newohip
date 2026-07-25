@@ -84,6 +84,7 @@
     cursor: pointer; transition: all 0.12s; font-family: inherit;
   }
   .search-chip:hover { background: #dde3ed; border-color: #a0aec0; color: #1a202c; }
+  .chip-toggle { display: none; font-weight: 700; }
 
   main { flex: 1; max-width: 860px; margin: 24px auto; padding: 0 16px 60px; width: 100%; }
 
@@ -134,6 +135,10 @@
     .ai-input-field { flex-basis: 100%; }
     .ai-search-btn { flex: 1 1 100%; justify-content: center; }
 
+    .chip-extra { display: none; }
+    .chip-toggle { display: block; }
+    .search-examples.expanded .chip-extra { display: block; }
+
     .ai-results table { display: none !important; }
     .ai-cards { display: flex; }
 
@@ -182,13 +187,14 @@
         <span id="ai-btn-label">✨ Search</span>
       </button>
     </div>
-    <div class="search-examples">
+    <div class="search-examples" id="searchExamples">
       <span class="search-chip" onclick="runExample('Shoulder dislocation reduction')">shoulder dislocation</span>
       <span class="search-chip" onclick="runExample('Pulled elbow')">pulled elbow</span>
       <span class="search-chip" onclick="runExample('I&D abscess')">abscess I&amp;D</span>
-      <span class="search-chip" onclick="runExample('Foreign body removal')">foreign body</span>
-      <span class="search-chip" onclick="runExample('Hip dislocation with sedation')">hip dislocation</span>
-      <span class="search-chip" onclick="runExample('Complex laceration repair')">complex laceration</span>
+      <span class="search-chip chip-toggle" onclick="toggleChips(this)">Examples</span>
+      <span class="search-chip chip-extra" onclick="runExample('Foreign body removal')">foreign body</span>
+      <span class="search-chip chip-extra" onclick="runExample('Hip dislocation with sedation')">hip dislocation</span>
+      <span class="search-chip chip-extra" onclick="runExample('Complex laceration repair')">complex laceration</span>
     </div>
   </div>
 </div>
@@ -206,6 +212,11 @@
 function runExample(text) {
   document.getElementById('ai-query').value = text;
   aiSearch();
+}
+
+function toggleChips(btn) {
+  const expanded = document.getElementById('searchExamples').classList.toggle('expanded');
+  btn.textContent = expanded ? 'Hide' : 'Examples';
 }
 
 async function aiSearch() {
