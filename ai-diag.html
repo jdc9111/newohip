@@ -91,6 +91,12 @@
     transition: all 0.15s;
   }
   .example-chip:hover { background: #fef3c7; border-color: #f59e0b; }
+  .chip-toggle { display: none; font-weight: 700; }
+  @media (max-width: 640px) {
+    .chip-extra { display: none; }
+    .chip-toggle { display: block; }
+    .example-chips.expanded .chip-extra { display: block; }
+  }
 
   .ai-results {
     background: #fffbeb; border: 1.5px solid #fcd34d;
@@ -167,13 +173,14 @@
 <main>
   <div id="examples-panel" class="examples">
     <div class="examples-title">Try an example</div>
-    <div class="example-chips">
+    <div class="example-chips" id="exampleChips">
       <span class="example-chip" onclick="runExample(this)">afib</span>
       <span class="example-chip" onclick="runExample(this)">PE</span>
       <span class="example-chip" onclick="runExample(this)">shingles</span>
-      <span class="example-chip" onclick="runExample(this)">BPPV</span>
-      <span class="example-chip" onclick="runExample(this)">acute abdomen</span>
-      <span class="example-chip" onclick="runExample(this)">drug overdose</span>
+      <span class="example-chip chip-toggle" onclick="toggleChips(this)">Examples</span>
+      <span class="example-chip chip-extra" onclick="runExample(this)">BPPV</span>
+      <span class="example-chip chip-extra" onclick="runExample(this)">acute abdomen</span>
+      <span class="example-chip chip-extra" onclick="runExample(this)">drug overdose</span>
     </div>
   </div>
 
@@ -189,6 +196,11 @@
 function runExample(el) {
   document.getElementById('ai-query').value = el.textContent;
   aiSearch();
+}
+
+function toggleChips(btn) {
+  const expanded = document.getElementById('exampleChips').classList.toggle('expanded');
+  btn.textContent = expanded ? 'Hide' : 'Examples';
 }
 
 async function aiSearch() {
