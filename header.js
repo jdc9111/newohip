@@ -131,16 +131,26 @@ const HEADER_CSS = `
   }
   .toggle-btn.active .beta-badge { background: #d97706; }
 
-  /* ── Mobile collapsed nav (menu button + bottom sheet) ── */
-  .mobile-menu-bar { display: none; }
+  /* ── Mobile collapsed header (single row: brand · current tool · menu) ── */
+  .mobile-top-bar { display: none; }
+  .mobile-top-brand {
+    font-weight: 800; font-size: 1.02rem; letter-spacing: -0.02em;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .mobile-top-sep { opacity: 0.4; flex-shrink: 0; }
+  .mobile-top-current {
+    font-size: 0.86rem; font-weight: 600; color: rgba(255,255,255,0.8);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    min-width: 0; flex: 1;
+  }
   .mobile-menu-btn {
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    width: 38px; height: 38px;
     background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.28);
-    border-radius: 20px; padding: 6px 12px 6px 10px; color: white;
-    font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    border-radius: 10px; color: white; cursor: pointer;
     font-family: inherit;
   }
-  .mobile-menu-current { font-size: 0.75rem; color: rgba(255,255,255,0.55); font-weight: 600; }
 
   .mobile-sheet-backdrop {
     display: none;
@@ -175,20 +185,26 @@ const HEADER_CSS = `
   .mobile-nav-sheet .nav-group-wrap:last-child { margin-bottom: 0; }
   .mobile-nav-sheet .nav-group { flex-wrap: wrap; }
   .mobile-nav-sheet .toggle-btn { white-space: normal; height: auto; }
+  .mobile-sheet-divider { height: 1px; background: rgba(255,255,255,0.12); margin: 14px 0; }
+  .mobile-sheet-link {
+    display: block; text-align: center; text-decoration: none;
+    color: rgba(255,255,255,0.85); font-size: 0.82rem; font-weight: 600;
+    padding: 10px; border-radius: 10px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18);
+  }
 
   /* ── Mobile ── */
   @media (max-width: 640px) {
-    .header-brand img { display: none !important; }
-    .header-brand .header-subtitle-sub { display: none !important; }
-    .header-brand { flex-direction: column; align-items: flex-start; gap: 4px; }
-    .header-subtitle { font-size: 1.5rem; font-weight: 600; }
-    .nav-link-sob { display: none !important; }
+    header { display: none; }
     .nav-scroll-container { display: none; }
 
-    .mobile-menu-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      background: linear-gradient(90deg, #123650, #163d5e 48%, #1b4767);
-      padding: 9px 16px;
+    .mobile-top-bar {
+      display: flex; align-items: center; gap: 7px;
+      min-height: 58px;
+      padding: 0 16px;
+      background: linear-gradient(120deg, #163d5e 0%, #1F4E79 54%, #27678f 100%);
+      color: white;
+      border-bottom: 1px solid rgba(255,255,255,0.16);
     }
     .mobile-sheet-backdrop { display: block; }
     .mobile-nav-sheet { display: block; }
@@ -273,18 +289,20 @@ class AppHeader extends HTMLElement {
           ${tabs}
         </div>
       </div>
-      <div class="mobile-menu-bar">
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileNavSheet">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-          Menu
+      <div class="mobile-top-bar">
+        <span class="mobile-top-brand">Shift<span class="brand-codes">Codes</span></span>
+        ${currentLabel ? `<span class="mobile-top-sep">·</span><span class="mobile-top-current">${currentLabel}</span>` : '<span class="mobile-top-current"></span>'}
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileNavSheet" aria-label="Open menu">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
-        <span class="mobile-menu-current">${currentLabel}</span>
       </div>
       <div class="mobile-sheet-backdrop" id="mobileSheetBackdrop"></div>
       <div class="mobile-nav-sheet" id="mobileNavSheet">
         <button class="mobile-sheet-close" id="mobileSheetClose" aria-label="Close menu">✕</button>
         <div class="mobile-sheet-handle"></div>
         ${tabs}
+        <div class="mobile-sheet-divider"></div>
+        <a href="updates.html" class="mobile-sheet-link">April 1st Updates</a>
       </div>`;
 
     const menuBtn = this.querySelector('#mobileMenuBtn');
@@ -309,7 +327,7 @@ class AppHeader extends HTMLElement {
     backdrop.addEventListener('click', closeSheet);
     sheetClose.addEventListener('click', closeSheet);
     sheet.addEventListener('click', e => {
-      if (e.target.closest('a.toggle-btn')) closeSheet();
+      if (e.target.closest('a.toggle-btn, a.mobile-sheet-link')) closeSheet();
     });
   }
 }
