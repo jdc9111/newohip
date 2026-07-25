@@ -284,29 +284,29 @@
       color: #276749;
     }
     .card-desc { font-size: 0.9rem; color: #1a202c; line-height: 1.4; }
+    .card-details-btn {
+      background: none; border: none; padding: 0;
+      margin-top: 8px; font-size: 0.78rem;
+      color: #718096; font-weight: 600;
+      cursor: pointer; text-align: left;
+    }
+    .card-details-btn:hover { color: #1F4E79; text-decoration: underline; }
+    .card-details-panel { display: none; margin-top: 8px; }
+    .card-details-panel.open { display: block; }
     .card-cat {
       display: inline-block;
       font-size: 0.68rem; font-weight: 600;
       text-transform: uppercase; letter-spacing: 0.05em;
       color: #1F4E79; background: #BDD7EE;
       border-radius: 4px; padding: 2px 6px;
-      margin-top: 5px; align-self: flex-start;
     }
-    .card-note { font-size: 0.78rem; color: #718096; margin-top: 3px; }
-    .card-details-btn {
-      background: none; border: none; padding: 0;
-      margin-top: 8px; font-size: 0.82rem;
-      color: #1F4E79; font-weight: 600;
-      cursor: pointer; text-align: left;
-    }
-    .card-details-btn:hover { text-decoration: underline; }
+    .card-note { font-size: 0.78rem; color: #718096; margin-top: 6px; }
     .card-ext-note {
-      display: none; margin-top: 8px; padding: 10px 12px;
+      margin-top: 6px; padding: 10px 12px;
       background: #f0f7ff; border-left: 3px solid #1F4E79;
       border-radius: 0 6px 6px 0;
       font-size: 0.78rem; color: #2d3748; line-height: 1.6;
     }
-    .card-ext-note.open { display: block; }
     .card-ext-note ul { margin: 4px 0 0 14px; }
     .card-ext-note li { margin-bottom: 2px; }
   }
@@ -823,7 +823,7 @@ const cards  = document.getElementById("cards");
 function toggleCardNote(btn) {
   const panel = btn.nextElementSibling;
   const open = panel.classList.toggle('open');
-  btn.textContent = open ? 'Hide billing details ‹' : 'Show billing details ›';
+  btn.textContent = open ? 'Hide details ‹' : 'Details ›';
 }
 
 // ── Extended billing notes ────────────────────────────────────────────────────
@@ -999,15 +999,20 @@ function render(query) {
     // Mobile card
     const card = document.createElement("div");
     card.className = "result-card";
+    const hasDetails = !!(cat || notes || extNote);
     card.innerHTML = `
       <div class="card-top">
         <span class="card-code">${highlight(code, q)}</span>
         <span class="card-fee">${feeStr}</span>
       </div>
       <div class="card-desc">${highlight(desc, q)}</div>
-      <span class="card-cat">${highlight(cat, q)}</span>
-      ${notes ? `<div class="card-note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
-      ${extNote ? `<button class="card-details-btn" onclick="toggleCardNote(this)">Show billing details ›</button><div class="card-ext-note">${extNote}</div>` : ""}`;
+      ${hasDetails ? `
+      <button class="card-details-btn" onclick="toggleCardNote(this)">Details ›</button>
+      <div class="card-details-panel">
+        ${cat ? `<span class="card-cat">${highlight(cat, q)}</span>` : ""}
+        ${notes ? `<div class="card-note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
+        ${extNote ? `<div class="card-ext-note">${extNote}</div>` : ""}
+      </div>` : ""}`;
     cards.appendChild(card);
   }
   tbody.appendChild(frag);
