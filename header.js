@@ -162,7 +162,7 @@ const HEADER_CSS = `
     position: fixed; left: 0; right: 0; bottom: 0;
     background: #142c42;
     border-radius: 18px 18px 0 0;
-    padding: 14px 16px calc(22px + env(safe-area-inset-bottom, 0px));
+    padding: 14px 12px calc(22px + env(safe-area-inset-bottom, 0px));
     transform: translateY(100%);
     transition: transform 0.28s cubic-bezier(.32,.72,.35,1);
     z-index: 999;
@@ -199,7 +199,7 @@ const HEADER_CSS = `
     .mobile-top-bar {
       display: flex; align-items: center; gap: 7px;
       min-height: 58px;
-      padding: 0 16px;
+      padding: 0 12px;
       background: #1F4E79;
       color: white;
       border-bottom: 1px solid rgba(255,255,255,0.16);
