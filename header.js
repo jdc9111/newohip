@@ -136,32 +136,41 @@ const HEADER_CSS = `
   }
 
   .mobile-nav-block { display: none; }
-  .mobile-cat-row { display: flex; gap: 8px; }
+
+  /* ── segmented tab control ── */
+  .mobile-cat-row {
+    display: flex; background: rgba(0,0,0,0.22); border-radius: 12px; padding: 3px; gap: 2px;
+  }
   .mobile-cat-btn {
-    flex: 1; padding: 14px 8px; border-radius: 12px; text-align: center;
-    font-size: 0.92rem; font-weight: 800; letter-spacing: -0.01em; color: rgba(255,255,255,0.75);
-    border: 1.5px solid; cursor: pointer; transition: all 0.15s;
+    flex: 1; padding: 13px 6px; border-radius: 9px; text-align: center;
+    font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.5);
+    border: none; background: transparent; cursor: pointer; transition: all 0.15s;
     font-family: inherit;
   }
-  .mobile-cat-btn.billing { background: rgba(167,139,250,0.14); border-color: rgba(167,139,250,0.3); }
-  .mobile-cat-btn.diag    { background: rgba(251,113,133,0.14); border-color: rgba(251,113,133,0.3); }
-  .mobile-cat-btn.tools   { background: rgba(45,212,191,0.14); border-color: rgba(45,212,191,0.3); }
-  .mobile-cat-btn.selected.billing { background: rgba(167,139,250,0.85); border-color: #a78bfa; color: white; }
-  .mobile-cat-btn.selected.diag    { background: rgba(251,113,133,0.85); border-color: #fb7185; color: white; }
-  .mobile-cat-btn.selected.tools  { background: rgba(45,212,191,0.85);  border-color: #2dd4bf; color: #08312c; }
+  .mobile-cat-btn.selected { color: white; }
+  .mobile-cat-btn.selected.billing { background: rgba(167,139,250,0.3); }
+  .mobile-cat-btn.selected.diag    { background: rgba(251,113,133,0.3); }
+  .mobile-cat-btn.selected.tools   { background: rgba(45,212,191,0.3); }
 
-  .mobile-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 14px; }
+  /* ── submenu heading + flat panel ── */
+  .mobile-sub-heading {
+    font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    margin: 13px 3px 7px;
+  }
+  .mobile-sub-heading.billing { color: #d8ccff; }
+  .mobile-sub-heading.diag    { color: #fecdd3; }
+  .mobile-sub-heading.tools   { color: #99f6e4; }
+
+  .mobile-sub-panel { background: rgba(255,255,255,0.045); border-radius: 12px; padding: 5px; }
+  .mobile-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
   .mobile-sub-btn {
-    padding: 9px 10px; border-radius: 10px; font-size: 0.78rem; font-weight: 600;
-    color: rgba(255,255,255,0.85); border: 1.5px solid; cursor: pointer;
-    text-align: center; line-height: 1.25; text-decoration: none;
-    display: flex; align-items: center; justify-content: center;
+    padding: 11px 10px; border-radius: 8px; text-align: center;
+    font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.78);
+    border: none; background: transparent; cursor: pointer; text-decoration: none;
+    display: flex; align-items: center; justify-content: center; min-height: 44px;
   }
   .mobile-sub-btn.span-full { grid-column: 1 / -1; }
-  .mobile-sub-row.billing .mobile-sub-btn { background: rgba(167,139,250,0.14); border-color: rgba(167,139,250,0.3); }
-  .mobile-sub-row.diag .mobile-sub-btn    { background: rgba(251,113,133,0.14); border-color: rgba(251,113,133,0.3); }
-  .mobile-sub-row.tools .mobile-sub-btn   { background: rgba(45,212,191,0.14); border-color: rgba(45,212,191,0.3); }
-  .mobile-sub-btn.active-page { background: white !important; color: #1F4E79 !important; border-color: white !important; }
+  .mobile-sub-btn.active-page { background: white; color: #1F4E79; font-weight: 700; }
 
   /* ── Mobile ── */
   @media (max-width: 640px) {
@@ -207,7 +216,8 @@ const NAV_TABS = [
 /* ── Mobile: 3 top-level categories, each drilling into a page list ── */
 const MOBILE_NAV = {
   billing: {
-    title: 'Billing Codes',
+    title: 'OHIP Codes',
+    heading: 'OHIP CODE PAGES',
     pages: [
       { key: 'billing',    href: 'index.html',      label: 'Search' },
       { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search' },
@@ -217,7 +227,8 @@ const MOBILE_NAV = {
     ],
   },
   diag: {
-    title: 'Diagnostic Codes',
+    title: 'Diagnostic',
+    heading: 'DIAGNOSTIC CODE PAGES',
     pages: [
       { key: 'diag',    href: 'diag.html',    label: 'Search' },
       { key: 'ai-diag', href: 'ai-diag.html', label: '&#10024; AI Search' },
@@ -226,6 +237,7 @@ const MOBILE_NAV = {
   },
   tools: {
     title: 'Tools',
+    heading: 'TOOLS',
     pages: [
       { key: 'sedation', href: 'sedation.html', label: 'Sedation Billing' },
       { key: 'calc',     href: 'calc.html',     label: 'Outside OHIP Billing' },
@@ -321,17 +333,22 @@ class AppHeader extends HTMLElement {
       </div>
       <div class="mobile-nav-block">
         <div class="mobile-cat-row">${catRow}</div>
-        <div class="mobile-sub-row ${currentCategory}" id="mobileSubRow">${renderSubRow(currentCategory, currentCategory, active)}</div>
+        <div class="mobile-sub-heading ${currentCategory}" id="mobileSubHeading">${MOBILE_NAV[currentCategory].heading}</div>
+        <div class="mobile-sub-panel">
+          <div class="mobile-sub-row" id="mobileSubRow">${renderSubRow(currentCategory, currentCategory, active)}</div>
+        </div>
       </div>`;
 
     const catButtons = this.querySelectorAll('.mobile-cat-btn');
     const subRow = this.querySelector('#mobileSubRow');
+    const subHeading = this.querySelector('#mobileSubHeading');
     catButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const cat = btn.dataset.cat;
         catButtons.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
-        subRow.className = 'mobile-sub-row ' + cat;
+        subHeading.textContent = MOBILE_NAV[cat].heading;
+        subHeading.className = 'mobile-sub-heading ' + cat;
         subRow.innerHTML = renderSubRow(cat, currentCategory, active);
       });
     });
