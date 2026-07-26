@@ -9,10 +9,7 @@
 const HEADER_CSS = `
   /* ── Header ── */
   header {
-    background:
-      radial-gradient(circle at 82% 18%, rgba(56,189,248,0.28), transparent 28%),
-      radial-gradient(circle at 14% 120%, rgba(167,139,250,0.30), transparent 34%),
-      linear-gradient(120deg, #163d5e 0%, #1F4E79 54%, #27678f 100%);
+    background: #1F4E79;
     color: white;
     padding: 14px 24px;
     display: flex;
@@ -66,7 +63,7 @@ const HEADER_CSS = `
 
   /* ── Nav bar ── */
   .toggle-bar {
-    background: linear-gradient(90deg, #123650, #163d5e 48%, #1b4767);
+    background: #163d5e;
     display: flex;
     justify-content: center;
     gap: 6px;
@@ -203,7 +200,7 @@ const HEADER_CSS = `
       display: flex; align-items: center; gap: 7px;
       min-height: 58px;
       padding: 0 16px;
-      background: linear-gradient(120deg, #163d5e 0%, #1F4E79 54%, #27678f 100%);
+      background: #1F4E79;
       color: white;
       border-bottom: 1px solid rgba(255,255,255,0.16);
     }
