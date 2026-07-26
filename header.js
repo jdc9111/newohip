@@ -218,13 +218,13 @@ const GROUP_LABELS = {
 
 const NAV_TABS = [
   { key: 'assessment', href: 'assessment.html', label: 'Assessment<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Counselling &amp; Forms</span>', group: 'billing', plain: 'Assessment · Counselling & Forms' },
-  { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty',       group: 'billing', plain: 'By Specialty' },
+  { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty',       group: 'billing', plain: 'Billing · By Specialty' },
   { key: 'fractures',  href: 'fractures.html',  label: 'Fractures<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">& Dislocations</span>', group: 'billing', plain: 'Fractures & Dislocations' },
-  { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'billingsearch', plain: 'Basic Search' },
-  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search',  group: 'billingsearch', plain: 'AI Search' },
-  { key: 'diag',       href: 'diag.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'diag', plain: 'Basic Search' },
-  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Search',  group: 'diag', plain: 'AI Search' },
-  { key: 'diagref',    href: 'diagref.html',    label: 'By Specialty',       group: 'diag', plain: 'By Specialty' },
+  { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'billingsearch', plain: 'Billing · Basic Search' },
+  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search',  group: 'billingsearch', plain: 'Billing · AI Search' },
+  { key: 'diag',       href: 'diag.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'diag', plain: 'Diagnosis · Basic Search' },
+  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Search',  group: 'diag', plain: 'Diagnosis · AI Search' },
+  { key: 'diagref',    href: 'diagref.html',    label: 'By Specialty',       group: 'diag', plain: 'Diagnosis · By Specialty' },
   { key: 'sedation',   href: 'sedation.html',   label: 'Sedation<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Billing</span>', group: 'other', plain: 'Sedation Billing' },
   { key: 'calc',       href: 'calc.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Outside</span>OHIP Billing', group: 'other', plain: 'Outside OHIP Billing' },
 ];
