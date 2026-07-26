@@ -9,10 +9,7 @@
 const HEADER_CSS = `
   /* ── Header ── */
   header {
-    background:
-      radial-gradient(circle at 82% 18%, rgba(56,189,248,0.28), transparent 28%),
-      radial-gradient(circle at 14% 120%, rgba(167,139,250,0.30), transparent 34%),
-      linear-gradient(120deg, #163d5e 0%, #1F4E79 54%, #27678f 100%);
+    background: #1F4E79;
     color: white;
     padding: 14px 24px;
     display: flex;
@@ -66,7 +63,7 @@ const HEADER_CSS = `
 
   /* ── Nav bar ── */
   .toggle-bar {
-    background: linear-gradient(90deg, #123650, #163d5e 48%, #1b4767);
+    background: #163d5e;
     display: flex;
     justify-content: center;
     gap: 6px;
@@ -146,7 +143,7 @@ const HEADER_CSS = `
   .mobile-menu-btn {
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    width: 38px; height: 38px;
+    width: 44px; height: 44px;
     background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.28);
     border-radius: 10px; color: white; cursor: pointer;
     font-family: inherit;
@@ -165,7 +162,7 @@ const HEADER_CSS = `
     position: fixed; left: 0; right: 0; bottom: 0;
     background: #142c42;
     border-radius: 18px 18px 0 0;
-    padding: 14px 16px calc(22px + env(safe-area-inset-bottom, 0px));
+    padding: 14px 12px calc(22px + env(safe-area-inset-bottom, 0px));
     transform: translateY(100%);
     transition: transform 0.28s cubic-bezier(.32,.72,.35,1);
     z-index: 999;
@@ -176,15 +173,16 @@ const HEADER_CSS = `
   .mobile-nav-sheet.open { transform: translateY(0); }
   .mobile-sheet-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 4px; margin: 0 auto 14px; }
   .mobile-sheet-close {
-    position: absolute; top: 12px; right: 14px;
-    width: 26px; height: 26px; border-radius: 50%;
+    position: absolute; top: 4px; right: 4px;
+    width: 44px; height: 44px; border-radius: 50%;
     background: rgba(255,255,255,0.1); color: white; border: none;
     font-size: 0.9rem; cursor: pointer; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
   }
   .mobile-nav-sheet .nav-group-wrap { margin-bottom: 12px; }
   .mobile-nav-sheet .nav-group-wrap:last-child { margin-bottom: 0; }
   .mobile-nav-sheet .nav-group { flex-wrap: wrap; }
-  .mobile-nav-sheet .toggle-btn { white-space: normal; height: auto; }
+  .mobile-nav-sheet .toggle-btn { white-space: normal; height: auto; padding: 11px 16px; }
   .mobile-sheet-divider { height: 1px; background: rgba(255,255,255,0.12); margin: 14px 0; }
   .mobile-sheet-link {
     display: block; text-align: center; text-decoration: none;
@@ -201,8 +199,8 @@ const HEADER_CSS = `
     .mobile-top-bar {
       display: flex; align-items: center; gap: 7px;
       min-height: 58px;
-      padding: 0 16px;
-      background: linear-gradient(120deg, #163d5e 0%, #1F4E79 54%, #27678f 100%);
+      padding: 0 12px;
+      background: #1F4E79;
       color: white;
       border-bottom: 1px solid rgba(255,255,255,0.16);
     }

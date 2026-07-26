@@ -29,10 +29,7 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    background:
-      radial-gradient(circle at 7% 16%, rgba(167,139,250,0.12), transparent 24rem),
-      radial-gradient(circle at 94% 30%, rgba(56,189,248,0.13), transparent 27rem),
-      linear-gradient(180deg, #f5f9fd 0%, #edf5fb 48%, #f4f7fb 100%);
+    background: #f4f6f8;
     color: #1a202c;
     min-height: 100vh;
     display: flex;
@@ -47,48 +44,48 @@
     align-items: flex-start;
     gap: 12px;
     padding: 12px 24px;
-    background: #fffbeb;
-    border-bottom: 2px solid #f59e0b;
+    background: #eaf3fb;
+    border-bottom: 1px solid #cfe0ee;
     animation: slideDown 0.3s ease;
   }
   @keyframes slideDown {
     from { opacity: 0; transform: translateY(-8px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .reminder-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 1px; }
+  .reminder-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 1px; filter: grayscale(0.4); }
   .reminder-body { flex: 1; }
-  .reminder-title { font-size: 0.88rem; font-weight: 700; color: #92400e; }
-  .reminder-codes { margin-top: 4px; font-size: 0.82rem; color: #78350f; }
+  .reminder-title { font-size: 0.88rem; font-weight: 700; color: #1F4E79; }
+  .reminder-codes { margin-top: 4px; font-size: 0.82rem; color: #3f5c74; }
   .reminder-codes code {
     display: inline-block;
-    background: #fef3c7;
-    border: 1px solid #fcd34d;
+    background: #d7e8f6;
+    border: 1px solid #b9d4ea;
     border-radius: 4px;
     padding: 1px 6px;
     font-family: inherit;
     font-weight: 700;
-    color: #92400e;
+    color: #1F4E79;
     margin: 2px 3px 2px 0;
     cursor: pointer;
   }
-  .reminder-codes code:hover { background: #fde68a; }
+  .reminder-codes code:hover { background: #c3ddf1; }
   .reminder-dismiss {
     background: none; border: none; cursor: pointer;
-    color: #b45309; font-size: 1.1rem; line-height: 1;
-    padding: 2px 4px; border-radius: 4px; flex-shrink: 0;
+    color: #1F4E79; font-size: 1.1rem; line-height: 1;
+    border-radius: 4px; flex-shrink: 0;
     opacity: 0.7;
+    min-width: 44px; min-height: 44px; margin: -10px -8px 0 0;
+    display: flex; align-items: center; justify-content: center;
   }
-  .reminder-dismiss:hover { opacity: 1; background: #fef3c7; }
+  .reminder-dismiss:hover { opacity: 1; background: #d7e8f6; }
 
   .search-bar {
-    background: linear-gradient(105deg, rgba(255,255,255,0.96), rgba(240,247,255,0.94));
+    background: white;
     padding: 18px 24px 16px;
     border-bottom: 1px solid #dde3ed;
     position: sticky;
     top: 0;
     z-index: 10;
-    box-shadow: 0 8px 24px rgba(31,78,121,0.10);
-    backdrop-filter: blur(12px);
   }
 
   .search-wrap {
@@ -110,17 +107,15 @@
     width: 100%;
     padding: 17px 14px 17px 44px;
     font-size: 1rem;
-    border: 2px solid #9fc8e9;
+    border: 1.5px solid #cfe0ee;
     border-radius: 14px;
     outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition: border-color 0.15s;
     background: white;
-    box-shadow: 0 5px 16px rgba(31,78,121,0.08);
   }
   #query:focus {
     border-color: #1F4E79;
     background: white;
-    box-shadow: 0 0 0 3px rgba(31,78,121,0.15);
   }
 
   .search-examples {
@@ -136,13 +131,11 @@
     background: #e8f3fb;
     border: 1px solid #BDD7EE;
     border-radius: 20px;
-    padding: 4px 10px;
+    padding: 8px 12px;
     cursor: pointer;
     transition: all 0.12s;
     font-family: inherit;
   }
-  .search-chip:nth-child(3n+2) { background: #f2edff; border-color: #d8ccff; }
-  .search-chip:nth-child(3n) { background: #e7f8f6; border-color: #a8e4dc; }
   .search-chip:hover { background: #d9ebf8; border-color: #7fb4dc; color: #163d5e; transform: translateY(-1px); }
   .chip-toggle { display: none; font-weight: 700; }
   @media (max-width: 640px) {
@@ -153,6 +146,8 @@
     .search-bar { padding: 12px; }
     #query { padding: 13px 14px 13px 44px; }
     .search-bar.scrolled .search-examples { display: none; }
+
+    .reminder-banner { padding: 12px; }
   }
 
   main {
@@ -175,12 +170,11 @@
     background: white;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 12px 32px rgba(31,78,121,0.11);
-    border: 1px solid rgba(189,215,238,0.75);
+    border: 1px solid #dde3ed;
   }
 
   thead th {
-    background: linear-gradient(100deg, #1F4E79, #27678f);
+    background: #1F4E79;
     color: white;
     font-size: 0.78rem;
     font-weight: 600;
@@ -199,7 +193,7 @@
 
   td { padding: 10px 14px; font-size: 0.88rem; vertical-align: top; }
   td:nth-child(1) { text-align: center; font-weight: 700; font-size: 0.92rem; color: #1F4E79; letter-spacing: 0.03em; }
-  td:nth-child(3) { text-align: right; font-weight: 600; color: #276749; white-space: nowrap; }
+  td:nth-child(3) { text-align: right; font-weight: 600; color: #1F4E79; white-space: nowrap; }
 
   .cat-pill {
     display: inline-block;
@@ -261,7 +255,7 @@
     .result-card {
       background: white;
       border-radius: 10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      border: 1px solid #dde3ed;
       padding: 13px 16px;
       display: flex;
       flex-direction: column;
@@ -282,14 +276,16 @@
     .card-fee {
       font-size: 1.05rem;
       font-weight: 700;
-      color: #276749;
+      color: #1F4E79;
     }
     .card-desc { font-size: 0.9rem; color: #1a202c; line-height: 1.4; }
     .card-details-btn {
-      background: none; border: none; padding: 0;
-      margin-top: 8px; font-size: 0.78rem;
+      background: none; border: none;
+      margin-top: 2px; font-size: 0.78rem;
       color: #718096; font-weight: 600;
       cursor: pointer; text-align: left;
+      width: 100%; min-height: 44px;
+      display: flex; align-items: center;
     }
     .card-details-btn:hover { color: #1F4E79; text-decoration: underline; }
     .card-details-panel { display: none; margin-top: 8px; }
@@ -330,7 +326,7 @@
   .cotd-b-body { flex: 1; min-width: 0; }
   .cotd-b-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
   .cotd-b-code { font-size: 1rem; font-weight: 800; color: #1F4E79; }
-  .cotd-b-fee { font-size: 0.88rem; font-weight: 700; color: #276749; }
+  .cotd-b-fee { font-size: 0.88rem; font-weight: 700; color: #1F4E79; }
   .cotd-b-desc { font-size: 0.88rem; color: #2d3748; }
   .cotd-b-actions { display: flex; gap: 10px; align-items: center; margin-top: 7px; flex-wrap: wrap; }
   .cotd-b-search {
@@ -349,7 +345,7 @@
 
  }
 </style>
-<script src="header.js?v=12"></script>
+<script src="header.js?v=15"></script>
 </head>
 <body>
 
