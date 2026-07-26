@@ -218,6 +218,7 @@ const MOBILE_NAV = {
   billing: {
     title: 'OHIP Codes',
     heading: 'OHIP CODE PAGES',
+    defaultKey: 'specialty',
     pages: [
       { key: 'billing',    href: 'index.html',      label: 'Search' },
       { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search' },
@@ -229,6 +230,7 @@ const MOBILE_NAV = {
   diag: {
     title: 'Diagnostic',
     heading: 'DIAGNOSTIC CODE PAGES',
+    defaultKey: 'diagref',
     pages: [
       { key: 'diag',    href: 'diag.html',    label: 'Search' },
       { key: 'ai-diag', href: 'ai-diag.html', label: '&#10024; AI Search' },
@@ -238,6 +240,7 @@ const MOBILE_NAV = {
   tools: {
     title: 'Tools',
     heading: 'TOOLS',
+    defaultKey: 'sedation',
     pages: [
       { key: 'sedation', href: 'sedation.html', label: 'Sedation Billing' },
       { key: 'calc',     href: 'calc.html',     label: 'Outside OHIP Billing' },
@@ -256,8 +259,11 @@ function categoryForKey(key) {
 function renderSubRow(catKey, currentCategory, currentActiveKey) {
   const pages = MOBILE_NAV[catKey].pages;
   const oddCount = pages.length % 2 === 1;
+  // When previewing a category you're not actually in, highlight its default
+  // page instead of leaving nothing selected.
+  const highlightKey = catKey === currentCategory ? currentActiveKey : MOBILE_NAV[catKey].defaultKey;
   return pages.map((p, i) => {
-    const isCurrent = catKey === currentCategory && p.key === currentActiveKey;
+    const isCurrent = p.key === highlightKey;
     const isLast = i === pages.length - 1;
     const classes = ['mobile-sub-btn'];
     if (isCurrent) classes.push('active-page');
