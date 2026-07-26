@@ -146,7 +146,7 @@ const HEADER_CSS = `
   .mobile-menu-btn {
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    width: 38px; height: 38px;
+    width: 44px; height: 44px;
     background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.28);
     border-radius: 10px; color: white; cursor: pointer;
     font-family: inherit;
@@ -176,15 +176,16 @@ const HEADER_CSS = `
   .mobile-nav-sheet.open { transform: translateY(0); }
   .mobile-sheet-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 4px; margin: 0 auto 14px; }
   .mobile-sheet-close {
-    position: absolute; top: 12px; right: 14px;
-    width: 26px; height: 26px; border-radius: 50%;
+    position: absolute; top: 4px; right: 4px;
+    width: 44px; height: 44px; border-radius: 50%;
     background: rgba(255,255,255,0.1); color: white; border: none;
     font-size: 0.9rem; cursor: pointer; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
   }
   .mobile-nav-sheet .nav-group-wrap { margin-bottom: 12px; }
   .mobile-nav-sheet .nav-group-wrap:last-child { margin-bottom: 0; }
   .mobile-nav-sheet .nav-group { flex-wrap: wrap; }
-  .mobile-nav-sheet .toggle-btn { white-space: normal; height: auto; }
+  .mobile-nav-sheet .toggle-btn { white-space: normal; height: auto; padding: 11px 16px; }
   .mobile-sheet-divider { height: 1px; background: rgba(255,255,255,0.12); margin: 14px 0; }
   .mobile-sheet-link {
     display: block; text-align: center; text-decoration: none;
