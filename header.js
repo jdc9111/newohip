@@ -128,68 +128,40 @@ const HEADER_CSS = `
   }
   .toggle-btn.active .beta-badge { background: #d97706; }
 
-  /* ── Mobile collapsed header (single row: brand · current tool · menu) ── */
+  /* ── Mobile always-visible nav (brand row + category row + page pills) ── */
   .mobile-top-bar { display: none; }
   .mobile-top-brand {
     font-weight: 800; font-size: 1.02rem; letter-spacing: -0.02em;
-    white-space: nowrap; flex-shrink: 0;
+    white-space: nowrap;
   }
-  .mobile-top-sep { opacity: 0.4; flex-shrink: 0; }
-  .mobile-top-current {
-    font-size: 0.86rem; font-weight: 600; color: rgba(255,255,255,0.8);
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    min-width: 0; flex: 1;
-  }
-  .mobile-menu-btn {
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    width: 44px; height: 44px;
-    background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.28);
-    border-radius: 10px; color: white; cursor: pointer;
+
+  .mobile-nav-block { display: none; }
+  .mobile-cat-row { display: flex; gap: 6px; }
+  .mobile-cat-btn {
+    flex: 1; padding: 9px 6px; border-radius: 10px; text-align: center;
+    font-size: 0.76rem; font-weight: 700; color: rgba(255,255,255,0.75);
+    border: 1.5px solid; cursor: pointer; transition: all 0.15s;
     font-family: inherit;
   }
+  .mobile-cat-btn.billing { background: rgba(167,139,250,0.14); border-color: rgba(167,139,250,0.3); }
+  .mobile-cat-btn.diag    { background: rgba(251,113,133,0.14); border-color: rgba(251,113,133,0.3); }
+  .mobile-cat-btn.tools   { background: rgba(45,212,191,0.14); border-color: rgba(45,212,191,0.3); }
+  .mobile-cat-btn.selected.billing { background: rgba(167,139,250,0.85); border-color: #a78bfa; color: white; }
+  .mobile-cat-btn.selected.diag    { background: rgba(251,113,133,0.85); border-color: #fb7185; color: white; }
+  .mobile-cat-btn.selected.tools  { background: rgba(45,212,191,0.85);  border-color: #2dd4bf; color: #08312c; }
 
-  .mobile-sheet-backdrop {
-    display: none;
-    position: fixed; inset: 0; background: rgba(10,16,26,0.45);
-    opacity: 0; pointer-events: none; transition: opacity 0.2s;
-    z-index: 998;
-  }
-  .mobile-sheet-backdrop.open { opacity: 1; pointer-events: auto; }
-
-  .mobile-nav-sheet {
-    display: none;
-    position: fixed; left: 0; right: 0; bottom: 0;
-    background: #142c42;
-    border-radius: 18px 18px 0 0;
-    padding: 14px 12px calc(22px + env(safe-area-inset-bottom, 0px));
-    transform: translateY(100%);
-    transition: transform 0.28s cubic-bezier(.32,.72,.35,1);
-    z-index: 999;
-    max-height: 78vh;
-    overflow-y: auto;
-    box-shadow: 0 -12px 30px rgba(0,0,0,0.35);
-  }
-  .mobile-nav-sheet.open { transform: translateY(0); }
-  .mobile-sheet-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.25); border-radius: 4px; margin: 0 auto 14px; }
-  .mobile-sheet-close {
-    position: absolute; top: 4px; right: 4px;
-    width: 44px; height: 44px; border-radius: 50%;
-    background: rgba(255,255,255,0.1); color: white; border: none;
-    font-size: 0.9rem; cursor: pointer; line-height: 1;
+  .mobile-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; }
+  .mobile-sub-btn {
+    padding: 9px 10px; border-radius: 10px; font-size: 0.78rem; font-weight: 600;
+    color: rgba(255,255,255,0.85); border: 1.5px solid; cursor: pointer;
+    text-align: center; line-height: 1.25; text-decoration: none;
     display: flex; align-items: center; justify-content: center;
   }
-  .mobile-nav-sheet .nav-group-wrap { margin-bottom: 12px; }
-  .mobile-nav-sheet .nav-group-wrap:last-child { margin-bottom: 0; }
-  .mobile-nav-sheet .nav-group { flex-wrap: wrap; }
-  .mobile-nav-sheet .toggle-btn { white-space: normal; height: auto; padding: 11px 16px; }
-  .mobile-sheet-divider { height: 1px; background: rgba(255,255,255,0.12); margin: 14px 0; }
-  .mobile-sheet-link {
-    display: block; text-align: center; text-decoration: none;
-    color: rgba(255,255,255,0.85); font-size: 0.82rem; font-weight: 600;
-    padding: 10px; border-radius: 10px;
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18);
-  }
+  .mobile-sub-btn.span-full { grid-column: 1 / -1; }
+  .mobile-sub-row.billing .mobile-sub-btn { background: rgba(167,139,250,0.14); border-color: rgba(167,139,250,0.3); }
+  .mobile-sub-row.diag .mobile-sub-btn    { background: rgba(251,113,133,0.14); border-color: rgba(251,113,133,0.3); }
+  .mobile-sub-row.tools .mobile-sub-btn   { background: rgba(45,212,191,0.14); border-color: rgba(45,212,191,0.3); }
+  .mobile-sub-btn.active-page { background: white !important; color: #1F4E79 !important; border-color: white !important; }
 
   /* ── Mobile ── */
   @media (max-width: 640px) {
@@ -197,15 +169,18 @@ const HEADER_CSS = `
     .nav-scroll-container { display: none; }
 
     .mobile-top-bar {
-      display: flex; align-items: center; gap: 7px;
-      min-height: 58px;
+      display: flex; align-items: center;
+      min-height: 54px;
       padding: 0 12px;
       background: #1F4E79;
       color: white;
       border-bottom: 1px solid rgba(255,255,255,0.16);
     }
-    .mobile-sheet-backdrop { display: block; }
-    .mobile-nav-sheet { display: block; }
+    .mobile-nav-block {
+      display: block;
+      background: #163d5e;
+      padding: 10px 12px 12px;
+    }
   }
 `;
 
@@ -217,17 +192,67 @@ const GROUP_LABELS = {
 };
 
 const NAV_TABS = [
-  { key: 'assessment', href: 'assessment.html', label: 'Assessment<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Counselling &amp; Forms</span>', group: 'billing', plain: 'Assessment · Counselling & Forms' },
-  { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty',       group: 'billing', plain: 'Billing · By Specialty' },
-  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">& Dislocations</span>', group: 'billing', plain: 'Fractures & Dislocations' },
-  { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'billingsearch', plain: 'Billing · Basic Search' },
-  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search',  group: 'billingsearch', plain: 'Billing · AI Search' },
-  { key: 'diag',       href: 'diag.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'diag', plain: 'Diagnosis · Basic Search' },
-  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Search',  group: 'diag', plain: 'Diagnosis · AI Search' },
-  { key: 'diagref',    href: 'diagref.html',    label: 'By Specialty',       group: 'diag', plain: 'Diagnosis · By Specialty' },
-  { key: 'sedation',   href: 'sedation.html',   label: 'Sedation<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Billing</span>', group: 'other', plain: 'Sedation Billing' },
-  { key: 'calc',       href: 'calc.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Outside</span>OHIP Billing', group: 'other', plain: 'Outside OHIP Billing' },
+  { key: 'assessment', href: 'assessment.html', label: 'Assessment<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Counselling &amp; Forms</span>', group: 'billing' },
+  { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty',       group: 'billing' },
+  { key: 'fractures',  href: 'fractures.html',  label: 'Fractures<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">& Dislocations</span>', group: 'billing' },
+  { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'billingsearch' },
+  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search',  group: 'billingsearch' },
+  { key: 'diag',       href: 'diag.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'diag' },
+  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Search',  group: 'diag' },
+  { key: 'diagref',    href: 'diagref.html',    label: 'By Specialty',       group: 'diag' },
+  { key: 'sedation',   href: 'sedation.html',   label: 'Sedation<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Billing</span>', group: 'other' },
+  { key: 'calc',       href: 'calc.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Outside</span>OHIP Billing', group: 'other' },
 ];
+
+/* ── Mobile: 3 top-level categories, each drilling into a page list ── */
+const MOBILE_NAV = {
+  billing: {
+    title: 'Billing Codes',
+    pages: [
+      { key: 'billing',    href: 'index.html',      label: 'Search' },
+      { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search' },
+      { key: 'assessment', href: 'assessment.html', label: 'Assessment Codes' },
+      { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty' },
+      { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations' },
+    ],
+  },
+  diag: {
+    title: 'Diagnostic Codes',
+    pages: [
+      { key: 'diag',    href: 'diag.html',    label: 'Search' },
+      { key: 'ai-diag', href: 'ai-diag.html', label: '&#10024; AI Search' },
+      { key: 'diagref', href: 'diagref.html', label: 'By Specialty' },
+    ],
+  },
+  tools: {
+    title: 'Tools',
+    pages: [
+      { key: 'sedation', href: 'sedation.html', label: 'Sedation Billing' },
+      { key: 'calc',     href: 'calc.html',     label: 'Outside OHIP Billing' },
+      { key: 'updates',  href: 'updates.html',  label: 'April 1st Updates' },
+    ],
+  },
+};
+
+function categoryForKey(key) {
+  for (const cat of Object.keys(MOBILE_NAV)) {
+    if (MOBILE_NAV[cat].pages.some(p => p.key === key)) return cat;
+  }
+  return 'billing';
+}
+
+function renderSubRow(catKey, currentCategory, currentActiveKey) {
+  const pages = MOBILE_NAV[catKey].pages;
+  const oddCount = pages.length % 2 === 1;
+  return pages.map((p, i) => {
+    const isCurrent = catKey === currentCategory && p.key === currentActiveKey;
+    const isLast = i === pages.length - 1;
+    const classes = ['mobile-sub-btn'];
+    if (isCurrent) classes.push('active-page');
+    if (oddCount && isLast) classes.push('span-full');
+    return `<a href="${p.href}" class="${classes.join(' ')}">${p.label}</a>`;
+  }).join('');
+}
 
 class AppHeader extends HTMLElement {
   connectedCallback() {
@@ -265,8 +290,12 @@ class AppHeader extends HTMLElement {
       </div>`;
     }).join('\n      ');
 
-    const activeTab = NAV_TABS.find(t => t.key === active);
-    const currentLabel = activeTab ? activeTab.plain : '';
+    const currentCategory = categoryForKey(active);
+    const catOrder = ['billing', 'diag', 'tools'];
+    const catRow = catOrder.map(cat => {
+      const selected = cat === currentCategory;
+      return `<button type="button" class="mobile-cat-btn ${cat}${selected ? ' selected' : ''}" data-cat="${cat}">${MOBILE_NAV[cat].title}</button>`;
+    }).join('');
 
     this.innerHTML = `
       <header>
@@ -289,43 +318,22 @@ class AppHeader extends HTMLElement {
       </div>
       <div class="mobile-top-bar">
         <span class="mobile-top-brand">Shift<span class="brand-codes">Codes</span></span>
-        ${currentLabel ? `<span class="mobile-top-sep">·</span><span class="mobile-top-current">${currentLabel}</span>` : '<span class="mobile-top-current"></span>'}
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileNavSheet" aria-label="Open menu">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
       </div>
-      <div class="mobile-sheet-backdrop" id="mobileSheetBackdrop"></div>
-      <div class="mobile-nav-sheet" id="mobileNavSheet">
-        <button class="mobile-sheet-close" id="mobileSheetClose" aria-label="Close menu">✕</button>
-        <div class="mobile-sheet-handle"></div>
-        ${tabs}
-        <div class="mobile-sheet-divider"></div>
-        <a href="updates.html" class="mobile-sheet-link">April 1st Updates</a>
+      <div class="mobile-nav-block">
+        <div class="mobile-cat-row">${catRow}</div>
+        <div class="mobile-sub-row ${currentCategory}" id="mobileSubRow">${renderSubRow(currentCategory, currentCategory, active)}</div>
       </div>`;
 
-    const menuBtn = this.querySelector('#mobileMenuBtn');
-    const sheet = this.querySelector('#mobileNavSheet');
-    const backdrop = this.querySelector('#mobileSheetBackdrop');
-    const sheetClose = this.querySelector('#mobileSheetClose');
-
-    const openSheet = () => {
-      sheet.classList.add('open');
-      backdrop.classList.add('open');
-      menuBtn.setAttribute('aria-expanded', 'true');
-    };
-    const closeSheet = () => {
-      sheet.classList.remove('open');
-      backdrop.classList.remove('open');
-      menuBtn.setAttribute('aria-expanded', 'false');
-    };
-
-    menuBtn.addEventListener('click', () => {
-      sheet.classList.contains('open') ? closeSheet() : openSheet();
-    });
-    backdrop.addEventListener('click', closeSheet);
-    sheetClose.addEventListener('click', closeSheet);
-    sheet.addEventListener('click', e => {
-      if (e.target.closest('a.toggle-btn, a.mobile-sheet-link')) closeSheet();
+    const catButtons = this.querySelectorAll('.mobile-cat-btn');
+    const subRow = this.querySelector('#mobileSubRow');
+    catButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cat = btn.dataset.cat;
+        catButtons.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        subRow.className = 'mobile-sub-row ' + cat;
+        subRow.innerHTML = renderSubRow(cat, currentCategory, active);
+      });
     });
   }
 }
