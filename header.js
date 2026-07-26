@@ -136,10 +136,10 @@ const HEADER_CSS = `
   }
 
   .mobile-nav-block { display: none; }
-  .mobile-cat-row { display: flex; gap: 6px; }
+  .mobile-cat-row { display: flex; gap: 8px; }
   .mobile-cat-btn {
-    flex: 1; padding: 9px 6px; border-radius: 10px; text-align: center;
-    font-size: 0.76rem; font-weight: 700; color: rgba(255,255,255,0.75);
+    flex: 1; padding: 14px 8px; border-radius: 12px; text-align: center;
+    font-size: 0.92rem; font-weight: 800; letter-spacing: -0.01em; color: rgba(255,255,255,0.75);
     border: 1.5px solid; cursor: pointer; transition: all 0.15s;
     font-family: inherit;
   }
@@ -150,7 +150,7 @@ const HEADER_CSS = `
   .mobile-cat-btn.selected.diag    { background: rgba(251,113,133,0.85); border-color: #fb7185; color: white; }
   .mobile-cat-btn.selected.tools  { background: rgba(45,212,191,0.85);  border-color: #2dd4bf; color: #08312c; }
 
-  .mobile-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; }
+  .mobile-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 14px; }
   .mobile-sub-btn {
     padding: 9px 10px; border-radius: 10px; font-size: 0.78rem; font-weight: 600;
     color: rgba(255,255,255,0.85); border: 1.5px solid; cursor: pointer;
