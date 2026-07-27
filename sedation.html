@@ -290,7 +290,7 @@
   }
   footer a { color: #1F4E79; }
 </style>
-<script src="header.js?v=20"></script>
+<script src="header.js?v=22"></script>
 </head>
 <body>
 
@@ -1041,11 +1041,11 @@ function playCashRegister() {
     _cashAudio.play().catch(() => {});
   } catch (e) {}
 }
-function selTimePrem(el, val) {
+function selTimePrem(el, val, silent) {
   document.querySelectorAll('#time-prem-group .radio-opt').forEach(e => e.classList.remove('sel-time'));
   el.classList.add('sel-time');
   timePrem = val;
-  if (val !== 'none') playCashRegister();
+  if (val !== 'none' && !silent) playCashRegister();
   recalc();
 }
 function selASA(el, code, units) {
@@ -1489,7 +1489,7 @@ function copyDCInstructions() {
     const opts = document.querySelectorAll('#time-prem-group .radio-opt');
     // opts[0]=None, opts[1]=E400C (Evening/Weekend), opts[2]=E401C (Night)
     const el = val === 'E400C' ? opts[1] : opts[2];
-    if (el) selTimePrem(el, val);
+    if (el) selTimePrem(el, val, true);
   }
 })();
 </script>

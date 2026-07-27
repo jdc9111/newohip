@@ -162,11 +162,11 @@ const HEADER_CSS = `
   .mobile-sub-heading.tools   { color: #99f6e4; }
 
   .mobile-sub-panel { background: rgba(255,255,255,0.045); border-radius: 12px; padding: 5px; }
-  .mobile-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .mobile-sub-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
   .mobile-sub-btn {
     padding: 11px 10px; border-radius: 8px; text-align: center;
     font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.78);
-    border: none; background: transparent; cursor: pointer; text-decoration: none;
+    border: none; background: rgba(255,255,255,0.045); cursor: pointer; text-decoration: none;
     display: flex; align-items: center; justify-content: center; min-height: 44px;
   }
   .mobile-sub-btn.span-full { grid-column: 1 / -1; }
@@ -351,6 +351,11 @@ class AppHeader extends HTMLElement {
     catButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const cat = btn.dataset.cat;
+        if (cat !== currentCategory) {
+          const defaultPage = MOBILE_NAV[cat].pages.find(p => p.key === MOBILE_NAV[cat].defaultKey);
+          window.location.href = defaultPage.href;
+          return;
+        }
         catButtons.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         subHeading.textContent = MOBILE_NAV[cat].heading;
