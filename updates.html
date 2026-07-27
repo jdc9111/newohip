@@ -30,28 +30,7 @@
     flex-direction: column;
   }
 
-  header {
-    background: #1F4E79;
-    color: white;
-    padding: 18px 24px;
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-  }
-  header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.01em; }
-  header span { font-size: 0.8rem; opacity: 0.75; }
-  header a.nav-link {
-    margin-left: auto;
-    font-size: 0.82rem;
-    color: white;
-    opacity: 0.85;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.45);
-    border-radius: 5px;
-    padding: 4px 12px;
-    white-space: nowrap;
-  }
-  header a.nav-link:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+  /* header/nav styles → header.js */
 
   main {
     flex: 1;
@@ -142,14 +121,11 @@
   }
   footer a { color: #1F4E79; }
 </style>
+<script src="header.js?v=22"></script>
 </head>
 <body>
 
-<header>
-  <h1>Emergency Department — OHIP Billing Search</h1>
-  <span>Effective April 1, 2026</span>
-  <a href="index.html" class="nav-link">← Back to Search</a>
-</header>
+<app-header active="updates"></app-header>
 
 <main>
   <h2>April 1, 2026 — Key Fee Schedule Changes</h2>
