@@ -230,81 +230,6 @@ async function aiSearch() {
   btn.disabled = true;
   label.innerHTML = '<span class="ai-spinner"></span> Searching...';
   container.style.display = 'none';
-  container.innerHTML = '';
-
-  let tbody = null, cardsEl = null, resultCount = 0;
-
-  function ensureShell() {
-    if (tbody) return;
-    container.innerHTML = `
-      <div class="ai-results">
-        <div class="ai-results-header">✨ AI Suggestions for &ldquo;${query}&rdquo;</div>
-        <table>
-          <thead><tr><th>Code</th><th>Description</th><th>Fee</th></tr></thead>
-          <tbody id="ai-tbody"></tbody>
-        </table>
-        <div class="ai-cards" id="ai-cards"></div>
-      </div>`;
-    tbody   = document.getElementById('ai-tbody');
-    cardsEl = document.getElementById('ai-cards');
-    container.style.display = '';
-  }
-
-  function addResult(r) {
-    if (!r || !r.code) return;
-    ensureShell();
-    resultCount++;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td class="td-code">${r.code}</td><td>${r.description || ''}</td><td class="td-fee">${r.fee || ''}</td>`;
-    tbody.appendChild(tr);
-    const card = document.createElement('div');
-    card.className = 'result-card';
-    card.innerHTML = `
-      <div class="card-top">
-        <span class="card-code">${r.code}</span>
-        <span class="card-fee">${r.fee || '—'}</span>
-      </div>
-      <div class="card-desc">${r.description || ''}</div>`;
-    cardsEl.appendChild(card);
-  }
-
-  // Accepts a bare result object, a {"results":[...]} wrapper, or a raw
-  // array -- the model doesn't always follow the "one object per line"
-  // instruction exactly, so this unwraps whatever shape it produced.
-  function addParsed(val) {
-    if (Array.isArray(val)) { val.forEach(addParsed); return; }
-    if (val && Array.isArray(val.results)) { val.results.forEach(addParsed); return; }
-    addResult(val);
-  }
-
-  // Scans the accumulated model text for complete, balanced {...} objects
-  // (string-literal aware) and parses each one as soon as its closing
-  // brace arrives -- this renders results incrementally regardless of
-  // whether the model wraps them in an array, separates them by newlines,
-  // or wraps everything in a {"results":[...]} object.
-  function extractObjects(buf) {
-    let i = 0;
-    while (true) {
-      const start = buf.indexOf('{', i);
-      if (start === -1) return buf.slice(i);
-      let depth = 0, inStr = false, esc = false, closed = -1;
-      for (let j = start; j < buf.length; j++) {
-        const ch = buf[j];
-        if (inStr) {
-          if (esc) esc = false;
-          else if (ch === '\\') esc = true;
-          else if (ch === '"') inStr = false;
-          continue;
-        }
-        if (ch === '"') { inStr = true; continue; }
-        if (ch === '{') depth++;
-        else if (ch === '}') { depth--; if (depth === 0) { closed = j; break; } }
-      }
-      if (closed === -1) return buf.slice(start); // incomplete object, wait for more data
-      try { addParsed(JSON.parse(buf.slice(start, closed + 1))); } catch (e) { /* malformed, ignore */ }
-      i = closed + 1;
-    }
-  }
 
   try {
     const res = await fetch('/.netlify/functions/billing', {
@@ -313,43 +238,41 @@ async function aiSearch() {
       body: JSON.stringify({ query })
     });
 
-    if (!res.ok || !res.body) throw new Error('Function error ' + res.status);
+    if (!res.ok) throw new Error('Function error ' + res.status);
 
-    const reader  = res.body.getReader();
-    const decoder = new TextDecoder();
-    let sseBuf  = '';  // raw SSE frame buffer
-    let textBuf = '';  // accumulated model text pending object extraction
+    const data = await res.json();
+    const results = data.results || [];
 
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      sseBuf += decoder.decode(value, { stream: true });
-
-      let idx;
-      while ((idx = sseBuf.indexOf('\n\n')) !== -1) {
-        const frame = sseBuf.slice(0, idx);
-        sseBuf = sseBuf.slice(idx + 2);
-        for (const rawLine of frame.split('\n')) {
-          const dataLine = rawLine.trim();
-          if (!dataLine.startsWith('data:')) continue;
-          const payload = dataLine.slice(5).trim();
-          if (payload === '[DONE]') continue;
-          try {
-            const delta = JSON.parse(payload).choices?.[0]?.delta?.content;
-            if (delta) {
-              textBuf += delta;
-              textBuf = extractObjects(textBuf);
-            }
-          } catch (e) { /* malformed SSE payload, ignore */ }
-        }
-      }
-    }
-    extractObjects(textBuf); // flush anything left in the buffer
-
-    if (!resultCount) {
+    if (!results.length) {
       container.innerHTML = '<div class="ai-results"><div class="ai-results-header">No suggestions found — try rephrasing</div></div>';
-      container.style.display = '';
+    } else {
+      const rows = results.map(r =>
+        `<tr>
+          <td class="td-code">${r.code}</td>
+          <td>${r.description}</td>
+          <td class="td-fee">${r.fee || ''}</td>
+        </tr>`
+      ).join('');
+      const cardItems = results.map(r =>
+        `<div class="result-card">
+          <div class="card-top">
+            <span class="card-code">${r.code}</span>
+            <span class="card-fee">${r.fee || '—'}</span>
+          </div>
+          <div class="card-desc">${r.description}</div>
+        </div>`
+      ).join('');
+      container.innerHTML = `
+        <div class="ai-results">
+          <div class="ai-results-header">✨ AI Suggestions for &ldquo;${query}&rdquo;</div>
+          <table>
+            <thead><tr><th>Code</th><th>Description</th><th>Fee</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+          <div class="ai-cards">${cardItems}</div>
+        </div>`;
     }
+    container.style.display = '';
 
   } catch (err) {
     container.innerHTML = '<div class="ai-results"><div class="ai-results-header" style="color:#dc2626">AI search unavailable — please try again</div></div>';
