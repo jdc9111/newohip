@@ -110,6 +110,22 @@
   .row-note {
     font-size: 0.75rem; color: #718096; margin-top: 2px;
   }
+  .info-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #e2e8f0; color: #4a5568;
+    font-size: 0.65rem; font-weight: 800; line-height: 1;
+    border: none; cursor: pointer; margin-left: 6px;
+    vertical-align: middle; flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .info-btn:hover, .info-btn.open { background: #1F4E79; color: white; }
+  .ext-note {
+    display: none; margin-top: 6px; padding: 10px 12px;
+    background: #f0f7ff; border-left: 3px solid #1F4E79; border-radius: 0 6px 6px 0;
+    font-size: 0.78rem; color: #2d3748; line-height: 1.6;
+  }
+  .ext-note.open { display: block; }
   .row-fee {
     font-weight: 600; color: #276749;
     white-space: nowrap; flex-shrink: 0;
@@ -168,6 +184,7 @@
       <div class="code-row"><span class="row-code">H112</span><div><div class="row-desc">Night premium (midnight–8am)</div><div class="row-note">Per patient visit</div></div><span class="row-fee">$51.00</span></div>
       <div class="code-row"><span class="row-code">H113</span><div><div class="row-desc">Wkd/Hol + Fri eve premium</div><div class="row-note">Per patient visit; incl Fri eve 5pm–midnight</div></div><span class="row-fee">$32.00</span></div>
       <div class="code-row"><span class="row-code">H114</span><div><div class="row-desc">Weekday eve premium (Mon–Thu)</div><div class="row-note">Per patient visit; NEW April 2026</div></div><span class="row-fee">$24.00</span></div>
+      <div class="code-row"><span class="row-code">E420</span><div><div class="row-desc">Trauma ISS &gt; 15 premium</div><div class="row-note">ISS &gt; 15 if patient ≥ 16 yrs; ISS &gt; 12 if patient &lt; 16 yrs; must be recorded on chart</div></div><span class="row-fee">+50%</span></div>
     </div>
   </div>
 
@@ -179,13 +196,13 @@
     </button>
     <div class="accordion-body">
       <div class="time-subhead">Imminent Life-Threatening</div>
-      <div class="code-row"><span class="row-code">G521</span><div><div class="row-desc">1st 15 min (1st MD)</div><div class="row-note">Arrest/Trauma; document times; cannot see other pts simultaneously</div></div><span class="row-fee">$111.80</span></div>
+      <div class="code-row"><span class="row-code">G521</span><div><div class="row-desc">1st 15 min (1st MD)<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">i</button><div class="ext-note">Patient must have a critical illness or injury that acutely impairs one or more vital organs or systems such that <strong>imminent life-threatening deterioration is highly probable.</strong><br><br><strong>Excludes:</strong> intubation, lines, defibrillation, cardioversion, ABGs, Foleys, NGTs. Does <em>not</em> exclude other procedure codes (fractures, lacerations, etc.)<br><br><strong>Ex.</strong> STEMI, CHF with intubation or BiPAP, severe sepsis/shock, true anaphylaxis (epi given), status epilepticus, trauma with unstable vitals, croup requiring epi, etc.</div></div><div class="row-note">Arrest/Trauma; document times; cannot see other pts simultaneously</div></div><span class="row-fee">$111.80</span></div>
       <div class="code-row"><span class="row-code">G523</span><div><div class="row-desc">2nd 15 min (1st MD)</div><div class="row-note">Arrest/Trauma</div></div><span class="row-fee">$57.65</span></div>
       <div class="code-row"><span class="row-code">G522</span><div><div class="row-desc">Each addl 15 min (max 6)</div><div class="row-note">Arrest/Trauma; bill for 2nd/3rd MD too</div></div><span class="row-fee">$38.00</span></div>
-      <div class="code-row"><span class="row-code">E420</span><div><div class="row-desc">Trauma ISS &gt; 15 premium</div><div class="row-note">Add-on to imminent life-threatening codes</div></div><span class="row-fee">+50%</span></div>
+      <div class="code-row"><span class="row-code">E420</span><div><div class="row-desc">Trauma ISS &gt; 15 premium</div><div class="row-note">ISS &gt; 15 if patient ≥ 16 yrs; ISS &gt; 12 if patient &lt; 16 yrs; must be recorded on chart</div></div><span class="row-fee">+50%</span></div>
 
       <div class="time-subhead">Potential Life-Threatening</div>
-      <div class="code-row"><span class="row-code">G395</span><div><div class="row-desc">1st 15 min</div><div class="row-note">Other resuscitation; document times</div></div><span class="row-fee">$57.45</span></div>
+      <div class="code-row"><span class="row-code">G395</span><div><div class="row-desc">1st 15 min<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">i</button><div class="ext-note">Where there is a potential threat to life or limb, physician provides resuscitation in order to address the high probability of <strong>loss of limb</strong> or requirement for <strong>&ldquo;life threatening&rdquo; critical care.</strong><br><br><strong>Excludes:</strong> intubation, lines, ABGs, catheters. Does <em>not</em> exclude cardioversion, defibrillation, or other procedure codes (fractures, dislocations, lacerations, etc.)<br><br><strong>Ex.</strong> Backboard/collar with imaging, chest pain requiring intervention, abdo pain requiring intervention, head injury requiring CT, OD/intoxication with decreased LOC, extremity requiring immediate reduction, etc.</div></div><div class="row-note">Other resuscitation; document times</div></div><span class="row-fee">$57.45</span></div>
       <div class="code-row"><span class="row-code">G391</span><div><div class="row-desc">Each addl 15 min (max 7)</div><div class="row-note">Bill for 2nd/3rd MD too</div></div><span class="row-fee">$30.60</span></div>
     </div>
   </div>
@@ -268,6 +285,11 @@ function toggle(btn) {
   const body = btn.nextElementSibling;
   const isOpen = body.classList.toggle('open');
   btn.classList.toggle('open', isOpen);
+}
+function toggleExtNote(btn) {
+  const panel = btn.nextElementSibling;
+  const open  = panel.classList.toggle('open');
+  btn.classList.toggle('open', open);
 }
 </script>
 </body>
