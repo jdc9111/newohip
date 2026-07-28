@@ -268,11 +268,42 @@ async function aiSearch() {
     cardsEl.appendChild(card);
   }
 
-  function processLine(raw) {
-    let line = raw.trim();
-    if (!line || line === '[' || line === ']') return;
-    if (line.endsWith(',')) line = line.slice(0, -1);
-    try { addResult(JSON.parse(line)); } catch (e) { /* incomplete/malformed line, ignore */ }
+  // Accepts a bare result object, a {"results":[...]} wrapper, or a raw
+  // array -- the model doesn't always follow the "one object per line"
+  // instruction exactly, so this unwraps whatever shape it produced.
+  function addParsed(val) {
+    if (Array.isArray(val)) { val.forEach(addParsed); return; }
+    if (val && Array.isArray(val.results)) { val.results.forEach(addParsed); return; }
+    addResult(val);
+  }
+
+  // Scans the accumulated model text for complete, balanced {...} objects
+  // (string-literal aware) and parses each one as soon as its closing
+  // brace arrives -- this renders results incrementally regardless of
+  // whether the model wraps them in an array, separates them by newlines,
+  // or wraps everything in a {"results":[...]} object.
+  function extractObjects(buf) {
+    let i = 0;
+    while (true) {
+      const start = buf.indexOf('{', i);
+      if (start === -1) return buf.slice(i);
+      let depth = 0, inStr = false, esc = false, closed = -1;
+      for (let j = start; j < buf.length; j++) {
+        const ch = buf[j];
+        if (inStr) {
+          if (esc) esc = false;
+          else if (ch === '\\') esc = true;
+          else if (ch === '"') inStr = false;
+          continue;
+        }
+        if (ch === '"') { inStr = true; continue; }
+        if (ch === '{') depth++;
+        else if (ch === '}') { depth--; if (depth === 0) { closed = j; break; } }
+      }
+      if (closed === -1) return buf.slice(start); // incomplete object, wait for more data
+      try { addParsed(JSON.parse(buf.slice(start, closed + 1))); } catch (e) { /* malformed, ignore */ }
+      i = closed + 1;
+    }
   }
 
   try {
@@ -287,7 +318,7 @@ async function aiSearch() {
     const reader  = res.body.getReader();
     const decoder = new TextDecoder();
     let sseBuf  = '';  // raw SSE frame buffer
-    let lineBuf = '';  // accumulated model text, split into JSON lines
+    let textBuf = '';  // accumulated model text pending object extraction
 
     while (true) {
       const { value, done } = await reader.read();
@@ -306,18 +337,14 @@ async function aiSearch() {
           try {
             const delta = JSON.parse(payload).choices?.[0]?.delta?.content;
             if (delta) {
-              lineBuf += delta;
-              let nl;
-              while ((nl = lineBuf.indexOf('\n')) !== -1) {
-                processLine(lineBuf.slice(0, nl));
-                lineBuf = lineBuf.slice(nl + 1);
-              }
+              textBuf += delta;
+              textBuf = extractObjects(textBuf);
             }
           } catch (e) { /* malformed SSE payload, ignore */ }
         }
       }
     }
-    processLine(lineBuf); // flush trailing partial line
+    extractObjects(textBuf); // flush anything left in the buffer
 
     if (!resultCount) {
       container.innerHTML = '<div class="ai-results"><div class="ai-results-header">No suggestions found — try rephrasing</div></div>';
