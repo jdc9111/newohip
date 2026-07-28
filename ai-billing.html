@@ -230,6 +230,50 @@ async function aiSearch() {
   btn.disabled = true;
   label.innerHTML = '<span class="ai-spinner"></span> Searching...';
   container.style.display = 'none';
+  container.innerHTML = '';
+
+  let tbody = null, cardsEl = null, resultCount = 0;
+
+  function ensureShell() {
+    if (tbody) return;
+    container.innerHTML = `
+      <div class="ai-results">
+        <div class="ai-results-header">✨ AI Suggestions for &ldquo;${query}&rdquo;</div>
+        <table>
+          <thead><tr><th>Code</th><th>Description</th><th>Fee</th></tr></thead>
+          <tbody id="ai-tbody"></tbody>
+        </table>
+        <div class="ai-cards" id="ai-cards"></div>
+      </div>`;
+    tbody   = document.getElementById('ai-tbody');
+    cardsEl = document.getElementById('ai-cards');
+    container.style.display = '';
+  }
+
+  function addResult(r) {
+    if (!r || !r.code) return;
+    ensureShell();
+    resultCount++;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="td-code">${r.code}</td><td>${r.description || ''}</td><td class="td-fee">${r.fee || ''}</td>`;
+    tbody.appendChild(tr);
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="card-code">${r.code}</span>
+        <span class="card-fee">${r.fee || '—'}</span>
+      </div>
+      <div class="card-desc">${r.description || ''}</div>`;
+    cardsEl.appendChild(card);
+  }
+
+  function processLine(raw) {
+    let line = raw.trim();
+    if (!line || line === '[' || line === ']') return;
+    if (line.endsWith(',')) line = line.slice(0, -1);
+    try { addResult(JSON.parse(line)); } catch (e) { /* incomplete/malformed line, ignore */ }
+  }
 
   try {
     const res = await fetch('/.netlify/functions/billing', {
@@ -238,41 +282,47 @@ async function aiSearch() {
       body: JSON.stringify({ query })
     });
 
-    if (!res.ok) throw new Error('Function error ' + res.status);
+    if (!res.ok || !res.body) throw new Error('Function error ' + res.status);
 
-    const data = await res.json();
-    const results = data.results || [];
+    const reader  = res.body.getReader();
+    const decoder = new TextDecoder();
+    let sseBuf  = '';  // raw SSE frame buffer
+    let lineBuf = '';  // accumulated model text, split into JSON lines
 
-    if (!results.length) {
-      container.innerHTML = '<div class="ai-results"><div class="ai-results-header">No suggestions found — try rephrasing</div></div>';
-    } else {
-      const rows = results.map(r =>
-        `<tr>
-          <td class="td-code">${r.code}</td>
-          <td>${r.description}</td>
-          <td class="td-fee">${r.fee || ''}</td>
-        </tr>`
-      ).join('');
-      const cardItems = results.map(r =>
-        `<div class="result-card">
-          <div class="card-top">
-            <span class="card-code">${r.code}</span>
-            <span class="card-fee">${r.fee || '—'}</span>
-          </div>
-          <div class="card-desc">${r.description}</div>
-        </div>`
-      ).join('');
-      container.innerHTML = `
-        <div class="ai-results">
-          <div class="ai-results-header">✨ AI Suggestions for &ldquo;${query}&rdquo;</div>
-          <table>
-            <thead><tr><th>Code</th><th>Description</th><th>Fee</th></tr></thead>
-            <tbody>${rows}</tbody>
-          </table>
-          <div class="ai-cards">${cardItems}</div>
-        </div>`;
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      sseBuf += decoder.decode(value, { stream: true });
+
+      let idx;
+      while ((idx = sseBuf.indexOf('\n\n')) !== -1) {
+        const frame = sseBuf.slice(0, idx);
+        sseBuf = sseBuf.slice(idx + 2);
+        for (const rawLine of frame.split('\n')) {
+          const dataLine = rawLine.trim();
+          if (!dataLine.startsWith('data:')) continue;
+          const payload = dataLine.slice(5).trim();
+          if (payload === '[DONE]') continue;
+          try {
+            const delta = JSON.parse(payload).choices?.[0]?.delta?.content;
+            if (delta) {
+              lineBuf += delta;
+              let nl;
+              while ((nl = lineBuf.indexOf('\n')) !== -1) {
+                processLine(lineBuf.slice(0, nl));
+                lineBuf = lineBuf.slice(nl + 1);
+              }
+            }
+          } catch (e) { /* malformed SSE payload, ignore */ }
+        }
+      }
     }
-    container.style.display = '';
+    processLine(lineBuf); // flush trailing partial line
+
+    if (!resultCount) {
+      container.innerHTML = '<div class="ai-results"><div class="ai-results-header">No suggestions found — try rephrasing</div></div>';
+      container.style.display = '';
+    }
 
   } catch (err) {
     container.innerHTML = '<div class="ai-results"><div class="ai-results-header" style="color:#dc2626">AI search unavailable — please try again</div></div>';
