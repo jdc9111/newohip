@@ -21,3 +21,12 @@
   to = "/ai-search.html"
   status = 301
   force = true
+
+# diag.html's Basic Search was merged into index.html, which now shows both
+# billing and diagnostic results for one query. force = true so the redirect
+# wins over the still-present (now unlinked) static file.
+[[redirects]]
+  from = "/diag.html"
+  to = "/"
+  status = 301
+  force = true
