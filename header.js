@@ -3,7 +3,8 @@
  *
  * Usage:  <app-header active="billing"></app-header>
  *
- * active values: billing | diag | diagref | sedation | fractures | calc
+ * active values: billing | diag | diagref | assessment | specialty | fractures |
+ *                ai-search | sedation | calc
  */
 
 const HEADER_CSS = `
@@ -105,14 +106,17 @@ const HEADER_CSS = `
   .nav-group.grp-billing       { background: rgba(167,139,250,0.16); }
   .nav-group.grp-billingsearch { background: rgba(56,189,248,0.14); }
   .nav-group.grp-diag    { background: rgba(251,113,133,0.14); }
+  .nav-group.grp-ai      { background: rgba(245,158,11,0.16); }
   .nav-group.grp-other   { background: rgba(45,212,191,0.16); }
   .nav-group.grp-billing       { border: 1px solid rgba(167,139,250,0.22); }
   .nav-group.grp-billingsearch { border: 1px solid rgba(56,189,248,0.20); }
   .nav-group.grp-diag          { border: 1px solid rgba(251,113,133,0.20); }
+  .nav-group.grp-ai            { border: 1px solid rgba(245,158,11,0.24); }
   .nav-group.grp-other         { border: 1px solid rgba(45,212,191,0.22); }
   .nav-group-wrap:has(.grp-billing) .nav-group-label { color: #d8ccff; }
   .nav-group-wrap:has(.grp-billingsearch) .nav-group-label { color: #a9e5fb; }
   .nav-group-wrap:has(.grp-diag) .nav-group-label { color: #fecdd3; }
+  .nav-group-wrap:has(.grp-ai) .nav-group-label { color: #fcd34d; }
   .nav-group-wrap:has(.grp-other) .nav-group-label { color: #5eead4; }
 
   .beta-badge {
@@ -197,6 +201,7 @@ const GROUP_LABELS = {
   billing: 'Billing',
   billingsearch: 'Billing Search',
   diag: 'Diagnostic Codes',
+  ai: 'AI Search',
   other: 'Tools',
 };
 
@@ -205,10 +210,9 @@ const NAV_TABS = [
   { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty',       group: 'billing' },
   { key: 'fractures',  href: 'fractures.html',  label: 'Fractures<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">& Dislocations</span>', group: 'billing' },
   { key: 'billing',    href: 'index.html',      label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'billingsearch' },
-  { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search',  group: 'billingsearch' },
   { key: 'diag',       href: 'diag.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Basic</span>Search', group: 'diag' },
-  { key: 'ai-diag',    href: 'ai-diag.html',    label: '&#10024; AI Search',  group: 'diag' },
   { key: 'diagref',    href: 'diagref.html',    label: 'By Specialty',       group: 'diag' },
+  { key: 'ai-search',  href: 'ai-search.html',  label: '&#10024; AI Search',  group: 'ai' },
   { key: 'sedation',   href: 'sedation.html',   label: 'Sedation<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Billing</span>', group: 'other' },
   { key: 'calc',       href: 'calc.html',       label: '<span style="display:block;font-size:0.72em;opacity:0.75;font-weight:500;line-height:1.1">Outside</span>OHIP Billing', group: 'other' },
 ];
@@ -221,7 +225,7 @@ const MOBILE_NAV = {
     defaultKey: 'specialty',
     pages: [
       { key: 'billing',    href: 'index.html',      label: 'Search' },
-      { key: 'ai-billing', href: 'ai-billing.html', label: '&#10024; AI Search' },
+      { key: 'ai-search',  href: 'ai-search.html',  label: '&#10024; AI Search' },
       { key: 'assessment', href: 'assessment.html', label: 'Assessment Codes' },
       { key: 'specialty',  href: 'specialty.html',  label: 'By Specialty' },
       { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; Dislocations' },
@@ -232,9 +236,9 @@ const MOBILE_NAV = {
     heading: 'DIAGNOSTIC CODE PAGES',
     defaultKey: 'diagref',
     pages: [
-      { key: 'diag',    href: 'diag.html',    label: 'Search' },
-      { key: 'ai-diag', href: 'ai-diag.html', label: '&#10024; AI Search' },
-      { key: 'diagref', href: 'diagref.html', label: 'By Specialty' },
+      { key: 'diag',      href: 'diag.html',      label: 'Search' },
+      { key: 'ai-search', href: 'ai-search.html', label: '&#10024; AI Search' },
+      { key: 'diagref',   href: 'diagref.html',   label: 'By Specialty' },
     ],
   },
   tools: {
