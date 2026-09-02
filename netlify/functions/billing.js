@@ -436,3 +436,8 @@ exports.handler = function(event) {
       return { statusCode: 500, body: JSON.stringify({ error: 'Internal error: ' + err.message }) };
     });
 };
+
+// Exposed so other functions (e.g. search.js, the combined billing+diagnostic
+// search) can reuse the same code list and prompt instead of duplicating them.
+exports.BILLING_CODES = BILLING_CODES;
+exports.SYSTEM_PROMPT = SYSTEM_PROMPT;

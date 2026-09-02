@@ -6,3 +6,18 @@
 
 [functions]
   node_bundler = "esbuild"
+
+# ai-billing.html and ai-diag.html were merged into a single AI Search page
+# that returns both billing and diagnostic code suggestions. force = true so
+# the redirect wins over the still-present (now unlinked) static files.
+[[redirects]]
+  from = "/ai-billing.html"
+  to = "/ai-search.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ai-diag.html"
+  to = "/ai-search.html"
+  status = 301
+  force = true
