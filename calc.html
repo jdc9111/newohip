@@ -268,8 +268,24 @@
     font-size: 0.88rem; font-weight: 600; cursor: pointer;
   }
   .btn-generate:hover { background: #163d5e; }
+
+  /* --- header-v2 chrome offsets ---------------------------------
+     Below 900px header-v2 swaps the rail for a fixed 52px top bar and a
+     78px bottom tab bar; above it, a 232px rail occupies the left edge.
+     Page-level fixed/sticky elements have to clear them. */
+  @media (max-width: 900px) {
+    .search-area { top: 52px; }
+  }
+  /* The bill total bar is fixed to the viewport, so it has to start after
+     the rail on desktop and sit above the tab bar on mobile.
+     --sc-rail-w tracks the collapsed rail too. */
+  #total-bar { left: var(--sc-rail-w, 0px); }
+  @media (max-width: 900px) {
+    #total-bar { left: 0; bottom: 78px; }
+    body.sc-shell { padding-bottom: 152px; }
+  }
 </style>
-<script src="header.js?v=22"></script>
+<script src="header-v2.js?v=23"></script>
 </head>
 <body>
 
