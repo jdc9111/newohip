@@ -86,8 +86,16 @@
   }
   footer a { color: #1F4E79; }
 
+
+  /* --- header-v2 chrome offsets ---------------------------------
+     Below 900px header-v2 swaps the rail for a fixed 52px top bar and a
+     78px bottom tab bar; above it, a 232px rail occupies the left edge.
+     Page-level fixed/sticky elements have to clear them. */
+  @media (max-width: 900px) {
+    .search-bar { top: 52px; }
+  }
 </style>
-<script src="header.js?v=22"></script>
+<script src="header-v2.js?v=23"></script>
 <script src="diagData.js?v=1"></script>
 </head>
 <body>
