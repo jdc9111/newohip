@@ -23,133 +23,85 @@
   gtag('js', new Date());
   gtag('config', 'G-YMK3RYM38R');
 </script>
+<link rel="stylesheet" href="steel.css?v=1">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    background: #f0f4f8; color: #1a202c;
-    min-height: 100vh; display: flex; flex-direction: column;
-  }
+  /* Shared foundation → steel.css. Header/nav → header-v2.js.
+     Legacy split AI page; superseded by ai-search.html. */
 
-  .search-bar {
-    background: white;
-    padding: 16px 24px;
-    border-bottom: 1px solid #dde3ed;
-    position: sticky; top: 0; z-index: 10;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
-  }
-  .search-wrap { max-width: 720px; margin: 0 auto; }
-  .ai-input-row { position: relative; }
-  .ai-input-row svg {
-    position: absolute; left: 14px; top: 50%;
-    transform: translateY(-50%); color: #b45309; pointer-events: none;
-  }
-  #ai-query {
-    width: 100%;
-    padding: 13px 14px 13px 44px;
-    font-size: 1rem;
-    border: 2px solid #fcd34d;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.15s;
-    background: #fffbeb;
-  }
-  #ai-query:focus { border-color: #f59e0b; background: white; }
-  #ai-query::placeholder { color: #a16207; opacity: 0.7; }
+  .search-wrap { max-width: 928px; margin: 0 auto; }
+  .ai-input-row { display: flex; gap: 8px; align-items: stretch; }
+  .ai-input-field { flex: 1; }
+
+  /* ai-diag: hint + button row under the input; examples panel in main. */
   .search-actions {
     display: flex; align-items: center; justify-content: space-between;
-    max-width: 720px; margin: 8px auto 0; gap: 12px;
+    margin: 9px 0 0; gap: 12px; flex-wrap: wrap;
   }
-  .ai-hint { font-size: 0.75rem; color: #92400e; }
-  .ai-search-btn {
-    padding: 10px 20px;
-    background: #1F4E79; color: white; border: none;
-    border-radius: 8px; font-size: 0.88rem; font-weight: 600;
-    cursor: pointer; white-space: nowrap;
-    transition: background 0.15s;
-    display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+  .ai-hint {
+    font-family: var(--sc-mono); font-size: 0.63rem; letter-spacing: 0.13em;
+    text-transform: uppercase; color: var(--sc-muted);
   }
-  .ai-search-btn:hover { background: #163d5e; }
-  .ai-search-btn:disabled { background: #93c5fd; cursor: not-allowed; }
-
-  main { flex: 1; max-width: 860px; margin: 24px auto; padding: 0 16px 60px; width: 100%; }
-
   .examples {
-    background: white; border-radius: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    padding: 20px 24px; margin-bottom: 20px;
+    background: #fff; border: 1px solid var(--sc-line);
+    border-radius: 12px; padding: 16px 18px; margin-bottom: 20px;
   }
   .examples-title {
-    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.07em; color: #718096; margin-bottom: 12px;
+    font-family: var(--sc-mono); font-size: 0.64rem; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--sc-muted);
+    margin-bottom: 10px;
   }
-  .example-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .example-chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .example-chip {
-    background: #fffbeb; border: 1.5px solid #fcd34d;
-    border-radius: 20px; padding: 9px 15px;
-    font-size: 0.82rem; color: #92400e; cursor: pointer;
-    transition: all 0.15s;
+    font-family: var(--sc-sans); font-size: 0.76rem; font-weight: 500;
+    color: var(--sc-rail-deep); background: var(--sc-surface);
+    border: 1px solid var(--sc-line); border-radius: 999px;
+    padding: 7px 13px; cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
   }
-  .example-chip:hover { background: #fef3c7; border-color: #f59e0b; }
-  .chip-toggle { display: none; font-weight: 700; }
-  @media (max-width: 640px) {
-    .chip-extra { display: none; }
-    .chip-toggle { display: block; }
-    .example-chips.expanded .chip-extra { display: block; }
-  }
+  .example-chip:hover { background: #E4EEF7; border-color: #B9D2E6; }
 
-  .ai-results {
-    background: #fffbeb; border: 1.5px solid #fcd34d;
-    border-radius: 10px; overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  /* ── Results ── */
+  .ai-results table { border: none; border-radius: 0; }
+  .ai-results thead th:nth-child(1) { width: 90px; text-align: center; }
+  .ai-results thead th:nth-child(3) { width: 85px; text-align: right; }
+  .td-code {
+    text-align: center; font-weight: 700; font-size: 0.92rem;
+    color: var(--sc-rail-deep); letter-spacing: 0.03em; white-space: nowrap;
   }
+  .td-fee { text-align: right; font-weight: 600; color: var(--sc-rail-deep); white-space: nowrap; }
+
+  /* Doubles as the results caption and the empty / error message. */
   .ai-results-header {
-    background: #fef3c7; border-bottom: 1px solid #fcd34d;
-    padding: 10px 16px; font-size: 0.75rem; font-weight: 700;
-    color: #92400e; text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 11px 16px;
+    font-family: var(--sc-mono); font-size: 0.64rem; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--sc-muted);
+    border-bottom: 1px solid var(--sc-line);
   }
-  .ai-results table {
-    width: 100%; border-collapse: collapse;
-    background: white;
-  }
-  .ai-results thead th {
-    background: #1F4E79; color: white; font-size: 0.75rem;
-    font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
-    padding: 9px 14px; text-align: left;
-  }
-  .ai-results thead th:first-child { width: 90px; }
-  .ai-results tbody tr { border-bottom: 1px solid #edf2f7; }
-  .ai-results tbody tr:last-child { border-bottom: none; }
-  .ai-results tbody tr:hover { background: #fef9e7; }
-  .ai-results td { padding: 10px 14px; font-size: 0.88rem; vertical-align: middle; }
-  .td-code { font-weight: 700; color: #1F4E79; white-space: nowrap; text-align: center; }
+  .ai-results-header:last-child { border-bottom: none; padding: 22px 16px; text-align: center; }
 
   .ai-spinner {
-    display: inline-block; width: 14px; height: 14px;
-    border: 2px solid #fcd34d; border-top-color: #b45309;
+    display: inline-block; width: 13px; height: 13px;
+    border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff;
     border-radius: 50%; animation: spin 0.7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  .disclaimer {
-    margin-top: 16px; padding: 10px 16px;
-    background: white; border-radius: 8px; border-left: 3px solid #cbd5e0;
-    font-size: 0.75rem; color: #718096;
-  }
+  .disclaimer { margin-top: 16px; }
+  .ai-cards { display: none; padding: 8px; gap: 8px; flex-direction: column; }
 
-  footer {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    text-align: center; padding: 8px 24px; font-size: 0.78rem;
-    color: #718096; background: white; border-top: 1px solid #dde3ed; z-index: 10;
-  }
-  footer a { color: #1F4E79; }
+  @media (max-width: 640px) {
+    .ai-input-row { flex-wrap: wrap; }
+    .ai-input-field { flex-basis: 100%; }
+    .ai-search-btn { flex: 1 1 100%; }
+    .search-actions .ai-search-btn { flex: 1 1 auto; }
+    .example-chips .chip-extra { display: none; }
+    .example-chips .chip-toggle { display: block; }
+    .example-chips.expanded .chip-extra { display: block; }
 
-  /* --- header-v2 chrome offsets ---------------------------------
-     Below 900px header-v2 swaps the rail for a fixed 52px top bar and a
-     78px bottom tab bar; above it, a 232px rail occupies the left edge.
-     Page-level fixed/sticky elements have to clear them. */
-  @media (max-width: 900px) {
-    .search-bar { top: 52px; }
+    .ai-results { background: none; border: none; border-radius: 0; overflow: visible; }
+    .ai-results table { display: none !important; }
+    .ai-results-header { background: #fff; border: 1px solid var(--sc-line); border-radius: 10px; margin-bottom: 8px; }
+    .ai-cards { display: flex; padding: 0; }
   }
 </style>
 <script src="header-v2.js?v=23"></script>
@@ -160,19 +112,17 @@
 
 <div class="search-bar">
   <div class="search-wrap">
-    <div class="ai-input-row">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-        <path d="M12 2a10 10 0 1 0 10 10"/><path d="m22 2-10 10"/><path d="M15 2h5v5"/>
-      </svg>
-      <input id="ai-query" type="text"
+    <div class="ai-input-row sc-input-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3"></path></svg>
+      <input id="ai-query" class="sc-input" type="text"
         placeholder="e.g. afib, PE, shingles, BPPV, OD, chest pain, blocked bowel..."
         autocomplete="off">
       <script>if (matchMedia('(min-width: 641px)').matches) document.getElementById('ai-query').focus();</script>
     </div>
     <div class="search-actions">
-      <span class="ai-hint">&#10024; Understands abbreviations &amp; synonyms &mdash; powered by AI</span>
-      <button class="ai-search-btn" id="ai-btn" onclick="aiSearch()">
-        <span id="ai-btn-label">&#10024; AI Search</span>
+      <span class="ai-hint">AI &middot; understands abbreviations &amp; synonyms</span>
+      <button class="ai-search-btn sc-btn" id="ai-btn" onclick="aiSearch()">
+        <span id="ai-btn-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3"></path></svg> Search</span>
       </button>
     </div>
   </div>
@@ -194,8 +144,8 @@
 
   <div id="ai-results-container" style="display:none"></div>
 
-  <div class="disclaimer">
-    &#9888;&#65039; AI suggestions should always be verified against current OHIP billing guidelines before submission.
+  <div class="disclaimer sc-note">
+    AI suggestions should always be verified against current OHIP billing guidelines before submission.
   </div>
 </main>
 
@@ -239,14 +189,14 @@ async function aiSearch() {
     examples.style.display = 'none';
 
     if (!results.length) {
-      container.innerHTML = '<div class="ai-results"><div class="ai-results-header">No suggestions found &mdash; try rephrasing</div></div>';
+      container.innerHTML = '<div class="ai-results sc-card"><div class="ai-results-header">No suggestions found &mdash; try rephrasing</div></div>';
     } else {
       const rows = results.map(r =>
         '<tr><td class="td-code">' + r.code + '</td><td>' + r.description + '</td></tr>'
       ).join('');
       container.innerHTML =
-        '<div class="ai-results">' +
-          '<div class="ai-results-header">&#10024; AI Suggestions for &ldquo;' + query + '&rdquo;</div>' +
+        '<div class="ai-results sc-card">' +
+          '<div class="ai-results-header">AI suggestions for &ldquo;' + query + '&rdquo;</div>' +
           '<table>' +
             '<thead><tr><th>Code</th><th>Diagnosis</th></tr></thead>' +
             '<tbody>' + rows + '</tbody>' +
@@ -257,12 +207,12 @@ async function aiSearch() {
 
   } catch (err) {
     examples.style.display = 'none';
-    container.innerHTML = '<div class="ai-results"><div class="ai-results-header" style="color:#dc2626">AI search unavailable &mdash; please try again</div></div>';
+    container.innerHTML = '<div class="ai-results sc-card"><div class="ai-results-header" style="color:#dc2626">AI search unavailable &mdash; please try again</div></div>';
     container.style.display = '';
     console.error(err);
   } finally {
     btn.disabled = false;
-    label.innerHTML = '&#10024; AI Search';
+    label.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3"></path></svg> Search';
   }
 }
 
