@@ -1,0 +1,395 @@
+/**
+ * steel.css — ShiftCodes shared foundation ("Steel", 5a)
+ *
+ * Tokens mirror header-v2.js. Every page links this BEFORE its own <style>,
+ * so page-level rules win on equal specificity. Page styles should only
+ * add what is specific to that page; anything two pages share lives here.
+ */
+
+:root {
+  --sc-rail:        #2C6FA8;
+  --sc-rail-deep:   #1B5183;
+  --sc-accent:      #FFC53D;
+  --sc-accent-ink:  #0F1A24;
+  --sc-accent-wash: #FFF6E1;
+  --sc-accent-line: #EFD79A;
+  --sc-ink:         #0F1A24;
+  --sc-surface:     #F2F6FA;
+  --sc-line:        #DDE7F0;
+  --sc-muted:       #55636F;
+  --sc-hover:       #EAF2F9;   /* row / control hover wash */
+  --sc-tint:        #D7E6F4;   /* category pill ground */
+  --sc-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --sc-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--sc-sans);
+  background: var(--sc-surface);
+  color: var(--sc-ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────── */
+
+/* align-self + width, not auto margins: inside a column flex container
+   auto side-margins cancel stretch, so <main> would collapse to its
+   content width whenever a page had little in it. */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
+  align-self: center;
+  margin: 22px 0 0;
+  padding: 0 16px 60px;
+}
+@media (max-width: 640px) {
+  main { padding-left: 12px; padding-right: 12px; }
+}
+
+/* ── Type ───────────────────────────────────────────────────────────── */
+
+/* Mono micro-label: section eyebrows, table heads, status lines. */
+.sc-eyebrow,
+.results-section-title,
+.hint {
+  font-family: var(--sc-mono);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sc-muted);
+}
+.results-section-title {
+  margin-bottom: 9px;
+  display: flex; align-items: center; gap: 7px;
+}
+.results-section-title svg { color: var(--sc-rail); flex-shrink: 0; }
+.hint { margin: 8px 0 0; font-size: 0.63rem; font-weight: 400; letter-spacing: 0.13em; }
+
+.page-title,
+.specialty-title,
+.extremity-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--sc-ink);
+  letter-spacing: -0.01em;
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--sc-line);
+}
+
+mark {
+  background: #FFE9AE;
+  border-radius: 2px;
+  padding: 0 1px;
+  color: inherit;
+}
+
+/* ── Sticky search toolbar ──────────────────────────────────────────── */
+
+.search-bar {
+  background: #fff;
+  padding: 14px 16px 13px;
+  border-bottom: 1px solid var(--sc-line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+@media (min-width: 901px) {
+  .search-bar { padding-top: 26px; }
+}
+/* header-v2 swaps to a fixed 52px top bar below 900px. */
+@media (max-width: 900px) {
+  .search-bar { top: 52px; }
+}
+@media (max-width: 640px) {
+  .search-bar { padding: 12px; }
+}
+
+/* One column, edge-aligned with <main>'s content (960 − 2×16). */
+.search-toolbar {
+  max-width: 928px;
+  margin: 0 auto;
+}
+
+/* Text input with a leading icon. Wrap: <div class="sc-input-wrap"><svg/><input class="sc-input"></div> */
+.sc-input-wrap { position: relative; }
+.sc-input-wrap > svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #93A2AF;
+  pointer-events: none;
+}
+.sc-input {
+  width: 100%;
+  padding: 14px 14px 14px 42px;
+  font-family: var(--sc-sans);
+  font-size: 0.95rem;
+  color: var(--sc-ink);
+  border: 1.5px solid var(--sc-line);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: #fff;
+}
+.sc-input::placeholder { color: #93A2AF; }
+.sc-input:focus {
+  border-color: var(--sc-rail);
+  box-shadow: 0 0 0 3px rgba(44, 111, 168, 0.14);
+}
+@media (max-width: 640px) {
+  .sc-input { padding: 13px 14px 13px 42px; }
+}
+
+.search-examples {
+  margin: 9px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.search-chip {
+  font-family: var(--sc-sans);
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--sc-rail-deep);
+  background: var(--sc-surface);
+  border: 1px solid var(--sc-line);
+  border-radius: 999px;
+  padding: 7px 13px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.search-chip:hover { background: #E4EEF7; border-color: #B9D2E6; }
+.chip-toggle { display: none; font-weight: 700; }
+@media (max-width: 640px) {
+  .chip-extra { display: none; }
+  .chip-toggle { display: block; }
+  .search-examples.expanded .chip-extra { display: block; }
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────── */
+
+.sc-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 0 18px;
+  min-height: 44px;
+  font-family: var(--sc-sans); font-size: 0.86rem; font-weight: 600;
+  color: #fff; background: var(--sc-rail-deep);
+  border: none; border-radius: 10px;
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.15s;
+}
+.sc-btn:hover { background: var(--sc-rail); }
+.sc-btn:disabled { background: #9FB9D0; cursor: not-allowed; }
+.sc-btn svg { flex-shrink: 0; }
+
+/* ── Cards & tables ─────────────────────────────────────────────────── */
+
+.sc-card {
+  background: #fff;
+  border: 1px solid var(--sc-line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--sc-line);
+}
+thead th {
+  background: var(--sc-rail-deep);
+  color: #fff;
+  font-family: var(--sc-mono);
+  font-size: 0.64rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  padding: 11px 14px;
+  text-align: left;
+}
+tbody tr { border-bottom: 1px solid #edf2f7; transition: background 0.1s; }
+tbody tr:nth-child(even) { background: #FAFCFE; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--sc-hover); }
+td { padding: 10px 14px; font-size: 0.88rem; vertical-align: top; }
+
+.cat-pill {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sc-rail-deep);
+  background: var(--sc-tint);
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-top: 3px;
+}
+.note { font-size: 0.76rem; color: var(--sc-muted); margin-top: 3px; }
+
+/* Amber-ruled note / disclaimer. */
+.sc-note {
+  padding: 11px 14px;
+  background: #fff;
+  border: 1px solid var(--sc-line);
+  border-left: 3px solid var(--sc-accent);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: var(--sc-muted);
+  line-height: 1.5;
+}
+
+/* ── Accordion + code rows (reference pages) ───────────────────────── */
+
+.accordion {
+  margin-bottom: 8px;
+  background: #fff;
+  border: 1px solid var(--sc-line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.accordion-header {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%;
+  padding: 13px 16px;
+  background: #fff;
+  color: var(--sc-ink);
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.accordion-header:hover { background: var(--sc-hover); }
+.accordion-header.open { background: var(--sc-rail-deep); color: #fff; }
+.accordion-title { font-size: 0.95rem; font-weight: 700; }
+.accordion-meta { font-size: 0.75rem; opacity: 0.65; margin-left: 10px; font-weight: 400; }
+.accordion-chevron { font-size: 0.8rem; transition: transform 0.2s; flex-shrink: 0; margin-left: 12px; }
+.accordion-header.open .accordion-chevron { transform: rotate(180deg); }
+.accordion-body {
+  display: none;
+  background: #fff;
+  border-top: 1px solid var(--sc-line);
+}
+.accordion-body.open { display: block; }
+
+.code-row {
+  display: flex; align-items: baseline;
+  padding: 9px 16px;
+  gap: 10px;
+  font-size: 0.88rem;
+  border-bottom: 1px solid #edf2f7;
+}
+.code-row:last-child { border-bottom: none; }
+.code-row:nth-child(even) { background: #FAFCFE; }
+.row-code {
+  font-weight: 700; color: var(--sc-rail-deep);
+  font-size: 0.9rem; letter-spacing: 0.03em;
+  min-width: 52px; flex-shrink: 0;
+}
+.row-desc { flex: 1; color: var(--sc-ink); }
+.row-note { font-size: 0.75rem; color: var(--sc-muted); margin-top: 2px; }
+.row-fee {
+  font-weight: 600; color: var(--sc-rail-deep);
+  white-space: nowrap; flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Grouped sections on the reference pages. */
+.specialty-section, .extremity-section { margin-bottom: 36px; }
+
+/* Indented child rows (e.g. with/without reduction variants). */
+.row-indent { padding-left: 28px; }
+.row-indent .row-code { color: var(--sc-rail); }
+
+/* Amber-ruled note row inside an accordion body. */
+.cast-note-row, .billing-note-row {
+  background: var(--sc-accent-wash);
+  border-left: 3px solid var(--sc-accent);
+  padding: 10px 16px;
+}
+.cast-billing-note, .billing-note-text {
+  font-size: 0.82rem; font-weight: 600; color: #6B5A2E;
+}
+
+/* Mono sub-heading inside an accordion body (time periods, sub-groups). */
+.time-subhead {
+  padding: 8px 16px;
+  font-family: var(--sc-mono);
+  font-size: 0.62rem; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--sc-muted);
+  background: var(--sc-surface);
+  border-bottom: 1px solid var(--sc-line);
+}
+
+.info-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #E3EAF1; color: var(--sc-muted);
+  font-size: 0.65rem; font-weight: 800; line-height: 1;
+  border: none; cursor: pointer; margin-left: 6px;
+  vertical-align: middle; flex-shrink: 0;
+  transition: background 0.15s;
+}
+.info-btn:hover, .info-btn.open { background: var(--sc-rail-deep); color: #fff; }
+.ext-note {
+  display: none; margin-top: 8px; padding: 10px 12px;
+  background: var(--sc-surface);
+  border-left: 3px solid var(--sc-rail);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.78rem; color: var(--sc-ink); line-height: 1.6;
+}
+.ext-note.open { display: block; }
+.ext-note ul { margin: 4px 0 0 14px; }
+.ext-note li { margin-bottom: 2px; }
+
+/* ── Empty states ───────────────────────────────────────────────────── */
+
+.empty-art {
+  width: 44px; height: 44px; margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--sc-surface);
+  border: 1px solid var(--sc-line);
+  color: var(--sc-rail);
+  display: flex; align-items: center; justify-content: center;
+}
+.empty-title { font-size: 0.95rem; font-weight: 600; color: var(--sc-ink); }
+.empty-sub {
+  margin-top: 5px; font-size: 0.82rem; color: var(--sc-muted);
+  line-height: 1.5; max-width: 38ch; margin-left: auto; margin-right: auto;
+}
+.empty-chips {
+  margin-top: 15px; display: flex; flex-wrap: wrap;
+  gap: 6px; justify-content: center;
+}
+
+/* ── Mobile result cards ────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .result-card {
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid var(--sc-line);
+    padding: 13px 16px;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .card-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 1px;
+  }
+  .card-code { font-size: 1.05rem; font-weight: 700; color: var(--sc-rail-deep); letter-spacing: 0.03em; }
+  .card-fee  { font-size: 1.05rem; font-weight: 700; color: var(--sc-rail-deep); }
+  .card-desc { font-size: 0.9rem; color: var(--sc-ink); line-height: 1.4; }
+}

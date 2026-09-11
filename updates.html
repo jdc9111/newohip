@@ -18,41 +18,26 @@
   gtag('js', new Date());
   gtag('config', 'G-YMK3RYM38R');
 </script>
+<link rel="stylesheet" href="steel.css?v=1">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* Shared foundation → steel.css. Header/nav → header-v2.js. */
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    background: #f0f4f8;
-    color: #1a202c;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* header/nav styles → header.js */
-
-  main {
-    flex: 1;
-    max-width: 720px;
-    margin: 32px auto;
-    padding: 0 16px 60px;
-    width: 100%;
-  }
+  main { max-width: 760px; }
 
   h2 {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    color: #1F4E79;
-    margin-bottom: 20px;
+    color: var(--sc-ink);
+    letter-spacing: -0.01em;
     padding-bottom: 10px;
-    border-bottom: 2px solid #BDD7EE;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--sc-line);
   }
 
   .card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    background: #fff;
+    border: 1px solid var(--sc-line);
+    border-radius: 12px;
     overflow: hidden;
   }
 
@@ -64,10 +49,10 @@
     border-bottom: 1px solid #edf2f7;
   }
   .note-row:last-child { border-bottom: none; }
-  .note-row:hover { background: #ebf3fb; }
+  .note-row:hover { background: var(--sc-hover); }
 
   .bullet {
-    color: #1F4E79;
+    color: var(--sc-rail);
     font-size: 1.1rem;
     flex-shrink: 0;
     line-height: 1;
@@ -77,10 +62,11 @@
 
   .code {
     display: inline-block;
-    font-weight: 700;
-    font-size: 0.88rem;
-    color: #1F4E79;
-    background: #BDD7EE;
+    font-family: var(--sc-mono);
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--sc-rail-deep);
+    background: var(--sc-tint);
     border-radius: 4px;
     padding: 1px 6px;
     margin-right: 3px;
@@ -88,12 +74,13 @@
 
   .new-badge {
     display: inline-block;
-    font-size: 0.68rem;
-    font-weight: 700;
+    font-family: var(--sc-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: white;
-    background: #276749;
+    letter-spacing: 0.12em;
+    color: var(--sc-accent-ink);
+    background: var(--sc-accent);
     border-radius: 4px;
     padding: 2px 6px;
     margin-right: 4px;
@@ -102,24 +89,11 @@
 
   .fee-change {
     font-size: 0.82rem;
-    color: #718096;
+    color: var(--sc-muted);
     margin-top: 2px;
   }
-  .fee-change s { color: #a0aec0; }
-  .fee-change strong { color: #276749; }
-
-  footer {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    text-align: center;
-    padding: 8px 24px;
-    font-size: 0.78rem;
-    color: #718096;
-    background: white;
-    border-top: 1px solid #dde3ed;
-    z-index: 10;
-  }
-  footer a { color: #1F4E79; }
+  .fee-change s { color: #93A2AF; }
+  .fee-change strong { color: var(--sc-rail-deep); }
 </style>
 <script src="header-v2.js?v=23"></script>
 </head>
