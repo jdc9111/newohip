@@ -186,7 +186,7 @@
   }
 </style>
 <script src="header-v2.js?v=23"></script>
-<script src="diagData.js?v=1"></script>
+<script src="diagData.js?v=2"></script>
 </head>
 <body>
 
@@ -615,6 +615,7 @@ const DATA = [
   ["S768","Spontaneous abortion, incomplete - including D&C",113.40,"Obstetrics & Gynaecology",""],
   ["A922","Medical management of ectopic pregnancy - initial service",207.80,"Obstetrics & Gynaecology","Consultations, assessments, and counselling not billable same day"],
   ["G900","Residual urine measurement by ultrasound (post-void residual)",12.70,"Urology","Not billable with pelvic or intracavitary ultrasound"],
+  ["Z786","Priapism – emergency management",250.00,"Urology","NEW April 2026; aspiration, intracavernosal sympathomimetic or shunt"],
   ["G125","Caudal/lumbar epidural with catheter",100.00,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["G218","Nerve block - ilioinguinal and iliohypogastric nerves",54.65,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["G219","Nerve block - infraorbital nerve",34.20,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
@@ -760,6 +761,12 @@ const EXTENDED_NOTES = {
   "H134": REASSESSMENT_NOTE,
   "H154": REASSESSMENT_NOTE,
   "H124": REASSESSMENT_NOTE,
+  "Z786": `<ul>
+    <li>New fee code effective April 1, 2026 (MOH new fee codes list)</li>
+    <li>Genitourinary System surgical procedures section of the Schedule of Benefits, alongside the other Z7xx urologic and genital emergency / operative services</li>
+    <li>Physician fee for emergency management of priapism: corporal aspiration ± irrigation, intracavernosal injection of a sympathomimetic (e.g. phenylephrine), or a shunt procedure</li>
+    <li>Diagnostic code: 607 (disorders of penis, incl. priapism)</li>
+  </ul>`,
   "E420": `<ul>
     <li>ISS &gt; 15 if patient is ≥ 16 years old</li>
     <li>ISS &gt; 12 if patient is &lt; 16 years old</li>

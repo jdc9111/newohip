@@ -344,6 +344,7 @@ var BILLING_CODES = [
   "S768 (Obstetrics & Gynaecology): Spontaneous abortion, incomplete - including D&C -- Exact fee $113.40",
   "A922 (Obstetrics & Gynaecology): Medical management of ectopic pregnancy - initial service -- Consultations, assessments, and counselling not billable same day -- Exact fee $207.80",
   "G900 (Urology): Residual urine measurement by ultrasound (post-void residual) -- Not billable with pelvic or intracavitary ultrasound -- Exact fee $12.70",
+  "Z786 (Urology): Priapism – emergency management -- NEW April 2026; aspiration, intracavernosal sympathomimetic or shunt -- Exact fee $250.00",
   "G125 (Nerve Blocks): Caudal/lumbar epidural with catheter -- For acute pain management only (>4 hr duration) -- Exact fee $100.00",
   "G218 (Nerve Blocks): Nerve block - ilioinguinal and iliohypogastric nerves -- For acute pain management only (>4 hr duration) -- Exact fee $54.65",
   "G219 (Nerve Blocks): Nerve block - infraorbital nerve -- For acute pain management only (>4 hr duration) -- Exact fee $34.20",

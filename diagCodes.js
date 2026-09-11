@@ -643,7 +643,7 @@ export const diagCodes = [
 
   {
     code: "607",
-    description: "Balanitis",
+    description: "Balanitis / priapism (disorders of penis)",
     category: "gu",
   },
   {

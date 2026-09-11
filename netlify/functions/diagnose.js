@@ -123,7 +123,7 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 437 (neuro): Stroke (chronic)
 435 (neuro): TIA
 780 (neuro): Vertigo
-607 (gu): Balanitis
+607 (gu): Balanitis / priapism (disorders of penis)
 600 (gu): BPH
 604 (gu): Epididymitis, orchitis
 599 (gu): Hematuria, proteinuria, incontinence, renal problem
