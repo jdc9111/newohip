@@ -75,6 +75,16 @@
   }
   .reminder-dismiss:hover { opacity: 1; background: #FFE9B0; }
 
+  /* ── Favourites chip ── */
+  .chip-fav { font-weight: 600; }
+  .chip-fav.active {
+    background: var(--sc-accent); border-color: #E0AE2A; color: var(--sc-accent-ink);
+  }
+  .chip-fav.active:hover { background: #F5BB2E; border-color: #D9A526; }
+  /* Locked favourites view: only the ★ chip (which exits the view) is relevant. */
+  body.fav-view .search-examples .search-chip:not(.chip-fav) { display: none; }
+  body.fav-view .chip-fav::after { content: " · show all"; font-weight: 500; opacity: .8; }
+
   /* ── Results ── */
   .results-section { margin-bottom: 28px; }
   .results-section:last-child { margin-bottom: 0; }
@@ -101,6 +111,15 @@
     border: 1px solid var(--sc-line);
     border-radius: 12px;
   }
+  #fav-empty {
+    text-align: center;
+    padding: 44px 20px 48px;
+    background: #fff;
+    border: 1px solid var(--sc-line);
+    border-radius: 12px;
+  }
+  #fav-empty .empty-art { font-size: 22px; color: var(--sc-accent); }
+  #fav-empty .empty-sub a { color: var(--sc-rail-deep); }
   #diag-empty {
     display: none;
     text-align: center; padding: 26px 20px 28px;
@@ -185,8 +204,10 @@
     .card-ext-note li { margin-bottom: 2px; }
   }
 </style>
-<script src="header-v2.js?v=23"></script>
+<script src="header-v2.js?v=24"></script>
 <script src="diagData.js?v=2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+<script src="favourites.js?v=5"></script>
 </head>
 <body>
 
@@ -205,6 +226,7 @@
   </div>
   <p class="hint">Billing + diagnostic codes</p>
   <div class="search-examples" id="searchExamples">
+    <span class="search-chip chip-fav" id="favChip" onclick="toggleFavMode()" style="display:none" title="Show only your starred codes">★ Favourites</span>
     <span class="search-chip" onclick="setQuery('night premium')">night premium</span>
     <span class="search-chip" onclick="setQuery('G521')">G521</span>
     <span class="search-chip" onclick="setQuery('fracture reduction')">fracture reduction</span>
@@ -220,6 +242,8 @@
 <main>
 
 <div id="cotd-banner"></div>
+
+<div id="fav-empty" style="display:none"></div>
 
 <div id="billing-results" class="results-section" style="display:none">
   <div class="results-section-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M14.5 9h-3.2a1.8 1.8 0 0 0 0 3.6h1.4a1.8 1.8 0 0 1 0 3.6H9.5M12 7.2v1.8M12 15v1.8"></path></svg> Billing codes</div>
@@ -698,38 +722,132 @@ const diagEmpty   = document.getElementById("diag-empty");
 const diagTbl     = document.getElementById("diag-tbl");
 const diagTbody   = document.getElementById("diag-tbody");
 
+// ── Favourites ────────────────────────────────────────────────────────────────
+// favMode narrows results to starred codes: with a query, only starred
+// matches; with an empty query, the full starred list (newest first). Off by
+// default so the home screen stays blank — the ★ chip or a nav tab turns it on.
+let favMode = false;
+
+// The nav's "Favourites" tabs open index.html?fav=billing|diag: a view locked
+// to that kind's starred codes, with the search box narrowing within them.
+const favKind = (() => {
+  const k = new URLSearchParams(location.search).get('fav');
+  return k === 'billing' || k === 'diag' ? k : null;
+})();
+if (favKind) {
+  favMode = true;
+  document.body.classList.add('fav-view');
+  document.getElementById('query').placeholder =
+    favKind === 'billing' ? 'Search your favourite billing codes…' : 'Search your favourite diagnostic codes…';
+  document.querySelector('.hint').textContent =
+    favKind === 'billing' ? 'Favourites · billing codes' : 'Favourites · diagnostic codes';
+}
+
+function toggleFavMode() {
+  if (favKind) { location.href = 'index.html'; return; }   // leave the locked view
+  favMode = !favMode;
+  document.getElementById('favChip').classList.toggle('active', favMode);
+  rerender();
+}
+
+function rerender() {
+  const q = document.getElementById('query').value;
+  render(q); renderDiag(q);
+}
+
+// Rows to show for a given kind: scored search results, or — in favourites
+// mode with an empty query — the user's favourites in most-recent-first order.
+function pickRows(rows, tokens, kind, q) {
+  if (favKind && kind !== favKind) return { results: [], mode: 'blank' };
+  const favs = Fav.list(kind);
+  if (!q) {
+    if (!favMode) return { results: [], mode: 'blank' };
+    if (!favs.length) return { results: [], mode: favKind ? 'favs' : 'blank' };
+    const byCode = new Map(rows.map(r => [r[0], r]));
+    // Codes starred on a browse page may not be in the search dataset; show
+    // them with the description captured when they were starred.
+    const fallback = c => kind === 'billing'
+      ? [c, Fav.labelOf(kind, c) || 'Saved from a reference page', null, '', '']
+      : [c, Fav.labelOf(kind, c) || 'Saved from a reference page'];
+    return { results: favs.map(c => byCode.get(c) || fallback(c)).map(r => ({ r })), mode: 'favs' };
+  }
+  const only = favMode ? new Set(favs) : null;
+  const results = rows
+    .map((r, i) => ({ r, s: (only && !only.has(r[0])) ? 0 : score(tokens[i], q) }))
+    .filter(x => x.s > 0)
+    .sort((a, b) => b.s - a.s);
+  return { results, mode: only ? 'favsearch' : 'search' };
+}
+
+// Locked favourites view with nothing to show: explain why, per sign-in state.
+function renderFavEmpty() {
+  const el = document.getElementById('fav-empty');
+  if (!favKind) { el.style.display = 'none'; return; }
+  const q = document.getElementById('query').value.trim();
+  const none = Fav.list(favKind).length === 0;
+  el.style.display = (!q && none) ? '' : 'none';
+  if (!(!q && none)) return;
+  const noun = favKind === 'billing' ? 'billing' : 'diagnostic';
+  el.innerHTML = Fav.user
+    ? `<div class="empty-art">★</div>
+       <p class="empty-title">No favourite ${noun} codes yet</p>
+       <p class="empty-sub">Star a code in <a href="index.html">Search</a> and it'll show up here on every device you sign in on.</p>`
+    : `<div class="empty-art">★</div>
+       <p class="empty-title">Sign in to see your favourites</p>
+       <p class="empty-sub">Your starred codes follow you to every workstation and your phone.</p>
+       <button type="button" class="sc-btn" onclick="Fav.openSignIn()" style="margin-top:14px">Sign in</button>`;
+}
+
+function statusText(n, q, mode) {
+  const plural = n === 1 ? '' : 's';
+  if (mode === 'favs')      return `★ ${n} favourite${plural}`;
+  if (mode === 'favsearch') return `${n} favourite${plural} for "${q}"`;
+  return `${n} result${plural} for "${q}"`;
+}
+
+Fav.onChange(() => {
+  const chip = document.getElementById('favChip');
+  const show = favKind || (!!Fav.user && Fav.count > 0);
+  chip.style.display = show ? '' : 'none';
+  chip.classList.toggle('active', favMode);
+  if (!show && favMode) { favMode = false; chip.classList.remove('active'); }
+  renderFavEmpty();
+  // Only re-render when the visible set could have changed (favourites view
+  // or a narrowed search); a star toggle inside plain results keeps its
+  // place until the next keystroke so the row doesn't jump.
+  const q = document.getElementById('query').value.trim();
+  if (!q || favMode) rerender();
+});
+
 function renderDiag(query) {
   const q = (query || "").trim();
-  diagSection.style.display = q ? "" : "none";
   diagTbody.innerHTML = "";
 
-  if (!q) {
+  const { results, mode } = pickRows(DIAG, DIAG_TOKENS, 'diag', q);
+  diagSection.style.display = mode === 'blank' ? "none" : "";
+  if (mode === 'blank') {
     diagTbl.style.display = "none";
     diagEmpty.style.display = "none";
     diagStatus.textContent = "";
     return;
   }
 
-  const results = DIAG
-    .map((r, i) => ({ r, s: score(DIAG_TOKENS[i], q) }))
-    .filter(x => x.s > 0)
-    .sort((a, b) => b.s - a.s);
-
   if (results.length === 0) {
     diagTbl.style.display = "none";
-    diagEmpty.style.display = "block";
+    diagEmpty.style.display = mode === 'favs' ? "none" : "block";
     diagStatus.textContent = "";
+    if (mode === 'favs') diagSection.style.display = "none";
     return;
   }
 
   diagTbl.style.display = "";
   diagEmpty.style.display = "none";
-  diagStatus.textContent = `${results.length} result${results.length === 1 ? "" : "s"} for "${q}"`;
+  diagStatus.textContent = statusText(results.length, q, mode);
 
   const frag = document.createDocumentFragment();
   for (const { r } of results) {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${highlight(r[0], q)}</td><td>${highlight(r[1], q)}</td>`;
+    tr.innerHTML = `<td><span class="fav-code">${Fav.btn('diag', r[0])}${highlight(r[0], q)}</span></td><td>${highlight(r[1], q)}</td>`;
     frag.appendChild(tr);
   }
   diagTbody.appendChild(frag);
@@ -868,34 +986,29 @@ function toggleExtNote(btn) {
 
 function render(query) {
   const q = (query || "").trim();
-  billingSection.style.display = q ? "" : "none";
-
   tbody.innerHTML = "";
-
   cards.innerHTML = "";
 
-  if (!q) {
+  const { results, mode } = pickRows(DATA, SEARCH_TOKENS, 'billing', q);
+  billingSection.style.display = mode === 'blank' ? "none" : "";
+  if (mode === 'blank') {
     tbl.style.display = "none";
     empty.style.display = "none";
     status.textContent = "";
     return;
   }
 
-  const results = DATA
-    .map((r, i) => ({ r, s: score(SEARCH_TOKENS[i], q) }))
-    .filter(x => x.s > 0)
-    .sort((a, b) => b.s - a.s);
-
   if (results.length === 0) {
     tbl.style.display = "none";
-    empty.style.display = "block";
+    empty.style.display = mode === 'favs' ? "none" : "block";
     status.textContent = "";
+    if (mode === 'favs') billingSection.style.display = "none";
     return;
   }
 
   tbl.style.display = "";
   empty.style.display = "none";
-  status.textContent = `${results.length} result${results.length === 1 ? "" : "s"} for "${q}"`;
+  status.textContent = statusText(results.length, q, mode);
 
 
   const frag = document.createDocumentFragment();
@@ -907,7 +1020,7 @@ function render(query) {
     // Desktop table row
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${highlight(code, q)}</td>
+      <td><span class="fav-code">${Fav.btn('billing', code)}${highlight(code, q)}</span></td>
       <td>
         ${highlight(desc, q)}${extNote ? `<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">i</button><div class="ext-note">${extNote}</div>` : ""}
         <div class="cat-pill">${highlight(cat, q)}</div>
@@ -922,7 +1035,7 @@ function render(query) {
     const hasDetails = !!(cat || notes || extNote);
     card.innerHTML = `
       <div class="card-top">
-        <span class="card-code">${highlight(code, q)}</span>
+        <span class="card-code fav-code">${Fav.btn('billing', code)}${highlight(code, q)}</span>
         <span class="card-fee">${feeStr}</span>
       </div>
       <div class="card-desc">${highlight(desc, q)}</div>
@@ -969,6 +1082,7 @@ document.getElementById("query").addEventListener("input", e => {
 // initial render
 render("");
 renderDiag("");
+renderFavEmpty();
 
 // ── Code-of-the-Day ──────────────────────────────────────────────────────────
 // Add codes here that are worth remembering — rarely billed, high-value, or easily forgotten.
