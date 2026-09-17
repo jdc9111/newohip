@@ -232,9 +232,11 @@ const RAIL = [
     { key: 'assessment', href: 'assessment.html', label: 'Assessment',  icon: ICONS.doc },
     { key: 'specialty',  href: 'specialty.html',  label: 'By specialty', icon: ICONS.grid },
     { key: 'fractures',  href: 'fractures.html',  label: 'Fractures',    icon: ICONS.crack },
+    { key: 'fav-billing', href: 'index.html?fav=billing', label: 'Favourites', icon: ICONS.star },
   ]},
   { label: 'Diagnostic', items: [
-    { key: 'diagref', href: 'diagref.html', label: 'By specialty', icon: ICONS.tag },
+    { key: 'diagref',  href: 'diagref.html',        label: 'By specialty', icon: ICONS.tag },
+    { key: 'fav-diag', href: 'index.html?fav=diag', label: 'Favourites',   icon: ICONS.star },
   ]},
   { label: 'Tools', items: [
     { key: 'sedation', href: 'sedation.html', label: 'Sedation billing', icon: ICONS.moon },
@@ -248,9 +250,11 @@ const DRAWER = [
     { key: 'assessment', href: 'assessment.html', label: 'Assessment, counselling &amp; forms' },
     { key: 'specialty',  href: 'specialty.html',  label: 'By specialty' },
     { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; dislocations' },
+    { key: 'fav-billing', href: 'index.html?fav=billing', label: 'Favourites' },
   ]},
   { label: 'Diagnostic codes', items: [
-    { key: 'diagref', href: 'diagref.html', label: 'By specialty' },
+    { key: 'diagref',  href: 'diagref.html',        label: 'By specialty' },
+    { key: 'fav-diag', href: 'index.html?fav=diag', label: 'Favourites' },
   ]},
   { label: 'Tools', items: [
     { key: 'sedation', href: 'sedation.html', label: 'Sedation billing' },
@@ -281,7 +285,11 @@ class AppHeader extends HTMLElement {
     ensureStyles();
 
     const raw = this.getAttribute('active') || '';
-    const active = ALIASES[raw] || raw;
+    let active = ALIASES[raw] || raw;
+    // index.html?fav=billing|diag is the Favourites view: highlight that
+    // rail item instead of Search.
+    const favView = new URLSearchParams(location.search).get('fav');
+    if (active === 'billing' && (favView === 'billing' || favView === 'diag')) active = 'fav-' + favView;
     document.body.classList.add('sc-shell');
     if (localStorage.getItem(STORE_KEY) === '1') {
       document.body.classList.add('sc-rail-collapsed');
@@ -313,7 +321,7 @@ class AppHeader extends HTMLElement {
       `<span style="display:flex;align-items:center;justify-content:center;height:20px">${icon}</span>` +
       `<span class="sc-t-lbl">${label}</span></a>`;
 
-    const browseKeys = ['assessment', 'specialty', 'fractures', 'diagref', 'sedation', 'calc'];
+    const browseKeys = ['assessment', 'specialty', 'fractures', 'fav-billing', 'diagref', 'fav-diag', 'sedation', 'calc'];
 
     this.innerHTML = `
       <nav class="sc-rail" aria-label="Main">
