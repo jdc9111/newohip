@@ -30,3 +30,19 @@
   to = "/"
   status = 301
   force = true
+
+# Canonical paths for analytics. Nav links used to point at index.html
+# explicitly, so GA4 split the home page between "/" and "/index.html"
+# (and "/updates" vs "/updates.html" via Netlify pretty-URL rewriting).
+# Links now use "/"; these 301s fold old bookmarks and home-screen
+# shortcuts into the same path. Query strings (?fav=…) are preserved.
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/updates"
+  to = "/updates.html"
+  status = 301
