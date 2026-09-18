@@ -652,9 +652,14 @@ const DATA = [
   ["J149P","Ultrasound guidance - professional component (aspiration or drainage procedures)",36.85,"Routine Procedures","J138 and J161 rendered same visit are payable at nil"]
 ];
 
+// ── extra search terms per category (not shown in the UI) ────────────────────
+const CATEGORY_ALIASES = {
+  "On-Call": "call-in call in callin callback call back"
+};
+
 // ── pre-build search tokens per row ─────────────────────────────────────────
 const SEARCH_TOKENS = DATA.map(r =>
-  (r[0] + " " + r[1] + " " + r[3] + " " + r[4]).toLowerCase()
+  (r[0] + " " + r[1] + " " + r[3] + " " + r[4] + " " + (CATEGORY_ALIASES[r[3]] || "")).toLowerCase()
 );
 
 // ── fuzzy score: higher = better match ───────────────────────────────────────

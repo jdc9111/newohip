@@ -928,8 +928,13 @@ const qEl  = document.getElementById('proc-query');
 const drop = document.getElementById('proc-drop');
 let focusIdx = -1;
 
+// ── extra search terms per category (not shown in the UI) ────────────────────
+const CATEGORY_ALIASES = {
+  'On-Call': 'call-in call in callin callback call back'
+};
+
 function score(r, q) {
-  const h = (r[0] + ' ' + r[1] + ' ' + (r[3]||'')).toLowerCase();
+  const h = (r[0] + ' ' + r[1] + ' ' + (r[3]||'') + ' ' + (CATEGORY_ALIASES[r[3]] || '')).toLowerCase();
   const n = q.toLowerCase().trim();
   if (!n) return 0;
   if (h.includes(n)) return 100 + (n.length / h.length) * 50;

@@ -565,8 +565,13 @@ const DATA = [
   ["Z204","Cast removal",10,"Splints & Casts","Exact fee $10.25 (MOH Jan 2025)"],
 ];
 
+// ── extra search terms per category (not shown in the UI) ────────────────────
+const CATEGORY_ALIASES = {
+  "On-Call": "call-in call in callin callback call back"
+};
+
 // ── Search tokens ────────────────────────────────────────────────────────────
-const TOKENS = DATA.map(r => (r[0] + " " + r[1] + " " + r[3]).toLowerCase());
+const TOKENS = DATA.map(r => (r[0] + " " + r[1] + " " + r[3] + " " + (CATEGORY_ALIASES[r[3]] || "")).toLowerCase());
 
 function score(idx, needle) {
   const h = TOKENS[idx];
