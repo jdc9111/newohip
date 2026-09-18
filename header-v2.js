@@ -225,18 +225,18 @@ const ICONS = {
 /* Rail structure — groups mirror the old GROUP_LABELS, flattened. */
 const RAIL = [
   { label: null, items: [
-    { key: 'billing',   href: 'index.html',     label: 'Search',    icon: ICONS.search },
+    { key: 'billing',   href: '/',     label: 'Search',    icon: ICONS.search },
     { key: 'ai-search', href: 'ai-search.html', label: 'AI search', icon: ICONS.spark },
   ]},
   { label: 'Billing codes', items: [
     { key: 'assessment', href: 'assessment.html', label: 'Assessment',  icon: ICONS.doc },
     { key: 'specialty',  href: 'specialty.html',  label: 'By specialty', icon: ICONS.grid },
     { key: 'fractures',  href: 'fractures.html',  label: 'Fractures',    icon: ICONS.crack },
-    { key: 'fav-billing', href: 'index.html?fav=billing', label: 'Favourites', icon: ICONS.star },
+    { key: 'fav-billing', href: '/?fav=billing', label: 'Favourites', icon: ICONS.star },
   ]},
   { label: 'Diagnostic', items: [
     { key: 'diagref',  href: 'diagref.html',        label: 'By specialty', icon: ICONS.tag },
-    { key: 'fav-diag', href: 'index.html?fav=diag', label: 'Favourites',   icon: ICONS.star },
+    { key: 'fav-diag', href: '/?fav=diag', label: 'Favourites',   icon: ICONS.star },
   ]},
   { label: 'Tools', items: [
     { key: 'sedation', href: 'sedation.html', label: 'Sedation billing', icon: ICONS.moon },
@@ -250,11 +250,11 @@ const DRAWER = [
     { key: 'assessment', href: 'assessment.html', label: 'Assessment, counselling &amp; forms' },
     { key: 'specialty',  href: 'specialty.html',  label: 'By specialty' },
     { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; dislocations' },
-    { key: 'fav-billing', href: 'index.html?fav=billing', label: 'Favourites' },
+    { key: 'fav-billing', href: '/?fav=billing', label: 'Favourites' },
   ]},
   { label: 'Diagnostic codes', items: [
     { key: 'diagref',  href: 'diagref.html',        label: 'By specialty' },
-    { key: 'fav-diag', href: 'index.html?fav=diag', label: 'Favourites' },
+    { key: 'fav-diag', href: '/?fav=diag', label: 'Favourites' },
   ]},
   { label: 'Tools', items: [
     { key: 'sedation', href: 'sedation.html', label: 'Sedation billing' },
@@ -286,7 +286,7 @@ class AppHeader extends HTMLElement {
 
     const raw = this.getAttribute('active') || '';
     let active = ALIASES[raw] || raw;
-    // index.html?fav=billing|diag is the Favourites view: highlight that
+    // /?fav=billing|diag is the Favourites view: highlight that
     // rail item instead of Search.
     const favView = new URLSearchParams(location.search).get('fav');
     if (active === 'billing' && (favView === 'billing' || favView === 'diag')) active = 'fav-' + favView;
@@ -326,7 +326,7 @@ class AppHeader extends HTMLElement {
     this.innerHTML = `
       <nav class="sc-rail" aria-label="Main">
         <button type="button" class="sc-collapse" id="scCollapse" aria-label="Collapse navigation">‹</button>
-        <a href="index.html" class="sc-brand" style="text-decoration:none;color:inherit">
+        <a href="/" class="sc-brand" style="text-decoration:none;color:inherit">
           <img src="shiftcodes-icon-transparent.png" alt="ShiftCodes">
           <span class="sc-brand-txt">Shift<b>Codes</b></span>
         </a>
@@ -346,7 +346,7 @@ class AppHeader extends HTMLElement {
       </div>
 
       <nav class="sc-tabbar" aria-label="Main">
-        ${tab('index.html', ICONS.search, 'Search', active === 'billing')}
+        ${tab('/', ICONS.search, 'Search', active === 'billing')}
         ${tab('ai-search.html', ICONS.spark, 'AI', active === 'ai-search')}
         <button type="button" id="scBrowse" class="${browseKeys.includes(active) ? 'sc-on' : ''}">
           <span style="display:flex;align-items:center;justify-content:center;height:20px">${ICONS.list}</span>

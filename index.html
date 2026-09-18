@@ -204,7 +204,7 @@
     .card-ext-note li { margin-bottom: 2px; }
   }
 </style>
-<script src="header-v2.js?v=24"></script>
+<script src="header-v2.js?v=25"></script>
 <script src="diagData.js?v=2"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 <script src="favourites.js?v=5"></script>
@@ -733,7 +733,7 @@ const diagTbody   = document.getElementById("diag-tbody");
 // default so the home screen stays blank — the ★ chip or a nav tab turns it on.
 let favMode = false;
 
-// The nav's "Favourites" tabs open index.html?fav=billing|diag: a view locked
+// The nav's "Favourites" tabs open /?fav=billing|diag: a view locked
 // to that kind's starred codes, with the search box narrowing within them.
 const favKind = (() => {
   const k = new URLSearchParams(location.search).get('fav');
@@ -749,7 +749,7 @@ if (favKind) {
 }
 
 function toggleFavMode() {
-  if (favKind) { location.href = 'index.html'; return; }   // leave the locked view
+  if (favKind) { location.href = '/'; return; }   // leave the locked view
   favMode = !favMode;
   document.getElementById('favChip').classList.toggle('active', favMode);
   rerender();
@@ -796,7 +796,7 @@ function renderFavEmpty() {
   el.innerHTML = Fav.user
     ? `<div class="empty-art">★</div>
        <p class="empty-title">No favourite ${noun} codes yet</p>
-       <p class="empty-sub">Star a code in <a href="index.html">Search</a> and it'll show up here on every device you sign in on.</p>`
+       <p class="empty-sub">Star a code in <a href="/">Search</a> and it'll show up here on every device you sign in on.</p>`
     : `<div class="empty-art">★</div>
        <p class="empty-title">Sign in to see your favourites</p>
        <p class="empty-sub">Your starred codes follow you to every workstation and your phone.</p>
