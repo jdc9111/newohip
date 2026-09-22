@@ -57,9 +57,9 @@ const CSS = `
   .sc-rail::-webkit-scrollbar { width: 6px; }
   .sc-rail::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.22); border-radius: 3px; }
 
-  .sc-brand { display: flex; align-items: center; gap: 9px; padding: 0 4px 2px; min-height: 30px; }
-  .sc-brand img { height: 26px; width: auto; display: block; flex-shrink: 0; }
-  .sc-brand-txt { font-size: 17px; font-weight: 700; letter-spacing: -0.03em; white-space: nowrap; }
+  .sc-brand { display: flex; align-items: center; gap: 10px; padding: 0 4px 2px; min-height: 38px; }
+  .sc-brand img { height: 34px; width: auto; display: block; flex-shrink: 0; }
+  .sc-brand-txt { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; white-space: nowrap; }
   .sc-brand-txt b { color: ${C.accent}; font-weight: 700; }
 
   .sc-grp { display: flex; flex-direction: column; gap: 3px; }
