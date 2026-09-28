@@ -46,8 +46,8 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 486 (resp): Pneumonia
 512 (resp): Pneumothorax
 461 (resp): Sinusitis
-112 (id): Pneumonia
-619 (id): Candida
+486 (id): Pneumonia
+112 (id): Candida
 682 (id): Cellulits
 616 (id): Cervicitis
 052 (id): Chicken Pox
@@ -236,9 +236,33 @@ ${CODE_LIST}
 Rules:
 - Return ONLY codes from the list above, never invent codes
 - Return the top 4 most relevant matches, ranked best match first
-- Respond ONLY with a valid JSON object in this exact format:
-  {"results": [{"code": "451", "description": "DVT - Deep Vein Thrombosis", "category": "cvs"}, ...]}
+- Respond ONLY with a valid JSON object listing just the codes, in this exact format:
+  {"results": ["451", "415", "785"]}
 - No explanation, no markdown, no extra text, just the JSON object`;
+
+// code -> { code, description, category }. Some codes appear on several
+// lines (e.g. 682 = Abscess and Cellulitis); their descriptions are merged.
+const CODE_MAP = {};
+CODE_LIST.split('\n').forEach((line) => {
+  const m = line.match(/^(\S+) \(([^)]+)\): (.+)$/);
+  if (!m) return;
+  const entry = CODE_MAP[m[1]];
+  if (!entry) {
+    CODE_MAP[m[1]] = { code: m[1], description: m[3].trim(), category: m[2] };
+  } else if (entry.description.toLowerCase().split(' / ').indexOf(m[3].trim().toLowerCase()) === -1) {
+    entry.description += ' / ' + m[3].trim();
+  }
+});
+
+// Turns the model's list of codes into full result rows from CODE_LIST,
+// dropping anything that isn't a real code.
+function hydrate(codes) {
+  const seen = {};
+  return (codes || [])
+    .map((c) => String(c && c.code ? c.code : c).trim().padStart(3, '0'))
+    .filter((c) => CODE_MAP[c] && !seen[c] && (seen[c] = true))
+    .map((c) => CODE_MAP[c]);
+}
 
 function callOpenAI(apiKey, query) {
   return new Promise((resolve, reject) => {
@@ -248,7 +272,7 @@ function callOpenAI(apiKey, query) {
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user',   content: query }
       ],
-      max_tokens: 400,
+      max_tokens: 60,
       temperature: 0.1,
       response_format: { type: 'json_object' }
     });
@@ -306,15 +330,12 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(body);
-    const content = data.choices[0].message.content;
-
-    // Validate parseable before returning
-    JSON.parse(content);
+    const content = JSON.parse(data.choices[0].message.content);
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: content
+      body: JSON.stringify({ results: hydrate(content.results) })
     };
 
   } catch (err) {
@@ -327,3 +348,4 @@ exports.handler = async (event) => {
 // search) can reuse the same code list and prompt instead of duplicating them.
 exports.CODE_LIST = CODE_LIST;
 exports.SYSTEM_PROMPT = SYSTEM_PROMPT;
+exports.hydrate = hydrate;

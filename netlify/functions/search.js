@@ -39,7 +39,9 @@ function callOpenAI(apiKey, systemPrompt, query, maxTokens) {
 // Runs one lookup (billing or diagnostic) end-to-end and normalizes the
 // outcome to { results: [...] } or { error: '...' } -- never throws, so
 // Promise.all in the handler can't be short-circuited by one side failing.
-function runLookup(apiKey, systemPrompt, query, maxTokens) {
+// The model returns only codes; hydrate() fills in description/category/fee
+// from our own lists so the model can't misquote them.
+function runLookup(apiKey, systemPrompt, hydrate, query, maxTokens) {
   return callOpenAI(apiKey, systemPrompt, query, maxTokens)
     .then(function(r) {
       if (r.status !== 200) {
@@ -48,7 +50,7 @@ function runLookup(apiKey, systemPrompt, query, maxTokens) {
       }
       var content = JSON.parse(r.body).choices[0].message.content;
       var parsed = JSON.parse(content);
-      return { results: parsed.results || [] };
+      return { results: hydrate(parsed.results) };
     })
     .catch(function(err) {
       console.error('Lookup error:', err);
@@ -74,8 +76,8 @@ exports.handler = function(event) {
   var trimmed = query.trim();
 
   return Promise.all([
-    runLookup(apiKey, billing.SYSTEM_PROMPT, trimmed, 600),
-    runLookup(apiKey, diagnose.SYSTEM_PROMPT, trimmed, 400)
+    runLookup(apiKey, billing.SYSTEM_PROMPT, billing.hydrate, trimmed, 60),
+    runLookup(apiKey, diagnose.SYSTEM_PROMPT, diagnose.hydrate, trimmed, 60)
   ]).then(function(outcomes) {
     var billingOutcome = outcomes[0];
     var diagnosticOutcome = outcomes[1];
