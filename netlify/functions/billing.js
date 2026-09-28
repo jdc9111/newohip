@@ -370,10 +370,36 @@ var SYSTEM_PROMPT =
   'Rules:\n' +
   '- Return ONLY codes from the list above, never invent codes\n' +
   '- Return 3 to 5 best matching codes, best match first\n' +
-  '- Respond ONLY with valid JSON in this exact format:\n' +
-  '  {"results": [{"code":"D015","description":"Shoulder dislocation reduction -- no sedation","category":"Dislocation Reductions","fee":"$49.20"}]}\n' +
-  '- fee = extract the dollar amount from "Exact fee $X.XX" in the code description. If no exact fee is listed, use "See SOB"\n' +
+  '- Respond ONLY with valid JSON listing just the codes, in this exact format:\n' +
+  '  {"results": ["D015", "Z154", "Z176"]}\n' +
   '- No explanation, no markdown, no extra text, just the JSON';
+
+// code -> { code, description, category, fee }, parsed from BILLING_CODES
+// ("CODE (Category): Description -- notes -- Exact fee $X.XX"). Where a line
+// has two fees, the first is the precise MOH value from the notes (e.g.
+// $49.20) and the second is the rounded table value ($49.00), so take the first.
+var CODE_MAP = {};
+BILLING_CODES.split('\n').forEach(function(line) {
+  var m = line.match(/^(\S+) \(([^)]+)\): (.+)$/);
+  if (!m || CODE_MAP[m[1]]) return;
+  var fee = m[3].match(/Exact fee (\$[\d,]+\.\d{2})/);
+  CODE_MAP[m[1]] = {
+    code: m[1],
+    description: m[3].split(' -- ')[0].trim(),
+    category: m[2],
+    fee: fee ? fee[1] : 'See SOB'
+  };
+});
+
+// Turns the model's list of codes into full result rows from BILLING_CODES,
+// dropping anything that isn't a real code.
+function hydrate(codes) {
+  var seen = {};
+  return (codes || [])
+    .map(function(c) { return String(c && c.code ? c.code : c).trim().toUpperCase(); })
+    .filter(function(c) { return CODE_MAP[c] && !seen[c] && (seen[c] = true); })
+    .map(function(c) { return CODE_MAP[c]; });
+}
 
 function callOpenAI(apiKey, query) {
   return new Promise(function(resolve, reject) {
@@ -383,7 +409,7 @@ function callOpenAI(apiKey, query) {
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: query }
       ],
-      max_tokens: 600,
+      max_tokens: 60,
       temperature: 0.1,
       response_format: { type: 'json_object' }
     });
@@ -428,9 +454,8 @@ exports.handler = function(event) {
         console.error('OpenAI error:', r.status, r.body);
         return { statusCode: 502, body: JSON.stringify({ error: 'AI service error' }) };
       }
-      var c = JSON.parse(r.body).choices[0].message.content;
-      JSON.parse(c);
-      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: c };
+      var c = JSON.parse(JSON.parse(r.body).choices[0].message.content);
+      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ results: hydrate(c.results) }) };
     })
     .catch(function(err) {
       console.error('Function error:', err);
@@ -442,3 +467,4 @@ exports.handler = function(event) {
 // search) can reuse the same code list and prompt instead of duplicating them.
 exports.BILLING_CODES = BILLING_CODES;
 exports.SYSTEM_PROMPT = SYSTEM_PROMPT;
+exports.hydrate = hydrate;
