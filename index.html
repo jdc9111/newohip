@@ -88,20 +88,7 @@
   /* ── Results ── */
   .results-section { margin-bottom: 28px; }
   .results-section:last-child { margin-bottom: 0; }
-  /* AI fallback: shown above basic results when nothing matches directly. */
-  .ai-sub {
-    font-size: 0.72rem; font-weight: 600; color: var(--sc-muted);
-    text-transform: uppercase; letter-spacing: 0.06em; margin: 12px 0 6px;
-  }
-  .ai-sub:first-child { margin-top: 0; }
-  .ai-cards { display: none; }
-  .ai-spinner {
-    display: inline-block; width: 11px; height: 11px; vertical-align: -1px; margin-right: 4px;
-    border: 2px solid var(--sc-line); border-top-color: var(--sc-rail);
-    border-radius: 50%; animation: ai-spin 0.7s linear infinite;
-  }
-  @keyframes ai-spin { to { transform: rotate(360deg); } }
-  #status, #diag-status, #ai-status {
+  #status, #diag-status {
     font-family: var(--sc-mono);
     font-size: 0.7rem;
     color: var(--sc-muted);
@@ -183,9 +170,9 @@
     .search-bar.scrolled .search-examples { display: none; }
     .reminder-banner { padding: 12px; }
 
-    #tbl, .ai-tbl { display: none !important; }
-    #cards, .ai-cards { display: flex; flex-direction: column; gap: 8px; }
-    #diag-tbl td, .ai-diag-tbl td { padding: 10px 12px; }
+    #tbl { display: none !important; }
+    #cards { display: flex; flex-direction: column; gap: 8px; }
+    #diag-tbl td { padding: 10px 12px; }
 
     .card-details-btn {
       background: none; border: none;
@@ -257,12 +244,6 @@
 <div id="cotd-banner"></div>
 
 <div id="fav-empty" style="display:none"></div>
-
-<div id="ai-results" class="results-section" style="display:none">
-  <div class="results-section-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3"></path></svg> AI suggestions</div>
-  <div id="ai-status"></div>
-  <div id="ai-body"></div>
-</div>
 
 <div id="billing-results" class="results-section" style="display:none">
   <div class="results-section-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M14.5 9h-3.2a1.8 1.8 0 0 0 0 3.6h1.4a1.8 1.8 0 0 1 0 3.6H9.5M12 7.2v1.8M12 15v1.8"></path></svg> Billing codes</div>
@@ -681,102 +662,7 @@ const SEARCH_TOKENS = DATA.map(r =>
   (r[0] + " " + r[1] + " " + r[3] + " " + r[4] + " " + (CATEGORY_ALIASES[r[3]] || "")).toLowerCase()
 );
 
-// ── shorthand & plain-language synonyms ──────────────────────────────────────
-// A query word listed here matches if the row contains ANY of its values
-// (substrings, so "fractur" covers fracture/fractures). The word itself is
-// not matched unless it's also a value — short keys like "fx" or "mi" would
-// otherwise hit unrelated words ("minor", "admission").
-const SYNONYMS = {
-  "fx": ["fractur"], "#": ["fractur"], "frac": ["fractur"], "broken": ["fractur"], "break": ["fractur"],
-  "lac": ["lacerat"], "lacs": ["lacerat"], "cut": ["lacerat", "suture"], "gash": ["lacerat", "suture"],
-  "stitch": ["suture"], "stitches": ["suture"],
-  "i+d": ["incision", "drainage"],
-  "fb": ["foreign bod"],
-  "afib": ["fibrillation"], "af": ["fibrillation"],
-  "mi": ["myocardial"], "stemi": ["myocardial"], "nstemi": ["myocardial"], "heartattack": ["myocardial"],
-  "cva": ["cerebrovascular", "c.v.a"], "stroke": ["cerebrovascular", "c.v.a", "stroke"],
-  "uti": ["urinary tract", "cystitis"],
-  "sob": ["dyspn"],
-  "abd": ["abdom"], "abdo": ["abdom"], "belly": ["abdom"], "tummy": ["abdom"],
-  "chf": ["heart failure", "chf"],
-  "pe": ["pulmonary embol"],
-  "dvt": ["dvt", "deep vein", "thromb"],
-  "intubate": ["intubat"], "ett": ["intubat"],
-  "htn": ["hypertens"],
-  "dm": ["diabet"],
-  "sz": ["seizure", "convuls", "epilep"],
-  "od": ["poison", "overdose"], "overdose": ["poison", "overdose"],
-  "etoh": ["alcohol"],
-  "ecg": ["ekg"], "ekg": ["ekg"],
-  "u/s": ["ultrasound"], "us": ["ultrasound"], "pocus": ["ultrasound"],
-  "iv": ["iv line", "intraven"],
-  "wrist": ["wrist", "radius", "scaphoid", "colles"],
-  "ngt": ["nasogastric"], "ng": ["nasogastric"],
-  "foley": ["catheter"],
-  "nosebleed": ["epistaxis"],
-  "boxer": ["metacarpal"],
-  "tooth": ["dental", "tooth"]
-};
-
-// Multi-word shorthand, rewritten to a single SYNONYMS key before matching.
-function normalizeQuery(n) {
-  return n
-    .replace(/\bi\s*(?:[+&\/]|and|n)\s*d\b/g, "i+d")
-    .replace(/\ba[\s-]fib\b/g, "afib")
-    .replace(/\bnose\s+bleed\b/g, "nosebleed")
-    .replace(/\bheart\s+attack\b/g, "heartattack");
-}
-
-// Every word in the search data, for typo matching.
-let VOCAB = null, VOCAB_TEXT = "";
-function vocab() {
-  if (!VOCAB) {
-    VOCAB_TEXT = SEARCH_TOKENS.join(" ") + " " + DIAG_TOKENS.join(" ");
-    VOCAB = [...new Set(VOCAB_TEXT.split(/[^a-z]+/).filter(w => w.length >= 4))];
-  }
-  return VOCAB;
-}
-
-// Edit distance, giving up early once it exceeds max.
-function withinEdits(a, b, max) {
-  if (Math.abs(a.length - b.length) > max) return false;
-  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
-  for (let i = 1; i <= a.length; i++) {
-    const cur = [i];
-    let rowMin = i;
-    for (let j = 1; j <= b.length; j++) {
-      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
-      if (cur[j] < rowMin) rowMin = cur[j];
-    }
-    if (rowMin > max) return false;
-    prev = cur;
-  }
-  return prev[b.length] <= max;
-}
-
-// Turns a query into one list of alternatives per word: synonyms, a stem
-// ("dislocated" → "dislocat"), and — only for words that appear nowhere in
-// the data — close spellings ("dislocaton" → "dislocation").
-let _groupsFor = null, _groups = null;
-function queryGroups(n) {
-  if (n === _groupsFor) return _groups;
-  vocab();
-  _groups = normalizeQuery(n).split(/\s+/).filter(Boolean).map(w => {
-    const alts = SYNONYMS[w] ? [...SYNONYMS[w]] : [w];
-    const stem = w.replace(/(ing|ed|es|s)$/, "");
-    if (!SYNONYMS[w] && w.length >= 5 && stem.length >= 4 && stem !== w) alts.push(stem);
-    if (w.length >= 5 && !alts.some(a => VOCAB_TEXT.includes(a))) {
-      const max = w.length >= 8 ? 2 : 1;
-      for (const v of VOCAB) if (withinEdits(w, v, max)) alts.push(v);
-    }
-    return alts;
-  });
-  _groupsFor = n;
-  return _groups;
-}
-
 // ── fuzzy score: higher = better match ───────────────────────────────────────
-// 60+ means every query word matched; the AI fallback keys off that.
 function score(haystack, needle) {
   if (!needle) return 1;
   const h = haystack.toLowerCase();
@@ -785,14 +671,14 @@ function score(haystack, needle) {
   // exact substring → highest score
   if (h.includes(n)) return 100 + (n.length / h.length) * 50;
 
-  // word-by-word partial match (each word via its synonyms / close spellings)
-  const groups = queryGroups(n);
+  // word-by-word partial match
+  const words = n.split(/\s+/).filter(Boolean);
   let hits = 0;
-  for (const alts of groups) {
-    if (alts.some(a => h.includes(a))) hits++;
+  for (const w of words) {
+    if (h.includes(w)) hits++;
   }
-  if (hits === groups.length) return 60 + hits * 5;
-  if (hits > 0) return Math.min(30 + hits * 10, 59);
+  if (hits === words.length) return 60 + hits * 5;
+  if (hits > 0) return 30 + hits * 10;
 
   return 0;
 }
@@ -870,18 +756,13 @@ function toggleFavMode() {
 }
 
 function rerender() {
-  runSearch(document.getElementById('query').value);
-}
-
-function runSearch(q, aiNow) {
-  render(q); renderDiag(q); AiFallback.update(q, aiNow);
+  const q = document.getElementById('query').value;
+  render(q); renderDiag(q);
 }
 
 // Rows to show for a given kind: scored search results, or — in favourites
 // mode with an empty query — the user's favourites in most-recent-first order.
-const bestScore = { billing: 0, diag: 0 };   // top score of the last search, per kind
 function pickRows(rows, tokens, kind, q) {
-  bestScore[kind] = 0;
   if (favKind && kind !== favKind) return { results: [], mode: 'blank' };
   const favs = Fav.list(kind);
   if (!q) {
@@ -900,7 +781,6 @@ function pickRows(rows, tokens, kind, q) {
     .map((r, i) => ({ r, s: (only && !only.has(r[0])) ? 0 : score(tokens[i], q) }))
     .filter(x => x.s > 0)
     .sort((a, b) => b.s - a.s);
-  bestScore[kind] = results.length ? results[0].s : 0;
   return { results, mode: only ? 'favsearch' : 'search' };
 }
 
@@ -970,14 +850,12 @@ function renderDiag(query) {
   diagStatus.textContent = statusText(results.length, q, mode);
 
   const frag = document.createDocumentFragment();
-  for (const { r } of results) frag.appendChild(diagRowEl(r, q));
+  for (const { r } of results) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td><span class="fav-code">${Fav.btn('diag', r[0])}${highlight(r[0], q)}</span></td><td>${highlight(r[1], q)}</td>`;
+    frag.appendChild(tr);
+  }
   diagTbody.appendChild(frag);
-}
-
-function diagRowEl(r, q) {
-  const tr = document.createElement("tr");
-  tr.innerHTML = `<td><span class="fav-code">${Fav.btn('diag', r[0])}${highlight(r[0], q)}</span></td><td>${highlight(r[1], q)}</td>`;
-  return tr;
 }
 
 function toggleCardNote(btn) {
@@ -1140,49 +1018,43 @@ function render(query) {
 
   const frag = document.createDocumentFragment();
   for (const { r } of results) {
-    const { tr, card } = billingRowEls(r, q);
+    const [code, desc, fee, cat, notes] = r;
+    const feeStr = fee !== null ? "$" + fee : "—";
+    const extNote = EXTENDED_NOTES[code] || "";
+
+    // Desktop table row
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><span class="fav-code">${Fav.btn('billing', code)}${highlight(code, q)}</span></td>
+      <td>
+        ${highlight(desc, q)}${extNote ? `<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">i</button><div class="ext-note">${extNote}</div>` : ""}
+        <div class="cat-pill">${highlight(cat, q)}</div>
+        ${notes ? `<div class="note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
+      </td>
+      <td>${feeStr}</td>`;
     frag.appendChild(tr);
+
+    // Mobile card
+    const card = document.createElement("div");
+    card.className = "result-card";
+    const hasDetails = !!(cat || notes || extNote);
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="card-code fav-code">${Fav.btn('billing', code)}${highlight(code, q)}</span>
+        <span class="card-fee">${feeStr}</span>
+      </div>
+      <div class="card-desc">${highlight(desc, q)}</div>
+      ${hasDetails ? `
+      <button class="card-details-btn" onclick="toggleCardNote(this)">Details ›</button>
+      <div class="card-details-panel">
+        ${cat ? `<span class="card-cat">${highlight(cat, q)}</span>` : ""}
+        ${notes ? `<div class="card-note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
+        ${extNote ? `<div class="card-ext-note">${extNote}</div>` : ""}
+      </div>` : ""}`;
     cards.appendChild(card);
   }
   tbody.appendChild(frag);
   // showCOTDBanner(); // disabled
-}
-
-// Desktop table row + mobile card for one DATA row (shared with AI results).
-function billingRowEls(r, q) {
-  const [code, desc, fee, cat, notes] = r;
-  const feeStr = fee !== null ? "$" + fee : "—";
-  const extNote = EXTENDED_NOTES[code] || "";
-
-  // Desktop table row
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td><span class="fav-code">${Fav.btn('billing', code)}${highlight(code, q)}</span></td>
-    <td>
-      ${highlight(desc, q)}${extNote ? `<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">i</button><div class="ext-note">${extNote}</div>` : ""}
-      <div class="cat-pill">${highlight(cat, q)}</div>
-      ${notes ? `<div class="note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
-    </td>
-    <td>${feeStr}</td>`;
-
-  // Mobile card
-  const card = document.createElement("div");
-  card.className = "result-card";
-  const hasDetails = !!(cat || notes || extNote);
-  card.innerHTML = `
-    <div class="card-top">
-      <span class="card-code fav-code">${Fav.btn('billing', code)}${highlight(code, q)}</span>
-      <span class="card-fee">${feeStr}</span>
-    </div>
-    <div class="card-desc">${highlight(desc, q)}</div>
-    ${hasDetails ? `
-    <button class="card-details-btn" onclick="toggleCardNote(this)">Details ›</button>
-    <div class="card-details-panel">
-      ${cat ? `<span class="card-cat">${highlight(cat, q)}</span>` : ""}
-      ${notes ? `<div class="card-note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
-      ${extNote ? `<div class="card-ext-note">${extNote}</div>` : ""}
-    </div>` : ""}`;
-  return { tr, card };
 }
 
 function setQuery(text) {
@@ -1209,120 +1081,8 @@ if (matchMedia('(max-width: 640px)').matches) {
 let timer;
 document.getElementById("query").addEventListener("input", e => {
   clearTimeout(timer);
-  timer = setTimeout(() => runSearch(e.target.value), 120);
+  timer = setTimeout(() => { render(e.target.value); renderDiag(e.target.value); }, 120);
 });
-// Enter skips the AI wait.
-document.getElementById("query").addEventListener("keydown", e => {
-  if (e.key !== "Enter") return;
-  clearTimeout(timer);
-  runSearch(e.target.value, true);
-});
-
-// ── AI fallback ──────────────────────────────────────────────────────────────
-// When the basic search has no strong match (no row matching every query
-// word), ask the AI search function and show its picks above the basic
-// results. Codes and direct matches never call it, so most searches stay
-// instant and free.
-const AiFallback = (() => {
-  const DELAY = 500;                  // ms after the basic search re-renders
-  const section = document.getElementById("ai-results");
-  const statusEl = document.getElementById("ai-status");
-  const body = document.getElementById("ai-body");
-  const cache = new Map();            // query → response, for this page view
-  const byCode = new Map(DATA.map(r => [r[0], r]));
-  let wait = null, ctrl = null, current = "";
-
-  function eligible(q) {
-    return !favMode && !favKind
-      && q.length >= 3 && /[a-z]/i.test(q)
-      && !/^[a-z]?\d{2,4}[a-z]?$/i.test(q)                     // looks like a code
-      && bestScore.billing < 60 && bestScore.diag < 60;
-  }
-
-  // While the AI is involved, empty basic sections are just noise.
-  function hideEmptyBasic() {
-    if (tbl.style.display === "none") billingSection.style.display = "none";
-    if (diagTbl.style.display === "none") diagSection.style.display = "none";
-  }
-
-  function stop() {
-    clearTimeout(wait); wait = null;
-    if (ctrl) ctrl.abort();
-    ctrl = null; current = "";
-    section.style.display = "none";
-  }
-
-  function update(query, now) {
-    const q = (query || "").trim();
-    if (!eligible(q)) return stop();
-    hideEmptyBasic();
-    const key = q.toLowerCase();
-    if (key === current) {            // already queued / fetching / showing this one
-      if (now && wait && !ctrl && !cache.has(key)) { clearTimeout(wait); wait = null; fetchAi(q, key); }
-      return;
-    }
-    clearTimeout(wait); wait = null;
-    if (ctrl) ctrl.abort();
-    ctrl = null;
-    current = key;
-    if (cache.has(key)) return show(q, cache.get(key));
-    section.style.display = "";
-    statusEl.innerHTML = '<span class="ai-spinner"></span> Searching with AI…';
-    body.innerHTML = "";
-    wait = setTimeout(() => { wait = null; fetchAi(q, key); }, now ? 0 : DELAY);
-  }
-
-  function fetchAi(q, key) {
-    ctrl = new AbortController();
-    fetch("/.netlify/functions/search", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: q }),
-      signal: ctrl.signal
-    })
-      .then(res => { if (!res.ok) throw new Error("AI search " + res.status); return res.json(); })
-      .then(data => {
-        if (key !== current) return;
-        cache.set(key, data);
-        show(q, data);
-      })
-      .catch(err => {
-        if (err.name === "AbortError" || key !== current) return;
-        console.error(err);
-        current = "";                 // let Enter / the next edit retry
-        statusEl.textContent = "AI search unavailable — try rephrasing, or use the AI tab.";
-      });
-  }
-
-  function show(q, data) {
-    section.style.display = "";
-    hideEmptyBasic();
-    // Prefer the page's own row for a code (full notes, fee, details panel).
-    const billing = (data.billing || []).map(b =>
-      byCode.get(b.code) || [b.code, b.description, b.fee && b.fee !== "See SOB" ? parseFloat(b.fee.slice(1)) : null, b.category || "", ""]);
-    const diag = (data.diagnostic || []).map(d => [d.code, d.description]);
-    body.innerHTML = "";
-    if (!billing.length && !diag.length) {
-      statusEl.textContent = `No codes found for "${q}" — try different wording.`;
-      return;
-    }
-    statusEl.textContent = `AI suggestions for "${q}" · check before billing`;
-    if (billing.length) {
-      body.insertAdjacentHTML("beforeend",
-        '<div class="ai-sub">Billing codes</div><table class="ai-tbl"><thead><tr><th>Code</th><th>Description</th><th>Fee</th></tr></thead><tbody></tbody></table><div class="ai-cards"></div>');
-      const tb = body.querySelector(".ai-tbl tbody"), cd = body.querySelector(".ai-cards");
-      for (const r of billing) { const { tr, card } = billingRowEls(r, ""); tb.appendChild(tr); cd.appendChild(card); }
-    }
-    if (diag.length) {
-      body.insertAdjacentHTML("beforeend",
-        '<div class="ai-sub">Diagnostic codes</div><table class="ai-diag-tbl"><thead><tr><th>Code</th><th>Diagnosis</th></tr></thead><tbody></tbody></table>');
-      const tb = body.querySelector(".ai-diag-tbl tbody");
-      for (const r of diag) tb.appendChild(diagRowEl(r, ""));
-    }
-  }
-
-  return { update };
-})();
 
 // initial render
 render("");
