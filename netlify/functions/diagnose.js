@@ -177,7 +177,7 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 274 (blood): Gout
 242 (blood): Hyperthyroid
 244 (blood): Hypothyroid
-269 (blood): Hypoglycemia
+251 (blood): Hypoglycemia
 274 (blood): Gout
 274 (blood): Neutropenia, WBC abnormality
 683 (blood): Lymphadenopathy
