@@ -205,7 +205,7 @@
   }
 </style>
 <script src="header-v2.js?v=26"></script>
-<script src="diagData.js?v=2"></script>
+<script src="diagData.js?v=3"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 <script src="favourites.js?v=5"></script>
 </head>
@@ -358,12 +358,12 @@ const DATA = [
   ["Z431","Repositioning of pacemaker wire",64.25,"Critical Care – Other Procedures",""],
   ["G269","Central line",31,"Critical Care – Other Procedures",""],
   ["G211","Intubation",38,"Critical Care – Other Procedures","Allowed with G395 but NOT G521; exact fee $38.35 (MOH Jan 2025)"],
-  ["Z325","Emergency tracheotomy",474.65,"Critical Care – Other Procedures","Only billable for life-threatening emergencies where patient is not intubated"],
+  ["Z325","Emergency tracheotomy / cricothyrotomy",474.65,"Critical Care – Other Procedures","Only billable for life-threatening emergencies where patient is not intubated"],
   ["E013C","Anaesthetic management – acute upper airway obstruction (above carina, excl. choanal atresia)",159.60,"Critical Care – Other Procedures","10 basic units · Do not bill other C-suffix procedure codes for the same procedure"],
   ["E639","Emergency tracheotomy – anterior cricoid split (add-on)",78.50,"Critical Care – Other Procedures","Add to Z325"],
   ["Z341","Chest tube (tube thoracostomy for closed drainage)",76.80,"Critical Care – Other Procedures",""],
   ["Z363","Chest tube removal (thoracostomy tube)",22.60,"Critical Care – Other Procedures","Incl wound closure; fee as of April 1 2026"],
-  ["Z611","Catheter",9,"Critical Care – Other Procedures","Exact fee $8.55 (MOH Jan 2025)"],
+  ["Z611","Urinary catheter (Foley) insertion",9,"Critical Care – Other Procedures","Exact fee $8.55 (MOH Jan 2025)"],
   ["H100","Ultrasound",20,"Critical Care – Other Procedures",""],
   ["E009","Patient < 1 year old",null,"Anaesthesia Modifiers","Add C4 units; 1 unit = $15.96 (April 2026)"],
   ["E019","Patient 1–8 years old",null,"Anaesthesia Modifiers","Add C2 units"],
@@ -398,12 +398,12 @@ const DATA = [
   ["R578","Extensor tendon repair",164,"Complex Lacerations",""],
   ["J149C","U/S guided procedure",47,"Routine Procedures",""],
   ["G269","Central line",31,"Routine Procedures",""],
-  ["G224","Nerve block – local, >4h duration (not a named anatomic block)",16,"Routine Procedures","Not billable with lacerations. Use for pudendal, femoral, intercostal, sciatic, ilioinguinal, ulnar, median, radial, or brachial blocks. If a more specific OHIP code exists for the block (e.g. G060, G218, G220), use that instead."],
+  ["G224","Nerve block by the physician who did the procedure – post-procedure analgesia > 4h",16,"Routine Procedures","Only when you also performed the procedure and the block is for pain control afterwards (>4h); bill instead of the individual block code (G060, G061, G231, etc.). Not billable with lacerations. Any nerve, e.g. femoral, sciatic, ulnar, median, radial, digital, pudendal, intercostal."],
   ["G268","Arterial line",31,"Routine Procedures",""],
-  ["G060","Major nerve block (provides analgesia > 4h)",55,"Routine Procedures",""],
-  ["G061","Minor nerve block (provides analgesia > 4h)",30,"Routine Procedures",""],
+  ["G060","Major peripheral nerve block (radial, median, ulnar, femoral, sciatic, fascia iliaca, ankle block) – analgesia > 4h",55,"Routine Procedures",""],
+  ["G061","Minor peripheral nerve block (ilioinguinal, intercostal, TAP, superficial cervical plexus) – analgesia > 4h",30,"Routine Procedures",""],
   ["G260","Major plexus block – 3-in-1 (provides analgesia > 4h)",80,"Routine Procedures",""],
-  ["G231","Dental block",34,"Routine Procedures",""],
+  ["G231","Peripheral nerve block – not otherwise listed, one nerve/site (e.g. digital)",34,"Routine Procedures",""],
   ["G370","Knee aspiration",20,"Routine Procedures",""],
   ["G328","Joint aspiration (not knee)",40,"Routine Procedures",""],
   ["E446","U/S guided aspiration (addl)",30,"Routine Procedures","Add-on code"],
@@ -646,7 +646,7 @@ const DATA = [
   ["G220","Nerve block - intercostal nerve",34.20,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["G221","Nerve block - each additional intercostal (add-on to G220)",16.95,"Nerve Blocks","Add-on to G220"],
   ["G225","Nerve block - mental branch of mandibular nerve",34.20,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
-  ["G250","Nerve block - maxillary or mandibular division of trigeminal nerve",75.10,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
+  ["G250","Nerve block - maxillary or mandibular division of trigeminal nerve (e.g. inferior alveolar / dental block)",75.10,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["G227","Nerve block - other cranial nerve",54.65,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["G258","Nerve block - intrapleural, single injection",44.25,"Nerve Blocks","For acute pain management only (>4 hr duration)"],
   ["J149P","Ultrasound guidance - professional component (aspiration or drainage procedures)",36.85,"Routine Procedures","J138 and J161 rendered same visit are payable at nil"]

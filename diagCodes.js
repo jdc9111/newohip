@@ -938,7 +938,7 @@ export const diagCodes = [
   },
 
   {
-    code: "269",
+    code: "251",
     description: "Hypoglycemia",
     category: "blood",
   },

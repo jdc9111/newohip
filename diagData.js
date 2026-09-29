@@ -521,7 +521,7 @@ const DIAG = [
   ["786","Hyperventilation"],
   ["536","Hypochlorhydria"],
   ["279","Hypogammaglobulinemia"],
-  ["259","Hypoglycemia"],
+  ["251","Hypoglycemia"],
   ["447","Hypotension"],
   ["244","Hypothyroidism - Acquired"],
   ["243","Congential"],
