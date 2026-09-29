@@ -92,9 +92,12 @@ const CSS = `
   .sc-rail a.sc-cta.sc-cta-on { box-shadow: 0 0 0 2px #fff; }
   .sc-rail a.sc-sob {
     font-size: 12.5px; color: #fff; text-decoration: none;
-    padding: 0 2px; white-space: nowrap; overflow: hidden;
+    padding: 5px 7px; margin: 0 -5px; border-radius: 6px;
+    white-space: nowrap; overflow: hidden;
   }
-  .sc-rail a.sc-sob:hover { color: #fff; text-decoration: underline; }
+  .sc-rail a.sc-sob:hover { color: #fff; background: rgba(255,255,255,0.14); }
+  .sc-rail a.sc-sob:focus { outline: none; }
+  .sc-rail a.sc-sob:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
 
   .sc-collapse {
     position: absolute; top: 14px; right: 8px;
@@ -191,6 +194,13 @@ const CSS = `
       font-size: 13.5px; color: #fff; text-align: center;
       text-decoration: none; padding: 12px 0 4px;
     }
+    .sc-drawer a.sc-fb-card {
+      display: flex; flex-direction: column; gap: 4px; margin-top: 14px;
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 11px; padding: 13px 15px;
+      color: #fff; text-decoration: none; font-size: 13px; line-height: 1.35;
+    }
+    .sc-drawer a.sc-fb-card b { font-size: 14.5px; }
+    .sc-drawer a.sc-fb-card span { opacity: 0.85; }
   }
 
   @media print {
@@ -208,6 +218,9 @@ const ALIASES = {
 };
 
 const SOB_URL = 'https://www.ontario.ca/files/2026-03/moh-schedule-benefit-2026-03-27.pdf';
+
+const CONTACT_EMAIL = 'info@erfaster.ca';
+const FEEDBACK_URL = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('ShiftCodes feedback')}`;
 
 const ICONS = {
   search:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>',
@@ -335,6 +348,7 @@ class AppHeader extends HTMLElement {
         <div class="sc-foot">
           <a href="updates.html" class="sc-cta${active === 'updates' ? ' sc-cta-on' : ''}"${active === 'updates' ? ' aria-current="page"' : ''}><span class="sc-txt">April 1st updates</span><span class="sc-mini">APR</span></a>
           <a href="${SOB_URL}" target="_blank" rel="noopener" class="sc-sob">Schedule of Benefits ↗</a>
+          <a href="${FEEDBACK_URL}" class="sc-sob" title="Feedback, suggestions or corrections: ${CONTACT_EMAIL}">Feedback &amp; corrections ✉</a>
         </div>
       </nav>
 
@@ -364,6 +378,10 @@ class AppHeader extends HTMLElement {
         ${drawer}
         <a href="updates.html" class="sc-cta">April 1st updates</a>
         <a href="${SOB_URL}" target="_blank" rel="noopener" class="sc-sob">Schedule of Benefits ↗</a>
+        <a href="${FEEDBACK_URL}" class="sc-fb-card">
+          <b>Spot an error or missing code?</b>
+          <span>Send feedback, suggestions or corrections to ${CONTACT_EMAIL}</span>
+        </a>
       </div>`;
 
     const collapse = this.querySelector('#scCollapse');

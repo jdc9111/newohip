@@ -190,7 +190,10 @@
       background: none; border: none; padding: 0; color: #fff; cursor: pointer;
       font: inherit; font-size: 12.5px; text-align: left; text-decoration: none;
     }
-    .sc-acct button:hover, .sc-acct a:hover { text-decoration: underline; }
+    .sc-rail .sc-acct button, .sc-rail .sc-acct a { padding: 5px 7px; margin: 0 -5px; border-radius: 6px; }
+    .sc-acct button:hover, .sc-acct a:hover { background: rgba(255,255,255,0.14); }
+    .sc-acct button:focus, .sc-acct a:focus { outline: none; }
+    .sc-acct button:focus-visible, .sc-acct a:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
     body.sc-rail-collapsed .sc-acct { display: none; }
     .sc-drawer .sc-acct { padding: 14px 2px 4px; font-size: 14px; border-top: 1px solid rgba(255,255,255,.2); margin-top: 6px; }
     .sc-drawer .sc-acct button { font-size: 14px; min-height: 44px; }
