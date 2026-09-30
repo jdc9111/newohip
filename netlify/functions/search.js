@@ -58,6 +58,17 @@ function runLookup(apiKey, systemPrompt, hydrate, query, maxTokens) {
     });
 }
 
+// Puts codes the user typed ahead of the model's picks (without duplicates);
+// a typed code still counts as a result if the model call failed.
+function withExact(exact, outcome) {
+  if (!exact.length) return outcome;
+  var seen = {};
+  var results = exact.concat(outcome.results || []).filter(function(r) {
+    return !seen[r.code] && (seen[r.code] = true);
+  });
+  return { results: results };
+}
+
 exports.handler = function(event) {
   if (event.httpMethod !== 'POST') {
     return Promise.resolve({ statusCode: 405, body: 'Method Not Allowed' });
@@ -68,19 +79,34 @@ exports.handler = function(event) {
   if (!query || query.trim().length < 2) {
     return Promise.resolve({ statusCode: 400, body: JSON.stringify({ error: 'Query too short' }) });
   }
+  var trimmed = query.trim();
+
+  // Typed codes ("H112", "e412 h113", "427") are looked up directly. The model
+  // is told to skip premium and assessment codes unless asked, so it returned
+  // nothing for them, and guessed a diagnosis from the digits ("h112" -> 112).
+  // If every word is a known code, answer without calling the model at all.
+  var words = trimmed.split(/[\s,]+/).filter(Boolean);
+  var exactBilling = billing.hydrate(words.filter(function(w) { return /^[a-z]\d{3}[a-z]?$/i.test(w); }));
+  var exactDiag = diagnose.hydrate(words.filter(function(w) { return /^\d{3}$/.test(w); }));
+  if (exactBilling.length + exactDiag.length === words.length) {
+    return Promise.resolve({
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ billing: exactBilling, diagnostic: exactDiag, errors: { billing: null, diagnostic: null } })
+    });
+  }
+
   var apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return Promise.resolve({ statusCode: 500, body: JSON.stringify({ error: 'API key not configured' }) });
   }
 
-  var trimmed = query.trim();
-
   return Promise.all([
     runLookup(apiKey, billing.SYSTEM_PROMPT, billing.hydrate, trimmed, 60),
     runLookup(apiKey, diagnose.SYSTEM_PROMPT, diagnose.hydrate, trimmed, 60)
   ]).then(function(outcomes) {
-    var billingOutcome = outcomes[0];
-    var diagnosticOutcome = outcomes[1];
+    var billingOutcome = withExact(exactBilling, outcomes[0]);
+    var diagnosticOutcome = withExact(exactDiag, outcomes[1]);
 
     // If both sides failed, surface it as a real error instead of a
     // confusing "no results" empty state.
