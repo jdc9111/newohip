@@ -5,7 +5,7 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 782 (skin): Skin symptoms
 919 (skin): Abrasion, brise, bite, FB, crush
 682 (skin): Abscess
-919 (skin): Abscess - Pilonidal cysts
+685 (skin): Abscess - Pilonidal cysts
 949 (skin): Burn
 910 (skin): Bites - Insect
 112 (skin): Candida
@@ -18,7 +18,7 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 706 (skin): Sebaceous Cyst
 454 (skin): Stasis Derm/ulcers, varicose
 708 (skin): Uritcaria
-539 (skin): Zoster
+053 (skin): Zoster
 078 (skin): Warts
 412 (cvs): Angina
 441 (cvs): Aortic Aneurysm
@@ -65,11 +65,11 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 010 (id): TB
 078 (id): Warts
 787 (gi): Abod pain NYD
-560 (gi): Hernia - abdominal
+560 (gi): Bowel obstruction
 565 (gi): Anal fissure
-549 (gi): Appendicitis
+540 (gi): Appendicitis
 574 (gi): Cholecystitis
-565 (gi): Constipation
+564 (gi): Constipation
 555 (gi): Crohns
 009 (gi): Diarrhea/Gastroenteritis
 562 (gi): Diverticulosis
@@ -91,8 +91,8 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 351 (ent): Bell's Palsy
 388 (ent): Earwax
 786 (ent): Epistaxis
-939 (ent): Foreign body - ear
-379 (ent): Hearing Loss
+930 (ent): Foreign body - ear
+389 (ent): Hearing Loss
 386 (ent): Labyrinthitis
 386 (ent): Meniere's, BPVertigo
 380 (ent): Otitis externa
@@ -117,7 +117,7 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 340 (neuro): Muliptle Sclerosis
 780 (neuro): Paresthesia
 332 (neuro): Parkinson's
-739 (neuro): Peripheral nerve, CTS, BELL's
+739 (neuro): Peripheral nerve, CTS
 345 (neuro): Seizure Disorder
 436 (neuro): Stroke (acute)
 437 (neuro): Stroke (chronic)
@@ -138,27 +138,27 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 598 (gu): Urethral stricture
 595 (gu): UTI
 650 (gyne): Delivery - normal
-627 (gyne): Dysfunctional uterine bleeding
-626 (gyne): Dysmennorhea
+626 (gyne): Dysfunctional uterine bleeding
+625 (gyne): Dysmennorhea
 634 (gyne): Early fetal loss - Complete/Incomplete
 632 (gyne): Early fetal loss - Missed
 640 (gyne): Early fetal loss - Threatened
 642 (gyne): Eclampsia, Pre-eclampsia, toxaemia
-615 (gyne): Ectopic pregnancy
-615 (gyne): Endometriosis
+633 (gyne): Ectopic pregnancy
+617 (gyne): Endometriosis
 642 (gyne): Eclampsia, Pre-eclampsia, toxaemia
 218 (gyne): Fibroid
 643 (gyne): Hyperemesis
 626 (gyne): Menorrhagia
-611 (gyne): Menopausal symtoms
-256 (gyne): Ovarian cyst
+627 (gyne): Menopausal symtoms
+220 (gyne): Ovarian cyst
 614 (gyne): PID - Pelvic inflammatory diesease
 669 (gyne): Post-partum complications
 650 (gyne): Pregnancy - normal
 099 (gyne): STI
 616 (gyne): Vaginitis
 303 (psych): Alchohol problems
-316 (psych): Anorexia
+307 (psych): Anorexia
 300 (psych): Anxiety
 312 (psych): Behaviour problem
 290 (psych): Dementia
@@ -179,10 +179,10 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 244 (blood): Hypothyroid
 251 (blood): Hypoglycemia
 274 (blood): Gout
-274 (blood): Neutropenia, WBC abnormality
+288 (blood): Neutropenia, WBC abnormality
 683 (blood): Lymphadenopathy
 199 (blood): Neoplasm - malignant
-279 (blood): Thyroiditis
+245 (blood): Thyroiditis
 739 (nyd): Arthritis
 839 (nyd): Dislocation
 829 (msk): Fracture
@@ -207,7 +207,7 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 611 (breast): Breast disorder
 785 (breast): Breast mass
 174 (breast): Breast ca
-610 (breast): Breast abscess
+611 (breast): Breast abscess
 675 (breast): Mastitis`;
 
 const SYSTEM_PROMPT = `You are an OHIP diagnostic code lookup tool for Emergency Department physicians in Ontario, Canada.
