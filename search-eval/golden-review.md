@@ -14,7 +14,7 @@
 |  | central line | plain | `G269` Central line |  |  |
 |  | cardioversion | plain | `Z437` Cardioversion (max 3/day) |  |  |
 |  | nasal packing | plain | `Z315` Anterior nasal pack<br>`Z316` Posterior nasal pack | `Z314` Nasal cautery |  |
-|  | hernia reduction | plain | `Z538` Hernia reduction |  |  |
+|  | hernia reduction | plain | `Z538` Hernia reduction |  | 560 is intestinal obstruction, not hernia (fixed in the ED list). |
 |  | knee aspiration | plain | `G370` Knee aspiration | `G328` Joint aspiration (not knee) |  |
 |  | cast removal | plain | `Z204` Cast removal |  |  |
 |  | death certificate | plain | `A771` Death certificate<br>`A777` Pronouncement + death certificate |  |  |
@@ -30,7 +30,7 @@
 |  | I&D | abbrev | `Z101` Abscess I&D – one abscess (LA) | `Z173` Abscess I&D – two abscesses (LA)<br>`Z174` Abscess I&D – 3+ abscesses (LA)<br>`Z104` Perianal abscess I&D (LA)<br>`Z106` Pilonidal abscess I&D (LA) |  |
 |  | I+D | abbrev | `Z101` Abscess I&D – one abscess (LA) | `Z173` Abscess I&D – two abscesses (LA)<br>`Z174` Abscess I&D – 3+ abscesses (LA)<br>`Z104` Perianal abscess I&D (LA)<br>`Z106` Pilonidal abscess I&D (LA) |  |
 |  | LP | abbrev | `Z804` Lumbar puncture | `L810` Description of CSF |  |
-|  | FB ear | abbrev | `Z915` Foreign body removal – ear (LA) | `Z866` Foreign body removal – ear (GA) |  |
+|  | FB ear | abbrev | `Z915` Foreign body removal – ear (LA) | `Z866` Foreign body removal – ear (GA) | Ear FB = 930 (foreign body, eye or other tissues); 939 does not exist. |
 |  | FB eye | abbrev | `Z847` Foreign body removal – eye (1 FB) | `Z848` Foreign body removal – eye (2 FBs)<br>`Z852` Foreign body removal – eye, embedded (GA) |  |
 |  | PTA | abbrev | `Z510` Peritonsillar abscess (PTA) drainage |  |  |
 |  | RSI | abbrev | `G211` Intubation |  |  |
@@ -73,7 +73,7 @@
 |  | tapped belly fluid | lay | `Z591` Therapeutic paracentesis<br>`Z590` Diagnostic paracentesis |  |  |
 |  | cauliflower ear drainage | lay | `E318` Pinna hematoma drainage |  |  |
 |  | bleeding after tonsils out | lay | `S066` Post-tonsillectomy haemorrhage - cauterization or suture |  |  |
-|  | stool stuck needs manual removal | lay | `Z756` Rectal disimpaction / fecal disimpaction |  |  |
+|  | stool stuck needs manual removal | lay | `Z756` Rectal disimpaction / fecal disimpaction |  | Constipation = 564; 565 is anal fissure. |
 |  | tube thoracostomy | synonym | `Z341` Chest tube (tube thoracostomy for closed drainage) |  |  |
 |  | cricothyrotomy | synonym | `Z325` Emergency tracheotomy / cricothyrotomy | `E639` Emergency tracheotomy – anterior cricoid split (add-on) | Confirmed: surgical cric is billed as Z325 (Emergency tracheotomy). |
 |  | transcutaneous pacing | synonym | `G115` External cardiac pacing - temporary transthoracic | `Z443` Insertion of transvenous pacemaker |  |
@@ -99,7 +99,7 @@
 |  | code blue | synonym | `G521` Imminent life-threatening: 1st 15 min (1st MD) | `G523` Imminent life-threatening: 2nd 15 min (1st MD)<br>`G522` Imminent life-threatening: each addl 15 min (max 6) |  |
 |  | resus | synonym | `G521` Imminent life-threatening: 1st 15 min (1st MD)<br>`G395` Potential life-threatening: 1st 15 min | `G523` Imminent life-threatening: 2nd 15 min (1st MD)<br>`G522` Imminent life-threatening: each addl 15 min (max 6)<br>`G391` Potential life-threatening: each addl 15 min (max 7) |  |
 |  | misoprostol for miscarriage | synonym | `A920` Misoprostol (including assessment) | `S768` Spontaneous abortion, incomplete - including D&C |  |
-|  | methotrexate ectopic | synonym | `A922` Medical management of ectopic pregnancy - initial service |  |  |
+|  | methotrexate ectopic | synonym | `A922` Medical management of ectopic pregnancy - initial service |  | Ectopic pregnancy = 633; 615 is endometritis. |
 |  | bursitis elbow drainage | synonym | `Z226` Elbow bursa I&D |  |  |
 |  | auricular hematoma | synonym | `E318` Pinna hematoma drainage |  |  |
 |  | paronychia | synonym | `Z101` Abscess I&D – one abscess (LA) | `Z128` Nail removal | Confirmed: drainage billed as Z101, diagnosis 686. |
@@ -179,30 +179,30 @@
 |  | shoulder dislocation | plain | `839` Dislocation |  |  |
 |  | abscess drainage | plain | `682` Abscess / Cellulitis / Cellulits |  |  |
 |  | nasal packing | plain | `786` Epistaxis / Dyspnea/SOB |  |  |
-|  | hernia reduction | plain | `553` Hernia: abd, fem, diaph, hiatus<br>`560` Hernia - abdominal |  |  |
+|  | hernia reduction | plain | `553` Hernia: abd, fem, diaph, hiatus<br>`550` Hernia - Inguinal with or without obstruction / Inguinal Hernia with or without Obstruction / Diseases of the Digestive System - Hernia - Inguinal hernia, with or without obstruction | `552` Hernia - Femoral, umbilical, ventral, diaphragmatic or hiatus hernia with obstruction / Diseases of the Digestive System - Hernia - Femoral, umbilical, ventral, diaphragmatic or hiatus hernia with obstruction | 560 is intestinal obstruction, not hernia (fixed in the ED list). |
 |  | chalazion | plain | `373` Stye, blepharitis, lid problem |  |  |
 |  | priapism | plain | `607` Balanitis / priapism (disorders of penis) |  |  |
 |  | lac | abbrev | `879` Laceration - except limbs<br>`884` Laceration - upper limb<br>`894` Laceration - lower limb |  |  |
-|  | FB ear | abbrev | `939` Foreign body - ear |  |  |
-|  | FB eye | abbrev | `930` Foreign Body |  |  |
+|  | FB ear | abbrev | `930` Foreign Body / Foreign body - ear |  | Ear FB = 930 (foreign body, eye or other tissues); 939 does not exist. |
+|  | FB eye | abbrev | `930` Foreign Body / Foreign body - ear |  |  |
 |  | BPPV | abbrev | `386` Labyrinthitis / Meniere's, BPVertigo | `780` Headache NYD / Paresthesia / Vertigo / Dizziness / Headache |  |
 |  | POC removal | abbrev | `634` Early fetal loss - Complete/Incomplete | `632` Early fetal loss - Missed |  |
 |  | TMJ dislocation | abbrev | `524` Mandible/TMJ problem<br>`839` Dislocation |  |  |
 |  | fx ankle | abbrev | `829` Fracture |  |  |
 |  | tib fib fx | abbrev | `829` Fracture |  |  |
 |  | nosebleed | lay | `786` Epistaxis / Dyspnea/SOB |  |  |
-|  | splinter | lay | `919` Abrasion, brise, bite, FB, crush / Abscess - Pilonidal cysts |  |  |
-|  | fish hook | lay | `919` Abrasion, brise, bite, FB, crush / Abscess - Pilonidal cysts |  |  |
+|  | splinter | lay | `919` Abrasion, brise, bite, FB, crush / Bites - Insect / Insect Bites |  |  |
+|  | fish hook | lay | `919` Abrasion, brise, bite, FB, crush / Bites - Insect / Insect Bites |  |  |
 |  | ear wax | lay | `388` Earwax |  |  |
 |  | nursemaid's elbow | lay | `839` Dislocation |  |  |
 |  | boxer's fracture | lay | `829` Fracture |  |  |
-|  | stool stuck needs manual removal | lay | `565` Anal fissure / Constipation |  |  |
+|  | stool stuck needs manual removal | lay | `564` Constipation |  | Constipation = 564; 565 is anal fissure. |
 |  | radial head subluxation | synonym | `839` Dislocation |  |  |
 |  | distal radius fracture | synonym | `829` Fracture |  |  |
 |  | 5th metacarpal fracture | synonym | `829` Fracture |  |  |
 |  | Weber B | synonym | `829` Fracture |  |  |
 |  | misoprostol for miscarriage | synonym | `634` Early fetal loss - Complete/Incomplete | `632` Early fetal loss - Missed<br>`640` Early fetal loss - Threatened |  |
-|  | methotrexate ectopic | synonym | `615` Ectopic pregnancy / Endometriosis |  |  |
+|  | methotrexate ectopic | synonym | `633` Ectopic pregnancy |  | Ectopic pregnancy = 633; 615 is endometritis. |
 |  | paronychia | synonym | `686` Granuloma, Pyogenic / Paronychia / Pyoderma | `682` Abscess / Cellulitis / Cellulits | Confirmed: drainage billed as Z101, diagnosis 686. |
 |  | face lac 3 cm | variant | `879` Laceration - except limbs |  |  |
 |  | forearm laceration 7cm | variant | `884` Laceration - upper limb |  |  |
@@ -221,7 +221,7 @@
 |  | splinted a broken toe | scenario | `829` Fracture |  |  |
 |  | old man in urinary retention needed a foley | scenario | `600` BPH<br>`599` Hematuria, proteinuria, incontinence, renal problem |  |  |
 |  | cardioverted afib | scenario | `427` Arrythmia / SVT, arrythmia, afib, arrest |  |  |
-|  | rust ring from cornea | scenario | `930` Foreign Body |  |  |
+|  | rust ring from cornea | scenario | `930` Foreign Body / Foreign body - ear |  |  |
 |  | hip dislocation after hip replacement | scenario | `839` Dislocation |  |  |
 |  | lacceration face | typo | `879` Laceration - except limbs |  |  |
 |  | disloaction shoulder | typo | `839` Dislocation |  |  |
@@ -231,7 +231,7 @@
 |  | pnuemothorax chest tube | typo | `512` Pneumothorax |  |  |
 |  | 427 | code | `427` Arrythmia / SVT, arrythmia, afib, arrest |  |  |
 |  | afib | abbrev, diag | `427` Arrythmia / SVT, arrythmia, afib, arrest |  |  |
-|  | chest pain | plain, diag | `785` Chest Pain / Palpitation / Syncope / Chest Pain NYD / Breast mass | `412` Angina<br>`410` MI - acute |  |
+|  | chest pain | plain, diag | `785` Chest Pain / Palpitation / Syncope / Chest Pain NYD | `412` Angina<br>`410` MI - acute |  |
 |  | STEMI | abbrev, diag | `410` MI - acute | `412` Angina |  |
 |  | SOB | abbrev, diag | `786` Epistaxis / Dyspnea/SOB | `493` Asthma<br>`492` COPD<br>`428` CHF |  |
 |  | CHF exacerbation | abbrev, diag | `428` CHF |  |  |
@@ -245,11 +245,11 @@
 |  | pyelo | abbrev, diag | `590` Pyelonephritis | `595` UTI |  |
 |  | renal colic | synonym, diag | `592` Stone - bladder, renal |  |  |
 |  | kidney stone | lay, diag | `592` Stone - bladder, renal |  |  |
-|  | shingles | lay, diag | `053` Herpes Zoster | `539` Zoster | Full list: "Shingles" = 53 (053). 539 is the skin-section line in the AI search list. |
+|  | shingles | lay, diag | `053` Zoster / Herpes Zoster |  | Confirmed: shingles = 053. |
 |  | cellulitis leg | plain, diag | `682` Abscess / Cellulitis / Cellulits |  |  |
 |  | hives | lay, diag | `708` Uritcaria | `977` Overdose / Adverse Effects - Drugs and Medications - including allergy, overdose, reactions |  |
 |  | vomiting and diarrhea | lay, diag | `009` Diarrhea/Gastroenteritis |  |  |
-|  | appy | abbrev, diag | `549` Appendicitis | `787` Abod pain NYD / Abdominal Pain NYD |  |
+|  | appy | abbrev, diag | `540` Appendicitis | `787` Abod pain NYD / Abdominal Pain NYD | Appendicitis = 540; 549 does not exist. |
 |  | biliary colic | synonym, diag | `574` Cholecystitis | `787` Abod pain NYD / Abdominal Pain NYD |  |
 |  | belly pain | lay, diag | `787` Abod pain NYD / Abdominal Pain NYD |  |  |
 |  | migraine | plain, diag | `346` Headache - Migraine / Migraine | `780` Headache NYD / Paresthesia / Vertigo / Dizziness / Headache |  |
@@ -257,7 +257,7 @@
 |  | CVA | abbrev, diag | `436` Stroke (acute) | `435` TIA<br>`437` Stroke (chronic) |  |
 |  | seizure | plain, diag | `345` Seizure Disorder |  |  |
 |  | concussion | plain, diag | `850` Concussion | `854` Head injury / Intracranial injury |  |
-|  | fainted | lay, diag | `785` Chest Pain / Palpitation / Syncope / Chest Pain NYD / Breast mass | `780` Headache NYD / Paresthesia / Vertigo / Dizziness / Headache |  |
+|  | fainted | lay, diag | `785` Chest Pain / Palpitation / Syncope / Chest Pain NYD | `780` Headache NYD / Paresthesia / Vertigo / Dizziness / Headache |  |
 |  | dizzy | lay, diag | `780` Headache NYD / Paresthesia / Vertigo / Dizziness / Headache | `386` Labyrinthitis / Meniere's, BPVertigo |  |
 |  | ankle sprain | plain, diag | `848` Muscle Sprain/Strain |  |  |
 |  | OD | abbrev, diag | `977` Overdose / Adverse Effects - Drugs and Medications - including allergy, overdose, reactions | `304` Drug abuse/addiction |  |
@@ -272,13 +272,13 @@
 |  | swimmer's ear | lay, diag | `380` Otitis externa |  |  |
 |  | AOM | abbrev, diag | `382` Otitis Media |  |  |
 |  | miscarriage | lay, diag | `634` Early fetal loss - Complete/Incomplete<br>`632` Early fetal loss - Missed | `640` Early fetal loss - Threatened |  |
-|  | bleeding in early pregnancy | scenario, diag | `640` Early fetal loss - Threatened | `634` Early fetal loss - Complete/Incomplete<br>`632` Early fetal loss - Missed<br>`615` Ectopic pregnancy / Endometriosis |  |
-|  | ectopic | plain, diag | `615` Ectopic pregnancy / Endometriosis |  |  |
+|  | bleeding in early pregnancy | scenario, diag | `640` Early fetal loss - Threatened | `634` Early fetal loss - Complete/Incomplete<br>`632` Early fetal loss - Missed<br>`633` Ectopic pregnancy |  |
+|  | ectopic | plain, diag | `633` Ectopic pregnancy |  | Ectopic pregnancy = 633; 615 is endometritis. |
 |  | PID | abbrev, diag | `614` PID - Pelvic inflammatory diesease |  |  |
-|  | gout flare | plain, diag | `274` Gout / Neutropenia, WBC abnormality |  |  |
+|  | gout flare | plain, diag | `274` Gout |  |  |
 |  | anaphylaxis | plain, diag | `977` Overdose / Adverse Effects - Drugs and Medications - including allergy, overdose, reactions | `708` Uritcaria |  |
-|  | dog bite | lay, diag | `919` Abrasion, brise, bite, FB, crush / Abscess - Pilonidal cysts |  |  |
-|  | bee sting | lay, diag | `910` Bites - Insect / Insect Bites | `977` Overdose / Adverse Effects - Drugs and Medications - including allergy, overdose, reactions |  |
+|  | dog bite | lay, diag | `919` Abrasion, brise, bite, FB, crush / Bites - Insect / Insect Bites |  |  |
+|  | bee sting | lay, diag | `919` Abrasion, brise, bite, FB, crush / Bites - Insect / Insect Bites | `989` Adverse Effects - Or Other Chemicals (e.g., lead pesticides and venomous bites) / Bee Sting / Bites, Venomous<br>`977` Overdose / Adverse Effects - Drugs and Medications - including allergy, overdose, reactions | Confirmed: insect bites/stings billed as 919. |
 |  | head injury | plain, diag | `854` Head injury / Intracranial injury | `850` Concussion |  |
 |  | mono | abbrev, diag | `075` Mononucleosis, EBV |  |  |
 |  | HTN urgency | abbrev, diag | `401` Hypertension |  |  |
@@ -286,7 +286,7 @@
 |  | back pain | plain, diag | `724` Coccydynia / Lumbago / Lumbar Strain | `847` Neck Sprain/Strain / Strains, Sprains and Other Trauma - Coccyx / Strains, Sprains and Other Trauma - Neck<br>`848` Muscle Sprain/Strain | Full list: 724 = lumbar strain, lumbago, sciatica; 847 = sprain of neck/low back. |
 |  | pneumonai | typo, diag | `486` Pneumonia |  |  |
 |  | diverticulitis | plain, diag | `562` Diverticulosis |  |  |
-|  | bowel obstruction | plain, diag | `560` Hernia - abdominal | `787` Abod pain NYD / Abdominal Pain NYD | Full list: "Obstruction - Intestine" = 560. |
+|  | bowel obstruction | plain, diag | `560` Bowel obstruction | `787` Abod pain NYD / Abdominal Pain NYD | Full list: "Obstruction - Intestine" = 560. |
 |  | GI bleed | abbrev, diag | `787` Abod pain NYD / Abdominal Pain NYD | `531` Gastric ulcer<br>`532` Duodenal ulcer<br>`569` Amputation, Traumatic - Stricture / Rectal / Polyp - Anal or Rectal | Confirmed: undiagnosed hematemesis/melena = 787; 531/532 once an ulcer is confirmed; 569 for rectal bleeding. |
 |  | BRBPR | abbrev, diag | `569` Amputation, Traumatic - Stricture / Rectal / Polyp - Anal or Rectal | `455` Hemmorhoids |  |
 |  | rectal bleeding | plain, diag | `569` Amputation, Traumatic - Stricture / Rectal / Polyp - Anal or Rectal | `455` Hemmorhoids<br>`787` Abod pain NYD / Abdominal Pain NYD |  |
