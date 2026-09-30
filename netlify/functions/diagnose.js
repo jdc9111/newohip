@@ -7,12 +7,12 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 682 (skin): Abscess
 685 (skin): Abscess - Pilonidal cysts
 949 (skin): Burn
-910 (skin): Bites - Insect
+919 (skin): Bites - Insect
 112 (skin): Candida
 682 (skin): Cellulitis
-702 (skin): Dermatitis
+690 (skin): Dermatitis
 684 (skin): Impetigo
-910 (skin): Insect Bites
+919 (skin): Insect Bites
 691 (skin): Rash
 133 (skin): Scabies
 706 (skin): Sebaceous Cyst
@@ -205,7 +205,7 @@ const CODE_LIST = `709 (skin): Skin abnormality, rash NYD
 894 (lac): Laceration - lower limb
 879 (lac): Laceration - except limbs
 611 (breast): Breast disorder
-785 (breast): Breast mass
+611 (breast): Breast mass
 174 (breast): Breast ca
 611 (breast): Breast abscess
 675 (breast): Mastitis`;

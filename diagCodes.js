@@ -32,7 +32,7 @@ export const diagCodes = [
     category: "skin",
   },
   {
-    code: "910",
+    code: "919",
     description: "Bites - Insect",
     category: "skin",
   },
@@ -48,7 +48,7 @@ export const diagCodes = [
     category: "skin",
   },
   {
-    code: "702",
+    code: "690",
     description: "Dermatitis",
     category: "skin",
   },
@@ -58,7 +58,7 @@ export const diagCodes = [
     category: "skin",
   },
   {
-    code: "910",
+    code: "919",
     description: "Insect Bites",
     category: "skin",
   },
@@ -1098,7 +1098,7 @@ export const diagCodes = [
     category: "breast",
   },
   {
-    code: "785",
+    code: "611",
     description: "Breast mass",
     category: "breast",
   },
