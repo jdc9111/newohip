@@ -120,6 +120,7 @@ const DIAG = [
   ["919","Bites, Non-venomous"],
   ["989","Bites, Venomous"],
   ["627","Bleeding - Post-menopausal"],
+  ["80","COVID-19"],
   ["569","Rectal"],
   ["373","Blepharitis"],
   ["369","Blindness"],

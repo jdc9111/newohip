@@ -22,7 +22,7 @@ export const diagCodes = [
   },
 
   {
-    code: "919",
+    code: "685",
     description: "Abscess - Pilonidal cysts",
     category: "skin",
   },
@@ -32,7 +32,7 @@ export const diagCodes = [
     category: "skin",
   },
   {
-    code: "910",
+    code: "919",
     description: "Bites - Insect",
     category: "skin",
   },
@@ -48,7 +48,7 @@ export const diagCodes = [
     category: "skin",
   },
   {
-    code: "702",
+    code: "690",
     description: "Dermatitis",
     category: "skin",
   },
@@ -58,7 +58,7 @@ export const diagCodes = [
     category: "skin",
   },
   {
-    code: "910",
+    code: "919",
     description: "Insect Bites",
     category: "skin",
   },
@@ -88,7 +88,7 @@ export const diagCodes = [
     category: "skin",
   },
   {
-    code: "539",
+    code: "053",
     description: "Zoster",
     category: "skin",
   },
@@ -341,7 +341,7 @@ export const diagCodes = [
   },
   {
     code: "560",
-    description: "Hernia - abdominal",
+    description: "Bowel obstruction",
     category: "gi",
   },
   {
@@ -350,7 +350,7 @@ export const diagCodes = [
     category: "gi",
   },
   {
-    code: "549",
+    code: "540",
     description: "Appendicitis",
     category: "gi",
   },
@@ -360,7 +360,7 @@ export const diagCodes = [
     category: "gi",
   },
   {
-    code: "565",
+    code: "564",
     description: "Constipation",
     category: "gi",
   },
@@ -475,12 +475,12 @@ export const diagCodes = [
     category: "ent",
   },
   {
-    code: "939",
+    code: "930",
     description: "Foreign body - ear",
     category: "ent",
   },
   {
-    code: "379",
+    code: "389",
     description: "Hearing Loss",
     category: "ent",
   },
@@ -609,7 +609,7 @@ export const diagCodes = [
   },
   {
     code: "739",
-    description: "Peripheral nerve, CTS, BELL's",
+    description: "Peripheral nerve, CTS",
     category: "neuro",
   },
   {
@@ -725,12 +725,12 @@ export const diagCodes = [
     category: "gyne",
   },
   {
-    code: "627",
+    code: "626",
     description: "Dysfunctional uterine bleeding",
     category: "gyne",
   },
   {
-    code: "626",
+    code: "625",
     description: "Dysmennorhea",
     category: "gyne",
   },
@@ -756,12 +756,12 @@ export const diagCodes = [
   },
 
   {
-    code: "615",
+    code: "633",
     description: "Ectopic pregnancy",
     category: "gyne",
   },
   {
-    code: "615",
+    code: "617",
     description: "Endometriosis",
     category: "gyne",
   },
@@ -793,13 +793,13 @@ export const diagCodes = [
   },
 
   {
-    code: "611",
+    code: "627",
     description: "Menopausal symtoms",
     category: "gyne",
   },
 
   {
-    code: "256",
+    code: "220",
     description: "Ovarian cyst",
     category: "gyne",
   },
@@ -838,7 +838,7 @@ export const diagCodes = [
     category: "psych",
   },
   {
-    code: "316",
+    code: "307",
     description: "Anorexia",
     category: "psych",
   },
@@ -948,7 +948,7 @@ export const diagCodes = [
     category: "blood",
   },
   {
-    code: "274",
+    code: "288",
     description: "Neutropenia, WBC abnormality",
     category: "blood",
   },
@@ -964,7 +964,7 @@ export const diagCodes = [
     category: "blood",
   },
   {
-    code: "279",
+    code: "245",
     description: "Thyroiditis",
     category: "blood",
   },
@@ -1098,7 +1098,7 @@ export const diagCodes = [
     category: "breast",
   },
   {
-    code: "785",
+    code: "611",
     description: "Breast mass",
     category: "breast",
   },
@@ -1108,7 +1108,7 @@ export const diagCodes = [
     category: "breast",
   },
   {
-    code: "610",
+    code: "611",
     description: "Breast abscess",
     category: "breast",
   },
