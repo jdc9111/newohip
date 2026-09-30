@@ -6,3 +6,4 @@
 # Generated search-benchmark files
 search-eval/index/
 search-eval/results/
+search-eval/cache/

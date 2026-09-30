@@ -1,7 +1,7 @@
 'use strict';
 // Runs the golden set against each search backend and writes a report.
 //
-// Usage: node search-eval/bench.js [--backends home,ai,embed,hybrid] [--index te3-small-512-syn] [--limit 20]
+// Usage: node search-eval/bench.js [--backends home,ai,embed,hybrid,prod] [--index te3-small-512-syn] [--limit 20]
 //
 // Backends
 //   home    the instant search on the home page (same scoring as index.html; runs locally)
@@ -9,6 +9,7 @@
 //           billing and diagnostic calls in parallel, same prompts as search.js
 //   embed   embed the query, rank by cosine similarity (one run per index in search-eval/index/)
 //   hybrid  exact-code match first, then embedding and BM25 ranks merged by reciprocal rank fusion
+//   prod    the shipped hybrid-search function's code (netlify/lib/hybrid.js) and int8 index
 //
 // Each side returns its top 5 codes. Scoring per golden case and side:
 //   hit@1  first result is one of the "best" codes
@@ -22,6 +23,28 @@ var billing = require('../netlify/functions/billing');
 var diagnose = require('../netlify/functions/diagnose');
 
 var TOP = 5;
+
+// --cached: embed every golden query once (batched, cached on disk) and reuse
+// the vectors, so runs are repeatable and immune to network hiccups. Latency
+// then only covers local ranking, so measure real latency on a deploy instead.
+var CACHED = process.argv.indexOf('--cached') !== -1;
+var ALL_QUERIES = [];
+var vecCache = {};
+function queryVec(q, model, dims) {
+  if (!CACHED) return lib.embed([q], model, dims).then(function(r) { return { v: r.vectors[0], tokens: r.tokens }; });
+  var key = model + '-' + dims;
+  if (!vecCache[key]) {
+    vecCache[key] = lib.embedCached(ALL_QUERIES, model, dims).then(function(r) {
+      var m = {};
+      ALL_QUERIES.forEach(function(t, i) { m[t] = r.vectors[i]; });
+      return m;
+    });
+  }
+  return vecCache[key].then(function(m) {
+    // Tokens are counted as if embedded live, so cost stays comparable.
+    return { v: m[q], tokens: Math.ceil(q.length / 4) + 1 };
+  });
+}
 
 function arg(name, dflt) {
   var i = process.argv.indexOf('--' + name);
@@ -146,8 +169,8 @@ function exactCode(q, side) {
 
 function embedBackends(idx) {
   function embedQuery(q) {
-    return lib.embed([q], idx.model, idx.dims).then(function(r) {
-      return { v: r.vectors[0], cost: lib.costUsd(idx.model, { embeddingTokens: r.tokens }) };
+    return queryVec(q, idx.model, idx.dims).then(function(r) {
+      return { v: r.v, cost: lib.costUsd(idx.model, { embeddingTokens: r.tokens }) };
     });
   }
   function semantic(side, v) {
@@ -190,6 +213,25 @@ function embedBackends(idx) {
   ];
 }
 
+// ── prod: the shipped function's code and compressed (int8) index ───────────
+function prodBackend() {
+  var hybrid = require('../netlify/lib/hybrid');
+  var INDEX = JSON.parse(fs.readFileSync(path.join(lib.ROOT, 'netlify', 'data', 'hybrid-index.json'), 'utf8'));
+  var idx = hybrid.load(INDEX);
+  return {
+    name: 'prod:' + INDEX.model.replace('text-embedding-', 'te') + '-' + INDEX.dims + '-int8',
+    run: function(q) {
+      var t = now();
+      var p = hybrid.onlyCodes(idx, q) ? Promise.resolve({ v: null, tokens: 0 }) : queryVec(q, idx.model, idx.dims);
+      return p.then(function(e) {
+        var v = e.v;
+        return { billing: hybrid.rank(idx, 'billing', q, v, TOP), diag: hybrid.rank(idx, 'diag', q, v, TOP),
+                 ms: now() - t, cost: lib.costUsd(idx.model, { embeddingTokens: e.tokens }) };
+      });
+    }
+  };
+}
+
 // ── scoring ──────────────────────────────────────────────────────────────────
 function scoreSide(got, exp, side) {
   var norm = side === 'diag' ? lib.padDiag : function(c) { return String(c).toUpperCase(); };
@@ -214,14 +256,16 @@ function fmtPct(x) { return x == null ? '–' : (x * 100).toFixed(0) + '%'; }
 
 async function main() {
   var golden = JSON.parse(fs.readFileSync(path.join(__dirname, 'golden.json'), 'utf8')).cases;
+  ALL_QUERIES = golden.map(function(c) { return c.q; });
   var limit = Number(arg('limit', 0));
   if (limit) golden = golden.slice(0, limit);
   var wanted = String(arg('backends', 'home,ai,embed,hybrid')).split(',');
 
   var backends = [];
   if (wanted.indexOf('home') !== -1) backends.push(homeBackend());
-  if (wanted.indexOf('ai') !== -1 || wanted.indexOf('embed') !== -1 || wanted.indexOf('hybrid') !== -1) lib.loadEnv();
+  if (['ai', 'embed', 'hybrid', 'prod'].some(function(b) { return wanted.indexOf(b) !== -1; })) lib.loadEnv();
   if (wanted.indexOf('ai') !== -1) backends.push(aiBackend());
+  if (wanted.indexOf('prod') !== -1) backends.push(prodBackend());
   if (wanted.indexOf('embed') !== -1 || wanted.indexOf('hybrid') !== -1) {
     var dir = path.join(__dirname, 'index');
     var only = arg('index', null);

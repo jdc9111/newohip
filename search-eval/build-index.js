@@ -40,7 +40,9 @@ async function main() {
   }));
   // Diagnostic synonyms get one extra row per code rather than being repeated
   // on every row that shares the code.
-  Object.keys(syn.diag).forEach(function(code) {
+  var diagCodes = {};
+  corpus.diag.forEach(function(d) { diagCodes[d.code] = true; });
+  Object.keys(syn.diag).filter(function(code) { return diagCodes[lib.padDiag(code)]; }).forEach(function(code) {
     docs.push({ side: 'diag', code: lib.padDiag(code), text: 'Also searched as: ' + syn.diag[code] });
   });
   if (useEd) {

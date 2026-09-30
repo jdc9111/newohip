@@ -77,6 +77,34 @@ function embed(texts, model, dimensions) {
     });
 }
 
+// Embeds texts via a disk cache (search-eval/cache/<model>-<dims>.json), so
+// ranking experiments are repeatable and don't depend on the network.
+// Returns { vectors, tokens } where tokens counts only newly embedded texts.
+function embedCached(texts, model, dimensions) {
+  var dir = path.join(__dirname, 'cache');
+  var file = path.join(dir, model + '-' + dimensions + '.json');
+  var cache = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : {};
+  var missing = texts.filter(function(t, i) { return !cache[t] && texts.indexOf(t) === i; });
+  var chain = Promise.resolve(0);
+  for (var i = 0; i < missing.length; i += 200) {
+    (function(batch) {
+      chain = chain.then(function(tokens) {
+        return embed(batch, model, dimensions).then(function(r) {
+          batch.forEach(function(t, j) { cache[t] = r.vectors[j].map(function(x) { return Number(x.toFixed(6)); }); });
+          return tokens + r.tokens;
+        });
+      });
+    })(missing.slice(i, i + 200));
+  }
+  return chain.then(function(tokens) {
+    if (missing.length) {
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+      fs.writeFileSync(file, JSON.stringify(cache));
+    }
+    return { vectors: texts.map(function(t) { return cache[t]; }), tokens: tokens };
+  });
+}
+
 function chat(model, system, user, maxTokens) {
   return openai('/v1/chat/completions', {
     model: model,
@@ -122,7 +150,12 @@ function loadCorpus() {
   });
 
   var DIAG = new Function(fs.readFileSync(path.join(ROOT, 'diagData.js'), 'utf8') + '\nreturn DIAG;')();
-  var diagDocs = DIAG.map(function(r) { return { code: padDiag(r[0]), description: r[1] }; });
+  // Skip rows that aren't physician diagnoses: the physiotherapy table (which
+  // reuses real codes with unrelated meanings, e.g. 930 and 894) and the
+  // 4-digit "Common Diagnostic Codes". They only add noise to ED search.
+  var diagDocs = DIAG.filter(function(r) {
+    return !/^Physiotherapy - /.test(r[1]) && !(String(r[0]).length === 4 && /^Common Diagnostic Codes/.test(r[1]));
+  }).map(function(r) { return { code: padDiag(r[0]), description: r[1] }; });
 
   // The ED short list from diagnose.js: the codes ED physicians actually bill,
   // including catch-alls like 829 "Fracture" that they use for any site.
@@ -185,7 +218,7 @@ function costUsd(model, usage) {
 }
 
 module.exports = {
-  ROOT: ROOT, PRICES: PRICES, loadEnv: loadEnv, embed: embed, chat: chat, dot: dot,
+  ROOT: ROOT, PRICES: PRICES, loadEnv: loadEnv, embed: embed, embedCached: embedCached, chat: chat, dot: dot,
   padDiag: padDiag, loadCorpus: loadCorpus, billingText: billingText, diagText: diagText,
   Bm25: Bm25, costUsd: costUsd
 };

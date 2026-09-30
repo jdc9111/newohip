@@ -217,6 +217,12 @@ function renderDiagnosticSection(results, error) {
   </div>`;
 }
 
+// Hybrid search (embeddings + keywords) by default; ?engine=ai uses the older
+// LLM search, for side-by-side comparison.
+const SEARCH_ENDPOINT = new URLSearchParams(location.search).get('engine') === 'ai'
+  ? '/.netlify/functions/search'
+  : '/.netlify/functions/hybrid-search';
+
 async function aiSearch() {
   const query = document.getElementById('ai-query').value.trim();
   if (!query) return;
@@ -230,7 +236,7 @@ async function aiSearch() {
   container.style.display = 'none';
 
   try {
-    const res = await fetch('/.netlify/functions/search', {
+    const res = await fetch(SEARCH_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query })
