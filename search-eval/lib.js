@@ -149,6 +149,30 @@ function loadCorpus() {
     billingDocs.push({ code: m[1], category: m[2], description: parts[0].trim(), notes: parts.slice(1).join('; ').trim() });
   });
 
+  // The home page's extended notes (EXTENDED_NOTES in index.html) carry the
+  // clinical examples that tie presentations to codes, e.g. G395 "chest pain
+  // requiring intervention ... head injury requiring CT". Add them as text.
+  var html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  var start = html.indexOf('const EXTENDED_NOTES = {');
+  if (start !== -1) {
+    var block = html.slice(start, html.indexOf('\n};', start) + 3);
+    var consts = {};
+    (html.slice(html.lastIndexOf('const CONSULTATION_NOTE', start) === -1 ? start : html.indexOf('const CONSULTATION_NOTE'), start)
+      .match(/const (\w+) = `[\s\S]*?`;/g) || []).forEach(function(d) {
+      var mm = d.match(/const (\w+) = `([\s\S]*?)`;/);
+      consts[mm[1]] = mm[2];
+    });
+    var notes = {};
+    var re = /"(\w+)":\s*(?:`([\s\S]*?)`|(\w+))/g, mm;
+    while ((mm = re.exec(block))) notes[mm[1]] = mm[2] !== undefined ? mm[2] : (consts[mm[3]] || '');
+    billingDocs.forEach(function(d) {
+      if (!notes[d.code]) return;
+      var text = notes[d.code].replace(/<[^>]+>/g, ' ').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&')
+        .replace(/\s+/g, ' ').trim();
+      d.notes = (d.notes ? d.notes + '. ' : '') + text;
+    });
+  }
+
   var DIAG = new Function(fs.readFileSync(path.join(ROOT, 'diagData.js'), 'utf8') + '\nreturn DIAG;')();
   // Skip rows that aren't physician diagnoses: the physiotherapy table (which
   // reuses real codes with unrelated meanings, e.g. 930 and 894) and the

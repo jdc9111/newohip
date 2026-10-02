@@ -157,6 +157,16 @@ function rank(idx, side, query, queryVec, top) {
   return dedupe(typed.concat(relevant)).slice(0, top);
 }
 
+// How well the best doc on a side matches the query (cosine similarity), or
+// null without an embedding. Lets a page tell which side the query is about:
+// "chest pain" is 0.65 on diagnoses but 0.32 on billing codes.
+function confidence(idx, side, queryVec) {
+  if (!queryVec) return null;
+  var best = -1;
+  idx[side].docs.forEach(function(d) { var s = dot(queryVec, d.v); if (s > best) best = s; });
+  return Math.round(best * 1000) / 1000;
+}
+
 // True when every word of the query is a known code, so no embedding is needed.
 function onlyCodes(idx, query) {
   var words = query.split(/[\s,]+/).filter(Boolean);
@@ -164,4 +174,4 @@ function onlyCodes(idx, query) {
     typedCodes(idx, 'billing', query).length + typedCodes(idx, 'diag', query).length === words.length;
 }
 
-module.exports = { load: load, rank: rank, onlyCodes: onlyCodes, padDiag: padDiag };
+module.exports = { load: load, rank: rank, confidence: confidence, onlyCodes: onlyCodes, padDiag: padDiag };

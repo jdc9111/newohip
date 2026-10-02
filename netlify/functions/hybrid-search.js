@@ -79,6 +79,8 @@ exports.handler = function(event) {
         billing: billing.hydrate(hybrid.rank(idx, 'billing', query, vec, TOP)),
         diagnostic: hybrid.rank(idx, 'diag', query, vec, TOP).map(diagRow),
         errors: { billing: null, diagnostic: null },
+        // Best-match similarity per side (null for typed codes); see hybrid.confidence.
+        confidence: { billing: hybrid.confidence(idx, 'billing', vec), diagnostic: hybrid.confidence(idx, 'diag', vec) },
         engine: 'hybrid',
         ms: Date.now() - started
       });
