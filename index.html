@@ -203,6 +203,14 @@
     .card-ext-note ul { margin: 4px 0 0 14px; }
     .card-ext-note li { margin-bottom: 2px; }
   }
+  /* Rows promoted by hybrid search (see BestMatch). */
+  .best-pill {
+    display: inline-block; vertical-align: 1px; margin-left: 6px;
+    font-size: 0.62rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--sc-accent-ink); background: var(--sc-accent-wash);
+    border: 1px solid var(--sc-accent-line); border-radius: 4px; padding: 1px 5px;
+  }
 </style>
 <script src="header-v2.js?v=27"></script>
 <script src="diagData.js?v=4"></script>
@@ -778,12 +786,116 @@ function pickRows(rows, tokens, kind, q) {
     return { results: favs.map(c => byCode.get(c) || fallback(c)).map(r => ({ r })), mode: 'favs' };
   }
   const only = favMode ? new Set(favs) : null;
+  // A typed code ("g521", "053") ranks its own row first, above rows that
+  // merely mention it in their notes ("Allowed with G395 but NOT G521").
+  const typed = new Set(q.toLowerCase().split(/[\s,]+/).map(w => w.replace(/^0+(?=\d)/, '')));
   const results = rows
-    .map((r, i) => ({ r, s: (only && !only.has(r[0])) ? 0 : score(tokens[i], q) }))
+    .map((r, i) => ({ r, s: (only && !only.has(r[0])) ? 0 :
+      score(tokens[i], q) + (typed.has(String(r[0]).toLowerCase().replace(/^0+(?=\d)/, '')) ? 1000 : 0) }))
     .filter(x => x.s > 0)
     .sort((a, b) => b.s - a.s);
   return { results, mode: only ? 'favsearch' : 'search' };
 }
+
+// ── Best matches (hybrid search) ─────────────────────────────────────────────
+// The instant search above only matches letters, so "afib", "stitches" or a
+// typo find nothing useful. Shortly after typing stops, ask hybrid search
+// (embeddings + keywords, ~0.4 s) and move its picks to the top of the same
+// lists, tagged "best match"; codes the instant search missed are added. One
+// reorder after a pause, nothing while typing; on any failure the instant
+// results simply stay. Skipped for typed codes, short queries and favourites.
+//
+// A side whose best match is weak while the other side is clearly stronger
+// isn't promoted: "chest pain" is about diagnoses (0.65), and its billing
+// "matches" are just the word chest (chest tube, 0.32). Those picks go below
+// the instant results untagged, and diagnoses are shown above billing.
+const BestMatch = (() => {
+  const WAIT = 350;                       // ms after the instant results render
+  const WEAK = 0.40, MARGIN = 0.15;       // best-match similarity (hybrid-search "confidence")
+  const cache = new Map();                // query -> { billing: [rows], diag: [rows], weak: {billing, diag} }
+  const pending = new Set();
+  const billByCode = new Map(DATA.map(r => [r[0], r]));
+  const pad = c => String(c).padStart(3, '0');
+  let timer = null, ctrl = null;
+
+  const key = q => q.trim().toLowerCase().replace(/\s+/g, ' ');
+  function eligible(q) {
+    const k = key(q);
+    if (favMode || k.length < 3) return false;
+    // Only codes ("h112", "e412 g521", "427")? The instant search has them.
+    return !k.split(/[\s,]+/).every(w => /^[a-z]\d{3}[a-z]?$/.test(w) || /^\d{2,4}$/.test(w));
+  }
+
+  function request(q) {
+    clearTimeout(timer);
+    if (ctrl) { ctrl.abort(); ctrl = null; }
+    pending.clear();
+    const k = key(q);
+    if (!eligible(q) || cache.has(k)) return;
+    pending.add(k);
+    timer = setTimeout(() => {
+      ctrl = new AbortController();
+      const mine = ctrl;
+      fetch('/.netlify/functions/hybrid-search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: q.trim() }),
+        signal: mine.signal
+      })
+        .then(res => { if (!res.ok) throw new Error('hybrid-search ' + res.status); return res.json(); })
+        .then(data => {
+          const c = data.confidence || {}, cb = c.billing, cd = c.diagnostic;
+          const weak = (mine, other) => mine != null && other != null && mine < WEAK && other - mine > MARGIN;
+          cache.set(k, {
+            // Use the page's own row for billing codes (fee, notes, details).
+            billing: (data.billing || []).map(b => billByCode.get(b.code) || [b.code, b.description, null, b.category || '', '']),
+            diag: (data.diagnostic || []).map(d => [d.code, d.description]),
+            weak: { billing: weak(cb, cd), diag: weak(cd, cb) }
+          });
+        })
+        .catch(err => { if (err.name !== 'AbortError') console.warn(err); })
+        .finally(() => {
+          if (ctrl === mine) ctrl = null;
+          pending.delete(k);
+          // Re-render only if the box still holds this query.
+          if (key(document.getElementById('query').value) === k) rerender();
+        });
+    }, WAIT);
+  }
+
+  // Instant results for one section, with hybrid's picks moved to the top.
+  function apply(kind, q, mode, results) {
+    const hit = mode === 'search' && cache.get(key(q));
+    if (!hit || !hit[kind].length) return results;
+    const same = kind === 'diag' ? (a, b) => pad(a) === pad(b) : (a, b) => a === b;
+    if (hit.weak[kind]) {
+      // Weak side: keep the instant order; add only what it missed, at the end.
+      return results.concat(hit[kind].filter(row => !results.some(x => same(x.r[0], row[0]))).map(r => ({ r })));
+    }
+    const top = hit[kind].map(row => {
+      const i = results.findIndex(x => same(x.r[0], row[0]));
+      const r = i === -1 ? row : results.splice(i, 1)[0].r;
+      return { r, best: true };
+    });
+    return top.concat(results);
+  }
+
+  // Diagnoses above billing when the query is clearly about a diagnosis.
+  const main = document.querySelector('main');
+  function arrange(q) {
+    const hit = cache.get(key(q));
+    const diagFirst = !!(hit && hit.weak.billing && !favMode);
+    const isFirst = billingSection.compareDocumentPosition(diagSection) & Node.DOCUMENT_POSITION_PRECEDING;
+    if (diagFirst && !isFirst) main.insertBefore(diagSection, billingSection);
+    if (!diagFirst && isFirst) main.insertBefore(billingSection, diagSection);
+  }
+
+  return {
+    request, apply, arrange,
+    waiting: q => pending.has(key(q)),
+    pill: x => x.best ? '<span class="best-pill" title="Top match from smart search">best match</span>' : ''
+  };
+})();
 
 // Locked favourites view with nothing to show: explain why, per sign-in state.
 function renderFavEmpty() {
@@ -829,7 +941,9 @@ function renderDiag(query) {
   const q = (query || "").trim();
   diagTbody.innerHTML = "";
 
-  const { results, mode } = pickRows(DIAG, DIAG_TOKENS, 'diag', q);
+  const picked = pickRows(DIAG, DIAG_TOKENS, 'diag', q);
+  const mode = picked.mode;
+  const results = BestMatch.apply('diag', q, mode, picked.results);
   diagSection.style.display = mode === 'blank' ? "none" : "";
   if (mode === 'blank') {
     diagTbl.style.display = "none";
@@ -839,9 +953,10 @@ function renderDiag(query) {
   }
 
   if (results.length === 0) {
+    const waiting = BestMatch.waiting(q);
     diagTbl.style.display = "none";
-    diagEmpty.style.display = mode === 'favs' ? "none" : "block";
-    diagStatus.textContent = "";
+    diagEmpty.style.display = mode === 'favs' || waiting ? "none" : "block";
+    diagStatus.textContent = waiting ? "Searching…" : "";
     if (mode === 'favs') diagSection.style.display = "none";
     return;
   }
@@ -851,9 +966,10 @@ function renderDiag(query) {
   diagStatus.textContent = statusText(results.length, q, mode);
 
   const frag = document.createDocumentFragment();
-  for (const { r } of results) {
+  for (const x of results) {
+    const r = x.r;
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td><span class="fav-code">${Fav.btn('diag', r[0])}${highlight(r[0], q)}</span></td><td>${highlight(r[1], q)}</td>`;
+    tr.innerHTML = `<td><span class="fav-code">${Fav.btn('diag', r[0])}${highlight(r[0], q)}</span></td><td>${highlight(r[1], q)}${BestMatch.pill(x)}</td>`;
     frag.appendChild(tr);
   }
   diagTbody.appendChild(frag);
@@ -992,10 +1108,13 @@ function toggleExtNote(btn) {
 
 function render(query) {
   const q = (query || "").trim();
+  BestMatch.arrange(q);
   tbody.innerHTML = "";
   cards.innerHTML = "";
 
-  const { results, mode } = pickRows(DATA, SEARCH_TOKENS, 'billing', q);
+  const picked = pickRows(DATA, SEARCH_TOKENS, 'billing', q);
+  const mode = picked.mode;
+  const results = BestMatch.apply('billing', q, mode, picked.results);
   billingSection.style.display = mode === 'blank' ? "none" : "";
   if (mode === 'blank') {
     tbl.style.display = "none";
@@ -1005,9 +1124,10 @@ function render(query) {
   }
 
   if (results.length === 0) {
+    const waiting = BestMatch.waiting(q);
     tbl.style.display = "none";
-    empty.style.display = mode === 'favs' ? "none" : "block";
-    status.textContent = "";
+    empty.style.display = mode === 'favs' || waiting ? "none" : "block";
+    status.textContent = waiting ? "Searching…" : "";
     if (mode === 'favs') billingSection.style.display = "none";
     return;
   }
@@ -1018,8 +1138,8 @@ function render(query) {
 
 
   const frag = document.createDocumentFragment();
-  for (const { r } of results) {
-    const [code, desc, fee, cat, notes] = r;
+  for (const x of results) {
+    const [code, desc, fee, cat, notes] = x.r;
     const feeStr = fee !== null ? "$" + fee : "—";
     const extNote = EXTENDED_NOTES[code] || "";
 
@@ -1028,7 +1148,7 @@ function render(query) {
     tr.innerHTML = `
       <td><span class="fav-code">${Fav.btn('billing', code)}${highlight(code, q)}</span></td>
       <td>
-        ${highlight(desc, q)}${extNote ? `<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">i</button><div class="ext-note">${extNote}</div>` : ""}
+        ${highlight(desc, q)}${BestMatch.pill(x)}${extNote ? `<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">i</button><div class="ext-note">${extNote}</div>` : ""}
         <div class="cat-pill">${highlight(cat, q)}</div>
         ${notes ? `<div class="note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
       </td>
@@ -1044,7 +1164,7 @@ function render(query) {
         <span class="card-code fav-code">${Fav.btn('billing', code)}${highlight(code, q)}</span>
         <span class="card-fee">${feeStr}</span>
       </div>
-      <div class="card-desc">${highlight(desc, q)}</div>
+      <div class="card-desc">${highlight(desc, q)}${BestMatch.pill(x)}</div>
       ${hasDetails ? `
       <button class="card-details-btn" onclick="toggleCardNote(this)">Details ›</button>
       <div class="card-details-panel">
@@ -1082,7 +1202,10 @@ if (matchMedia('(max-width: 640px)').matches) {
 let timer;
 document.getElementById("query").addEventListener("input", e => {
   clearTimeout(timer);
-  timer = setTimeout(() => { render(e.target.value); renderDiag(e.target.value); }, 120);
+  timer = setTimeout(() => {
+    BestMatch.request(e.target.value);
+    render(e.target.value); renderDiag(e.target.value);
+  }, 120);
 });
 
 // initial render

@@ -10,8 +10,13 @@
 
 var RRF_K = 60;
 
+// Filler words never count as keyword matches ("shoulder reduction with
+// sedation" matched "Delivery - With Other Complications" on "with").
+var STOPWORDS = { a: 1, an: 1, and: 1, at: 1, by: 1, for: 1, from: 1, in: 1, is: 1, of: 1, on: 1, or: 1, the: 1, to: 1, with: 1 };
+
 function tokenize(s) {
-  return String(s).toLowerCase().replace(/[^a-z0-9&+]+/g, ' ').trim().split(' ').filter(Boolean);
+  return String(s).toLowerCase().replace(/[^a-z0-9&+]+/g, ' ').trim().split(' ')
+    .filter(function(t) { return t && !STOPWORDS[t]; });
 }
 
 function Bm25(texts) {
@@ -96,6 +101,10 @@ var COS_GAP = 0.06, ED_GAP = 0.05, BM25_REL = 0.5;
 // relative rules above keep everything. A result (including the first) also
 // needs similarity >= COS_FLOOR unless keyword matching backs it.
 var COS_FLOOR = Number(process.env.HYBRID_COS_FLOOR || 0.40);
+// Results after the first that only qualify by being close to the top (not by
+// keywords) need a higher bar: when the top match is itself weak, "close to
+// it" means little ("nursemaid elbow" pulled in 642 eclampsia at 0.42).
+var EXTRA_FLOOR = Number(process.env.HYBRID_EXTRA_FLOOR || 0.43);
 
 function bestBy(docs, scores, filter) {
   var best = {};
@@ -141,9 +150,21 @@ function rank(idx, side, query, queryVec, top) {
     var keyword = bmTop > 0 && (bmBy[c] || 0) >= BM25_REL * bmTop;
     if (keyword) return true;
     if (cosBy[c] < COS_FLOOR) return false;
-    return i === 0 || cosTop - cosBy[c] <= COS_GAP || (c in edBy && edTop - edBy[c] <= ED_GAP);
+    if (i === 0) return true;
+    if (cosBy[c] < EXTRA_FLOOR) return false;
+    return cosTop - cosBy[c] <= COS_GAP || (c in edBy && edTop - edBy[c] <= ED_GAP);
   });
   return dedupe(typed.concat(relevant)).slice(0, top);
+}
+
+// How well the best doc on a side matches the query (cosine similarity), or
+// null without an embedding. Lets a page tell which side the query is about:
+// "chest pain" is 0.65 on diagnoses but 0.32 on billing codes.
+function confidence(idx, side, queryVec) {
+  if (!queryVec) return null;
+  var best = -1;
+  idx[side].docs.forEach(function(d) { var s = dot(queryVec, d.v); if (s > best) best = s; });
+  return Math.round(best * 1000) / 1000;
 }
 
 // True when every word of the query is a known code, so no embedding is needed.
@@ -153,4 +174,4 @@ function onlyCodes(idx, query) {
     typedCodes(idx, 'billing', query).length + typedCodes(idx, 'diag', query).length === words.length;
 }
 
-module.exports = { load: load, rank: rank, onlyCodes: onlyCodes, padDiag: padDiag };
+module.exports = { load: load, rank: rank, confidence: confidence, onlyCodes: onlyCodes, padDiag: padDiag };
