@@ -203,6 +203,7 @@
     .card-ext-note ul { margin: 4px 0 0 14px; }
     .card-ext-note li { margin-bottom: 2px; }
   }
+  .show-all { color: var(--sc-rail); font-weight: 600; }
   /* Rows promoted by hybrid search (see BestMatch). */
   .best-pill {
     display: inline-block; vertical-align: 1px; margin-left: 6px;
@@ -789,12 +790,30 @@ function pickRows(rows, tokens, kind, q) {
   // A typed code ("g521", "053") ranks its own row first, above rows that
   // merely mention it in their notes ("Allowed with G395 but NOT G521").
   const typed = new Set(q.toLowerCase().split(/[\s,]+/).map(w => w.replace(/^0+(?=\d)/, '')));
-  const results = rows
+  const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+  let results = rows
     .map((r, i) => ({ r, s: (only && !only.has(r[0])) ? 0 :
-      score(tokens[i], q) + (typed.has(String(r[0]).toLowerCase().replace(/^0+(?=\d)/, '')) ? 1000 : 0) }))
+      score(tokens[i], q) + (typed.has(String(r[0]).toLowerCase().replace(/^0+(?=\d)/, '')) ? 1000 : 0),
+      all: words.every(w => tokens[i].includes(w)) }))
     .filter(x => x.s > 0)
     .sort((a, b) => b.s - a.s);
+  // If some rows match every word, the rest only share one word ("tibia
+  // fracture" listed all 57 fracture codes for 2 tibia rows): drop them.
+  if (results.some(x => x.all || x.s >= 1000)) results = results.filter(x => x.all || x.s >= 1000);
   return { results, mode: only ? 'favsearch' : 'search' };
+}
+
+// Partial-match lists (no row has every word, e.g. "chest pain") can run to
+// dozens of rows; show the first PARTIAL_CAP until "Show all" is clicked.
+const PARTIAL_CAP = 15;
+let showAllFor = '';
+function capRows(results, q) {
+  if (showAllFor === q || results.length <= PARTIAL_CAP || results.some(x => x.all)) return { shown: results, hidden: 0 };
+  return { shown: results.slice(0, PARTIAL_CAP), hidden: results.length - PARTIAL_CAP };
+}
+function showAll(q) { showAllFor = q; rerender(); }
+function moreLink(hidden, q) {
+  return hidden ? ` · <a href="#" class="show-all" onclick="showAll(${esc(JSON.stringify(q)).replace(/"/g, '&quot;')});return false">show ${hidden} more</a>` : '';
 }
 
 // ── Best matches (hybrid search) ─────────────────────────────────────────────
@@ -963,10 +982,11 @@ function renderDiag(query) {
 
   diagTbl.style.display = "";
   diagEmpty.style.display = "none";
-  diagStatus.textContent = statusText(results.length, q, mode);
+  const { shown, hidden } = capRows(results, q);
+  diagStatus.innerHTML = esc(statusText(results.length, q, mode)) + moreLink(hidden, q);
 
   const frag = document.createDocumentFragment();
-  for (const x of results) {
+  for (const x of shown) {
     const r = x.r;
     const tr = document.createElement("tr");
     tr.innerHTML = `<td><span class="fav-code">${Fav.btn('diag', r[0])}${highlight(r[0], q)}</span></td><td>${highlight(r[1], q)}${BestMatch.pill(x)}</td>`;
@@ -1134,11 +1154,12 @@ function render(query) {
 
   tbl.style.display = "";
   empty.style.display = "none";
-  status.textContent = statusText(results.length, q, mode);
+  const { shown, hidden } = capRows(results, q);
+  status.innerHTML = esc(statusText(results.length, q, mode)) + moreLink(hidden, q);
 
 
   const frag = document.createDocumentFragment();
-  for (const x of results) {
+  for (const x of shown) {
     const [code, desc, fee, cat, notes] = x.r;
     const feeStr = fee !== null ? "$" + fee : "—";
     const extNote = EXTENDED_NOTES[code] || "";
