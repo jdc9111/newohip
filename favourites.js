@@ -273,7 +273,7 @@
             <div class="err"></div>
             <button type="submit" class="sc-btn">Send code</button>
           </form>
-          <p class="fav-fine">We only use your email to sign you in. Favourites are billing codes only — never patient information.</p>
+          <p class="fav-fine">We only use your email to sign you in. Favourites are billing codes only — never patient information. <a href="privacy.html" target="_blank">Privacy Policy</a></p>
         </div>
         <div class="fav-step-code" style="display:none">
           <h2>Enter the code from the email</h2>

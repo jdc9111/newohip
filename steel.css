@@ -71,6 +71,12 @@ main {
 .results-section-title svg { color: var(--sc-rail); flex-shrink: 0; }
 .hint { margin: 8px 0 0; font-size: 0.63rem; font-weight: 400; letter-spacing: 0.13em; }
 
+/* Search-box caption with the patient-information warning on the right;
+   wraps under the caption on narrow screens. */
+.hint:has(.sc-phi) { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 12px; }
+.sc-phi { color: #8A5A00; font-weight: 600; }
+.sc-phi::before { content: "⚠ "; }
+
 .page-title,
 .specialty-title,
 .extremity-title {

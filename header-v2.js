@@ -203,6 +203,19 @@ const CSS = `
     .sc-drawer a.sc-fb-card span { opacity: 0.85; }
   }
 
+  /* ───────── Page footer (disclaimer + legal links) ─────────
+     In the page flow, not fixed: it sits under <main> and costs no
+     screen space while searching. */
+  .sc-legal {
+    width: 100%; max-width: 960px; align-self: center; box-sizing: border-box;
+    padding: 18px 16px 22px; border-top: 1px solid ${C.line};
+    font-size: 11.5px; line-height: 1.5; color: ${C.muted}; text-align: center;
+  }
+  .sc-legal p { margin: 0 0 6px; }
+  .sc-legal a { color: ${C.railDeep}; text-decoration: none; white-space: nowrap; }
+  .sc-legal a:hover { text-decoration: underline; }
+  .sc-legal .sc-sep { margin: 0 7px; opacity: 0.5; }
+
   @media print {
     .sc-rail, .sc-mtop, .sc-tabbar, .sc-drawer { display: none !important; }
     body.sc-shell { padding: 0 !important; }
@@ -399,7 +412,28 @@ class AppHeader extends HTMLElement {
     this.querySelector('#scBrowse').addEventListener('click', open);
     this.querySelector('#scDrawerX').addEventListener('click', close);
     document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+    // The header upgrades while the parser is still at the top of <body>,
+    // so wait for the rest of the page before appending the footer after it.
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', appendLegalFooter);
+    } else {
+      appendLegalFooter();
+    }
   }
+}
+
+function appendLegalFooter() {
+  if (document.querySelector('.sc-legal')) return;
+  const f = document.createElement('footer');
+  f.className = 'sc-legal';
+  f.innerHTML =
+    `<p>ShiftCodes is an independent reference tool, not affiliated with OHIP or the Ontario Ministry of Health. ` +
+    `Always verify codes against the current Schedule of Benefits before billing.</p>` +
+    `<p><a href="terms.html">Terms of Use</a><span class="sc-sep">·</span>` +
+    `<a href="privacy.html">Privacy Policy</a><span class="sc-sep">·</span>` +
+    `<a href="${FEEDBACK_URL}">Contact</a></p>`;
+  document.body.appendChild(f);
 }
 
 customElements.define('app-header', AppHeader);

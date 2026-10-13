@@ -24,7 +24,7 @@
   gtag('js', new Date());
   gtag('config', 'G-YMK3RYM38R');
 </script>
-<link rel="stylesheet" href="steel.css?v=1">
+<link rel="stylesheet" href="steel.css?v=2">
 <style>
   /* Shared foundation (tokens, toolbar, table, chips, empty states) → steel.css
      Header/nav → header-v2.js. Only index-specific rules live here. */
@@ -213,10 +213,10 @@
     border: 1px solid var(--sc-accent-line); border-radius: 4px; padding: 1px 5px;
   }
 </style>
-<script src="header-v2.js?v=27"></script>
+<script src="header-v2.js?v=28"></script>
 <script src="diagData.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
-<script src="favourites.js?v=6"></script>
+<script src="favourites.js?v=7"></script>
 </head>
 <body>
 
@@ -233,7 +233,7 @@
     <input id="query" class="sc-input" type="search" placeholder="Search code, procedure, or diagnosis…" autocomplete="off">
     <script>if (matchMedia('(min-width: 641px)').matches) document.getElementById('query').focus();</script>
   </div>
-  <p class="hint">Billing + diagnostic codes</p>
+  <p class="hint"><span class="hint-txt">Billing + diagnostic codes</span><span class="sc-phi">No patient names or identifiers</span></p>
   <div class="search-examples" id="searchExamples">
     <span class="search-chip chip-fav" id="favChip" onclick="toggleFavMode()" style="display:none" title="Show only your starred codes">★ Favourites</span>
     <span class="search-chip" onclick="setQuery('night premium')">night premium</span>
@@ -754,7 +754,7 @@ if (favKind) {
   document.body.classList.add('fav-view');
   document.getElementById('query').placeholder =
     favKind === 'billing' ? 'Search your favourite billing codes…' : 'Search your favourite diagnostic codes…';
-  document.querySelector('.hint').textContent =
+  document.querySelector('.hint-txt').textContent =
     favKind === 'billing' ? 'Favourites · billing codes' : 'Favourites · diagnostic codes';
 }
 
