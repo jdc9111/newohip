@@ -23,7 +23,7 @@
   gtag('js', new Date());
   gtag('config', 'G-YMK3RYM38R');
 </script>
-<link rel="stylesheet" href="steel.css?v=1">
+<link rel="stylesheet" href="steel.css?v=2">
 <style>
   /* Shared foundation → steel.css. Header/nav → header-v2.js.
      Only AI-search-specific rules live here. */
@@ -77,9 +77,9 @@
     .ai-cards { display: flex; padding: 0; }
   }
 </style>
-<script src="header-v2.js?v=27"></script>
+<script src="header-v2.js?v=28"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
-<script src="favourites.js?v=6"></script>
+<script src="favourites.js?v=7"></script>
 </head>
 <body>
 
@@ -99,7 +99,7 @@
         <span id="ai-btn-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3"></path></svg> Search</span>
       </button>
     </div>
-    <p class="hint">AI &middot; billing + diagnostic codes</p>
+    <p class="hint"><span class="hint-txt">AI &middot; billing + diagnostic codes</span><span class="sc-phi">No patient names or identifiers</span></p>
     <div class="search-examples" id="searchExamples">
       <span class="search-chip" onclick="runExample('Shoulder dislocation reduction')">shoulder dislocation</span>
       <span class="search-chip" onclick="runExample('Afib')">afib</span>
