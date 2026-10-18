@@ -23,7 +23,7 @@
   gtag('js', new Date());
   gtag('config', 'G-YMK3RYM38R');
 </script>
-<link rel="stylesheet" href="steel.css?v=2">
+<link rel="stylesheet" href="steel.css?v=3">
 <style>
   /* Shared foundation → steel.css. Header/nav → header-v2.js.
      Only AI-search-specific rules live here. */
@@ -113,6 +113,11 @@
 </div>
 
 <main>
+  <div id="kind-switch" class="kind-switch" role="radiogroup" aria-label="Show results" style="display:none">
+    <button type="button" role="radio" aria-checked="true" data-k="all" onclick="setKind('all')">All</button>
+    <button type="button" role="radio" aria-checked="false" data-k="billing" onclick="setKind('billing')">Billing<span class="kind-n"></span></button>
+    <button type="button" role="radio" aria-checked="false" data-k="diag" onclick="setKind('diag')">Diagnostic<span class="kind-n"></span></button>
+  </div>
   <div id="ai-results-container" style="display:none"></div>
 
   <div class="disclaimer sc-note">
@@ -144,13 +149,13 @@ function escapeHtml(str) {
 
 function renderBillingSection(results, error) {
   if (error && !results.length) {
-    return `<div class="results-section">
+    return `<div class="results-section" data-kind="billing">
       <div class="results-section-title">${ICON_COIN} Billing codes</div>
       <div class="ai-results sc-card"><div class="section-error">Billing lookup unavailable — ${escapeHtml(error)}</div></div>
     </div>`;
   }
   if (!results.length) {
-    return `<div class="results-section">
+    return `<div class="results-section" data-kind="billing">
       <div class="results-section-title">${ICON_COIN} Billing codes</div>
       <div class="ai-results sc-card"><div class="ai-results-header">No billing codes match that search</div></div>
     </div>`;
@@ -171,7 +176,7 @@ function renderBillingSection(results, error) {
       <div class="card-desc">${escapeHtml(r.description)}</div>
     </div>`
   ).join('');
-  return `<div class="results-section">
+  return `<div class="results-section" data-kind="billing">
     <div class="results-section-title">${ICON_COIN} Billing codes</div>
     <div class="ai-results sc-card">
       <table>
@@ -185,13 +190,13 @@ function renderBillingSection(results, error) {
 
 function renderDiagnosticSection(results, error) {
   if (error && !results.length) {
-    return `<div class="results-section">
+    return `<div class="results-section" data-kind="diag">
       <div class="results-section-title">${ICON_TAG} Diagnostic codes</div>
       <div class="ai-results sc-card"><div class="section-error">Diagnostic lookup unavailable — ${escapeHtml(error)}</div></div>
     </div>`;
   }
   if (!results.length) {
-    return `<div class="results-section">
+    return `<div class="results-section" data-kind="diag">
       <div class="results-section-title">${ICON_TAG} Diagnostic codes</div>
       <div class="ai-results sc-card"><div class="ai-results-header">No diagnostic codes match that search</div></div>
     </div>`;
@@ -205,7 +210,7 @@ function renderDiagnosticSection(results, error) {
       <div class="card-desc">${escapeHtml(r.description)}</div>
     </div>`
   ).join('');
-  return `<div class="results-section">
+  return `<div class="results-section" data-kind="diag">
     <div class="results-section-title">${ICON_TAG} Diagnostic codes</div>
     <div class="ai-results sc-card">
       <table>
@@ -215,6 +220,22 @@ function renderDiagnosticSection(results, error) {
       <div class="ai-cards">${cardItems}</div>
     </div>
   </div>`;
+}
+
+// All · Billing · Diagnostic switch: CSS hides the other kind's section.
+// Deliberately not remembered: on a shared workstation the next doctor would
+// find half the results missing.
+function setKind(kind) {
+  document.body.classList.remove('kind-billing', 'kind-diag');
+  if (kind !== 'all') document.body.classList.add('kind-' + kind);
+  for (const b of document.querySelectorAll('#kind-switch button'))
+    b.setAttribute('aria-checked', b.dataset.k === kind);
+}
+function showKindSwitch(counts) {
+  const sw = document.getElementById('kind-switch');
+  sw.style.display = counts ? '' : 'none';
+  for (const k of ['billing', 'diag'])
+    sw.querySelector(`[data-k="${k}"] .kind-n`).textContent = counts ? counts[k] : '';
 }
 
 // Hybrid search (embeddings + keywords) by default; ?engine=ai uses the older
@@ -234,6 +255,7 @@ async function aiSearch() {
   btn.disabled = true;
   label.innerHTML = '<span class="ai-spinner"></span> Searching...';
   container.style.display = 'none';
+  showKindSwitch(null);
 
   try {
     const res = await fetch(SEARCH_ENDPOINT, {
@@ -253,6 +275,7 @@ async function aiSearch() {
       renderBillingSection(billingResults, errors.billing) +
       renderDiagnosticSection(diagnosticResults, errors.diagnostic);
     container.style.display = '';
+    showKindSwitch({ billing: billingResults.length, diag: diagnosticResults.length });
 
   } catch (err) {
     container.innerHTML = '<div class="ai-results sc-card"><div class="ai-results-header" style="color:#dc2626">AI search unavailable — please try again</div></div>';
