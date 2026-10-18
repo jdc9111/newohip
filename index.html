@@ -793,7 +793,9 @@ function setKind(kind) {
 }
 function renderKindSwitch() {
   const sw = document.getElementById('kind-switch');
-  sw.style.display = !favKind && kindN.billing !== null && kindN.diag !== null ? '' : 'none';
+  // Shown before a search too, so the choice can be made up front; counts
+  // appear once there are results. Hidden in the locked favourites views.
+  sw.style.display = favKind ? 'none' : '';
   for (const k of ['billing', 'diag'])
     sw.querySelector(`[data-k="${k}"] .kind-n`).textContent = kindN[k] ?? '';
 }
@@ -1262,6 +1264,7 @@ document.getElementById("query").addEventListener("input", e => {
 // initial render
 render("");
 renderDiag("");
+renderKindSwitch();
 renderFavEmpty();
 
 // ── Code-of-the-Day ──────────────────────────────────────────────────────────
