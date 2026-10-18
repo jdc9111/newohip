@@ -180,6 +180,37 @@ mark {
   .search-examples.expanded .chip-extra { display: block; }
 }
 
+/* All · Billing · Diagnostic switch above search results. The body class
+   hides the other kind's section (it wins over inline display styles). */
+.kind-switch {
+  display: inline-flex;
+  gap: 2px;
+  margin-bottom: 16px;
+  padding: 3px;
+  background: #fff;
+  border: 1px solid var(--sc-line);
+  border-radius: 999px;
+}
+.kind-switch button {
+  font-family: var(--sc-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--sc-rail-deep);
+  background: none;
+  border: none;
+  border-radius: 999px;
+  padding: 7px 14px;
+  min-height: 34px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.kind-switch button:hover { background: var(--sc-hover); }
+.kind-switch button[aria-checked="true"] { background: var(--sc-rail-deep); color: #fff; }
+.kind-n { font-family: var(--sc-mono); font-size: 0.7rem; font-weight: 500; opacity: .7; margin-left: 3px; }
+.kind-n:empty { display: none; }
+body.kind-billing [data-kind="diag"],
+body.kind-diag [data-kind="billing"] { display: none !important; }
+
 /* ── Buttons ────────────────────────────────────────────────────────── */
 
 .sc-btn {
