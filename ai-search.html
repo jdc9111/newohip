@@ -113,7 +113,7 @@
 </div>
 
 <main>
-  <div id="kind-switch" class="kind-switch" role="radiogroup" aria-label="Show results" style="display:none">
+  <div id="kind-switch" class="kind-switch" role="radiogroup" aria-label="Show results">
     <button type="button" role="radio" aria-checked="true" data-k="all" onclick="setKind('all')">All</button>
     <button type="button" role="radio" aria-checked="false" data-k="billing" onclick="setKind('billing')">Billing<span class="kind-n"></span></button>
     <button type="button" role="radio" aria-checked="false" data-k="diag" onclick="setKind('diag')">Diagnostic<span class="kind-n"></span></button>
@@ -231,9 +231,10 @@ function setKind(kind) {
   for (const b of document.querySelectorAll('#kind-switch button'))
     b.setAttribute('aria-checked', b.dataset.k === kind);
 }
+// Always shown, so the choice can be made before searching; counts appear
+// once there are results.
 function showKindSwitch(counts) {
   const sw = document.getElementById('kind-switch');
-  sw.style.display = counts ? '' : 'none';
   for (const k of ['billing', 'diag'])
     sw.querySelector(`[data-k="${k}"] .kind-n`).textContent = counts ? counts[k] : '';
 }
