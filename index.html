@@ -24,7 +24,7 @@
   gtag('js', new Date());
   gtag('config', 'G-YMK3RYM38R');
 </script>
-<link rel="stylesheet" href="steel.css?v=3">
+<link rel="stylesheet" href="steel.css?v=4">
 <style>
   /* Shared foundation (tokens, toolbar, table, chips, empty states) → steel.css
      Header/nav → header-v2.js. Only index-specific rules live here. */
@@ -1222,7 +1222,7 @@ function render(query) {
     tr.innerHTML = `
       <td><span class="fav-code">${Fav.btn('billing', code)}${highlight(code, q)}</span></td>
       <td>
-        ${highlight(desc, q)}${BestMatch.pill(x)}${extNote ? `<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">i</button><div class="ext-note">${extNote}</div>` : ""}
+        ${highlight(desc, q)}${BestMatch.pill(x)}${extNote ? `<button class="info-btn" onclick="toggleExtNote(this)" title="Show details">Details</button><div class="ext-note">${extNote}</div>` : ""}
         <div class="cat-pill">${highlight(cat, q)}</div>
         ${notes ? `<div class="note">${/[<>]/.test(notes) ? notes : highlight(notes, q)}</div>` : ""}
       </td>
