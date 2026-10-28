@@ -8,11 +8,11 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ShiftCodes">
 <meta name="theme-color" content="#1F4E79">
-<title>Billing Value by Shift | ShiftCodes</title>
+<title>Rank-Order Billing Table by Shift | ShiftCodes</title>
 <meta name="description" content="Eligible OHIP billing combinations for the Ontario emergency department, ranked by value for each shift period — daytime, weekday evening, weekend and holiday, and overnight.">
 <meta property="og:site_name" content="ShiftCodes">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Billing Value by Shift | ShiftCodes">
+<meta property="og:title" content="Rank-Order Billing Table by Shift | ShiftCodes">
 <meta property="og:description" content="Eligible OHIP billing combinations for the Ontario emergency department, ranked by value for each shift period.">
 <meta property="og:url" content="https://newohipcodes.netlify.app/shift-value.html">
 <!-- Google tag (gtag.js) -->
@@ -135,7 +135,7 @@
     .sv-intro { padding-bottom: 6px; }
   }
 </style>
-<script src="header-v2.js?v=29"></script>
+<script src="header-v2.js?v=30"></script>
 <script src="billingData.js?v=1"></script>
 </head>
 <body>
@@ -144,7 +144,7 @@
 
 <main>
   <div class="sv-intro">
-    <h1 class="sv-h1">Billing value by shift</h1>
+    <h1 class="sv-h1">Rank-order billing table by shift</h1>
     <p class="sv-sub">The highest-value <b>eligible</b> combination per encounter, by shift period. Bill what you actually did — this ranks the combinations that are billable together, it does not suggest what to claim. Fees effective April 1, 2026.</p>
   </div>
 
@@ -194,6 +194,7 @@ const SHIFTS = [
   { id:'evening', name:'Evening',         when:'Mon–Thu 17:00–24:00',       prem:'H114',
     minor:'H131', comp:'H132', multi:'H133', re:'H134' },
   { id:'wknd',    name:'Wknd / Holiday',  when:'08:00–24:00 · incl Fri eve', prem:'H113',
+    pick:'Wknd / Hol + Fri eve',
     minor:'H151', comp:'H152', multi:'H153', re:'H154' },
   { id:'nights',  name:'Nights',          when:'00:00–08:00',               prem:'H112',
     minor:'H121', comp:'H122', multi:'H123', re:'H124' }
@@ -316,7 +317,9 @@ function render() {
 }
 
 function renderPicker() {
-  const opts = SHIFTS.map(s => [s.id, s.name + (s.id === nowShift ? ' · now' : '')]);
+  // The button spells out Friday evening; the column header has room for the
+  // hours, the button does not.
+  const opts = SHIFTS.map(s => [s.id, (s.pick || s.name) + (s.id === nowShift ? ' · now' : '')]);
   opts.push(['all', 'All four']);
   pick.innerHTML = opts.map(([id, name]) =>
     '<button type="button" data-shift="' + id + '" aria-pressed="' + (id === active) + '">' +
