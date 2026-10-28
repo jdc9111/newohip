@@ -24,6 +24,8 @@
   gtag('config', 'G-YMK3RYM38R');
 </script>
 <link rel="stylesheet" href="steel.css?v=4">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,500..700&display=swap">
+<link rel="stylesheet" href="sponsor.css?v=1">
 <style>
   /* Shared foundation → steel.css. Header/nav → header-v2.js.
      Only AI-search-specific rules live here. */
@@ -113,6 +115,15 @@
 </div>
 
 <main>
+  <a id="sponsor-card" class="sp-card" href="https://www.resolvmd.com/shiftcodes?utm_source=shiftcodes&amp;utm_medium=banner&amp;utm_campaign=shiftcodes_benefits" target="_blank" rel="sponsored noopener">
+    <div class="sp-body">
+      <div class="sp-top"><img class="sp-logo" src="resolvmd-logo.png" alt="ResolvMD" width="113" height="22"><span class="sp-label">Sponsored</span></div>
+      <div class="sp-head">Full-service billing for Ontario physicians and groups. Built by physicians.</div>
+      <div class="sp-tags"><span class="sp-tag">Shadow billing included</span><span class="sp-tag">Snap your day sheet</span><span class="sp-tag">Rejections handled</span></div>
+    </div>
+    <span class="sp-cta">See how it works &rarr;</span>
+  </a>
+
   <div id="kind-switch" class="kind-switch" role="radiogroup" aria-label="Show results">
     <button type="button" role="radio" aria-checked="true" data-k="all" onclick="setKind('all')">All</button>
     <button type="button" role="radio" aria-checked="false" data-k="billing" onclick="setKind('billing')">Billing<span class="kind-n"></span></button>
@@ -248,8 +259,10 @@ const SEARCH_ENDPOINT = new URLSearchParams(location.search).get('engine') === '
 async function aiSearch() {
   const query = document.getElementById('ai-query').value.trim();
   if (!query) return;
+  // Sponsor card makes way for results, as on the home screen.
+  document.getElementById('sponsor-card').hidden = true;
 
-  const btn       = document.getElementById('ai-btn');
+  const btn      = document.getElementById('ai-btn');
   const label     = document.getElementById('ai-btn-label');
   const container = document.getElementById('ai-results-container');
 
@@ -292,5 +305,6 @@ document.getElementById('ai-query').addEventListener('keydown', e => {
   if (e.key === 'Enter') aiSearch();
 });
 </script>
+<script src="sponsor.js?v=1"></script>
 </body>
 </html>

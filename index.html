@@ -26,6 +26,7 @@
 </script>
 <link rel="stylesheet" href="steel.css?v=4">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,500..700&display=swap">
+<link rel="stylesheet" href="sponsor.css?v=1">
 <style>
   /* Shared foundation (tokens, toolbar, table, chips, empty states) → steel.css
      Header/nav → header-v2.js. Only index-specific rules live here. */
@@ -165,47 +166,6 @@
     background: none; border: none; font-size: 1rem; color: #93A2AF; cursor: pointer; line-height: 1;
   }
   .cotd-b-close:hover { color: var(--sc-muted); }
-
-  /* ── Sponsor card (ResolvMD) — home screen only, hidden once a search starts ── */
-  .sp-card {
-    --sp-brand: #0156cd; --sp-brand-deep: #0046ad; --sp-wash: #eaf2fe; --sp-line: #cfe0fa;
-    display: flex; gap: 16px; align-items: center; margin: 0 0 14px;
-    background: linear-gradient(100deg, var(--sp-wash) 0%, #fff 65%);
-    border: 1px solid var(--sp-line); border-left: 4px solid var(--sp-brand);
-    border-radius: 12px; padding: 16px 18px; text-decoration: none;
-    box-shadow: 0 1px 2px rgba(15,26,36,.04), 0 4px 14px rgba(1,86,205,.07);
-    transition: box-shadow .15s, transform .15s;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  }
-  .sp-card[hidden] { display: none; }
-  .sp-card:hover { box-shadow: 0 2px 4px rgba(15,26,36,.05), 0 8px 22px rgba(1,86,205,.13); transform: translateY(-1px); }
-  .sp-body { flex: 1; min-width: 0; }
-  .sp-top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
-  .sp-logo { height: 22px; width: auto; display: block; }
-  .sp-label {
-    font-family: var(--sc-mono); font-size: 0.58rem; font-weight: 600;
-    letter-spacing: 0.14em; text-transform: uppercase; color: var(--sc-muted);
-    border: 1px solid var(--sc-line); background: #fff; border-radius: 4px; padding: 1px 6px;
-  }
-  .sp-head {
-    font-size: 1rem; font-weight: 650; color: var(--sc-ink); line-height: 1.3;
-    letter-spacing: -0.01em; font-variation-settings: 'opsz' 32;
-  }
-  .sp-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; }
-  .sp-tag {
-    font-size: 0.72rem; font-weight: 600; color: var(--sp-brand-deep);
-    background: #fff; border: 1px solid var(--sp-line); border-radius: 999px; padding: 2px 9px;
-  }
-  .sp-cta {
-    font-size: 0.85rem; font-weight: 700; color: #fff; background: var(--sp-brand);
-    border-radius: 8px; padding: 10px 16px; white-space: nowrap;
-    box-shadow: 0 2px 6px rgba(1,86,205,.3); transition: background .15s;
-  }
-  .sp-card:hover .sp-cta { background: var(--sp-brand-deep); }
-  @media (max-width: 640px) {
-    .sp-card { flex-wrap: wrap; gap: 12px; padding: 14px; }
-    .sp-cta { width: 100%; text-align: center; }
-  }
 
   /* What the site is, for first-time visitors. */
   .sc-tagline {
@@ -845,21 +805,11 @@ function rerender() {
 
 // ── Sponsor card ─────────────────────────────────────────────────────────────
 // Home screen only: hidden once a search starts (so it never pushes results
-// down) and in favourites views. GA gets one view per page load, counted when
-// at least half the card is on screen, plus each click.
+// down) and in favourites views. GA tracking lives in sponsor.js.
 const sponsorCard = document.getElementById('sponsor-card');
 function renderSponsor() {
   sponsorCard.hidden = favMode || !!document.getElementById('query').value.trim();
 }
-if ('IntersectionObserver' in window) {
-  const seen = new IntersectionObserver(entries => {
-    if (!entries.some(e => e.isIntersecting)) return;
-    gtag('event', 'resolvmd_banner_view');
-    seen.disconnect();
-  }, { threshold: 0.5 });
-  seen.observe(sponsorCard);
-}
-sponsorCard.addEventListener('click', () => gtag('event', 'resolvmd_banner_click'));
 
 // ── All · Billing · Diagnostic switch ────────────────────────────────────────
 // Narrows results to one kind (CSS hides the other section). Deliberately not
@@ -1534,5 +1484,6 @@ function dismissCOTD(optOut) {
 
 // }, { capture: true });
 </script>
+<script src="sponsor.js?v=1"></script>
 </body>
 </html>
