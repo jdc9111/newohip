@@ -256,6 +256,7 @@ const RAIL = [
   ]},
   { label: 'Billing codes', items: [
     { key: 'assessment', href: 'assessment.html', label: 'Assessment',  icon: ICONS.doc },
+    { key: 'shift-value', href: 'shift-value.html', label: 'By shift value', icon: ICONS.list },
     { key: 'specialty',  href: 'specialty.html',  label: 'By specialty', icon: ICONS.grid },
     { key: 'fractures',  href: 'fractures.html',  label: 'Fractures',    icon: ICONS.crack },
     { key: 'fav-billing', href: '/?fav=billing', label: 'Favourites', icon: ICONS.star },
@@ -274,6 +275,7 @@ const RAIL = [
 const DRAWER = [
   { label: 'Billing codes', items: [
     { key: 'assessment', href: 'assessment.html', label: 'Assessment, counselling &amp; forms' },
+    { key: 'shift-value', href: 'shift-value.html', label: 'By shift value — ranked combinations' },
     { key: 'specialty',  href: 'specialty.html',  label: 'By specialty' },
     { key: 'fractures',  href: 'fractures.html',  label: 'Fractures &amp; dislocations' },
     { key: 'fav-billing', href: '/?fav=billing', label: 'Favourites' },

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ShiftCodes">
+<meta name="theme-color" content="#1F4E79">
+<title>Billing Value by Shift | ShiftCodes</title>
+<meta name="description" content="Eligible OHIP billing combinations for the Ontario emergency department, ranked by value for each shift period — daytime, weekday evening, weekend and holiday, and overnight.">
+<meta property="og:site_name" content="ShiftCodes">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Billing Value by Shift | ShiftCodes">
+<meta property="og:description" content="Eligible OHIP billing combinations for the Ontario emergency department, ranked by value for each shift period.">
+<meta property="og:url" content="https://newohipcodes.netlify.app/shift-value.html">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YMK3RYM38R');
+</script>
+<link rel="stylesheet" href="steel.css?v=4">
+<style>
+  /* Four shift columns side by side on desktop; one at a time on a phone,
+     chosen by the segmented control. Everything here is page-specific —
+     foundation and code rows come from steel.css. */
+  .sv-intro { padding: 0 2px 14px; }
+  .sv-h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 4px; }
+  .sv-sub { font-size: 0.88rem; color: var(--sc-muted); margin: 0; }
+  .sv-sub b { color: var(--sc-ink); font-weight: 600; }
+
+  /* Shift picker — a control on narrow screens, a legend-less no-op on wide */
+  .sv-pick { display: none; gap: 6px; margin: 0 0 12px; flex-wrap: wrap; }
+  .sv-pick button {
+    font: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    padding: 7px 12px; border-radius: 999px; color: var(--sc-ink);
+    background: #fff; border: 1px solid var(--sc-line);
+  }
+  .sv-pick button[aria-pressed="true"] { background: var(--sc-rail); border-color: var(--sc-rail); color: #fff; }
+  .sv-now { font-size: 0.72rem; color: var(--sc-muted); margin: 0 0 12px; }
+
+  .sv-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; align-items: start; }
+
+  .sv-col { background: #fff; border: 1px solid var(--sc-line); border-radius: 10px; overflow: hidden; }
+  .sv-col-head { background: var(--sc-rail-deep); color: #fff; padding: 9px 12px; }
+  .sv-col-name { font-size: 0.95rem; font-weight: 650; letter-spacing: -0.01em; }
+  .sv-col-when { display: block; font-size: 0.7rem; opacity: 0.85; margin-top: 1px; }
+  .sv-col[data-current="yes"] .sv-col-head { background: var(--sc-rail); }
+  .sv-badge {
+    display: inline-block; font-family: var(--sc-mono); font-size: 0.56rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; background: var(--sc-accent);
+    color: var(--sc-accent-ink); border-radius: 3px; padding: 1px 5px; margin-left: 6px; vertical-align: 2px;
+  }
+
+  .sv-row {
+    display: flex; align-items: baseline; gap: 8px; width: 100%; text-align: left;
+    font: inherit; cursor: pointer; background: none; border: 0;
+    border-top: 1px solid var(--sc-line); padding: 7px 12px;
+    border-left: 3px solid transparent;
+  }
+  .sv-col > .sv-row:first-of-type { border-top: 0; }
+  .sv-row:hover { background: var(--sc-hover); }
+  .sv-combo { flex: 1; font-family: var(--sc-mono); font-size: 0.78rem; font-weight: 500; min-width: 0; }
+  .sv-amt { font-size: 0.82rem; font-weight: 700; white-space: nowrap; }
+
+  /* Family tints, so the eye can group rows without reading them */
+  .sv-row[data-fam="g5"]      { border-left-color: #2C6FA8; background: #F4F8FC; }
+  .sv-row[data-fam="g3"]      { border-left-color: #7FA8C9; background: #F8FAFC; }
+  .sv-row[data-fam="consult"] { border-left-color: #D98324; background: #FDF6EE; }
+  .sv-row[data-fam="k"]       { border-left-color: #8E6BA8; background: #F9F5FB; }
+  .sv-row[data-fam="assess"]  { border-left-color: var(--sc-line); }
+  .sv-row[data-fam="g5"]:hover, .sv-row[data-fam="g3"]:hover,
+  .sv-row[data-fam="consult"]:hover, .sv-row[data-fam="k"]:hover { background: var(--sc-hover); }
+
+  /* Component breakdown, revealed on click */
+  .sv-parts { display: none; padding: 2px 12px 9px 15px; background: var(--sc-surface); border-top: 1px solid var(--sc-line); }
+  .sv-parts[data-open="yes"] { display: block; }
+  .sv-part { display: flex; gap: 8px; font-size: 0.72rem; color: var(--sc-muted); padding: 2px 0; }
+  .sv-part-code { font-family: var(--sc-mono); font-weight: 600; color: var(--sc-ink); min-width: 42px; }
+  .sv-part-desc { flex: 1; min-width: 0; }
+  .sv-part-fee { white-space: nowrap; }
+
+  /* Notes */
+  .sv-notes { margin-top: 18px; background: #fff; border: 1px solid var(--sc-line); border-radius: 10px; padding: 14px 16px; }
+  .sv-notes h2 { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--sc-rail-deep); margin: 0 0 8px; }
+  .sv-notes ul { margin: 0 0 10px; padding-left: 18px; }
+  .sv-notes li { font-size: 0.82rem; color: var(--sc-muted); margin-bottom: 5px; }
+  .sv-notes li b { color: var(--sc-ink); }
+  .sv-notes p { font-size: 0.78rem; color: var(--sc-muted); margin: 0; }
+  .sv-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 12px; }
+  .sv-key { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--sc-muted); }
+  .sv-swatch { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+
+  .sv-warn {
+    background: var(--sc-accent-wash); border: 1px solid var(--sc-accent-line);
+    border-left: 3px solid var(--sc-accent); border-radius: 0 6px 6px 0;
+    padding: 9px 12px; margin: 0 0 14px; font-size: 0.8rem;
+  }
+
+  @media (max-width: 900px) {
+    .sv-grid { grid-template-columns: 1fr; }
+    .sv-pick { display: flex; }
+    .sv-col[data-active="no"] { display: none; }
+  }
+
+  @media print {
+    .sv-pick, .sv-now, app-header { display: none !important; }
+    .sv-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .sv-col, .sv-col[data-active="no"] { display: block !important; break-inside: avoid; border-color: #999; }
+    .sv-col-head { background: #fff !important; color: #000 !important; border-bottom: 1px solid #000; }
+    .sv-row { padding: 2px 5px; border-left-width: 2px; }
+    .sv-combo, .sv-amt { font-size: 7.4pt; }
+    .sv-parts { display: none !important; }
+    .sv-notes li, .sv-notes p { font-size: 7pt; }
+    .sv-intro { padding-bottom: 6px; }
+  }
+</style>
+<script src="header-v2.js?v=29"></script>
+<script src="billingData.js?v=1"></script>
+</head>
+<body>
+
+<app-header active="shift-value"></app-header>
+
+<main>
+  <div class="sv-intro">
+    <h1 class="sv-h1">Billing value by shift</h1>
+    <p class="sv-sub">The highest-value <b>eligible</b> combination per encounter, by shift period. Bill what you actually did — this ranks the combinations that are billable together, it does not suggest what to claim. Fees effective April 1, 2026.</p>
+  </div>
+
+  <div id="sv-warn" class="sv-warn" hidden></div>
+
+  <div class="sv-pick" id="sv-pick" role="group" aria-label="Shift"></div>
+  <p class="sv-now" id="sv-now"></p>
+
+  <div class="sv-grid" id="sv-grid"></div>
+
+  <div class="sv-notes">
+    <h2>Legend</h2>
+    <div class="sv-legend" id="sv-legend"></div>
+    <h2>What this table encodes</h2>
+    <ul>
+      <li><b>Premiums attach to critical care and counselling</b> (G521/523/522, G395/391, K005, K028, K623) — not to assessments and not to consultations. That is why H055 and H065 appear bare in every column.</li>
+      <li><b>Premiums do not bill with H101–H154.</b> The time-of-day uplift is already built into the H12x night tier and the H15x weekend tier.</li>
+      <li><b>H055 and H065 are consultations</b> — not billable with H1x2 or H1x3, but billable with an H1x4 reassessment. Hence the consult + reassessment rows.</li>
+      <li><b>Friday evening is weekend-tier.</b> As of April 1 2026, Friday 17:00–24:00 moved out of the weekday evening group: use H15x + H113, not H13x + H114.</li>
+      <li><b>H114 is new as of April 1 2026</b> and did not exist on older cheat sheets. It adds $23.65 to every weekday-evening critical care and counselling row.</li>
+      <li>Reassessments: maximum 3 per patient per day, more than 2h apart, with a change in management.</li>
+      <li>Procedures are deliberately excluded. E412 (+20%) and E420 (+50%) are multipliers rather than additions, and would multiply the row count instead of adding to it.</li>
+    </ul>
+    <p>Eligibility rules here reflect our reading of the Schedule of Benefits and are not a substitute for it. Verify against the current <a href="https://www.ontario.ca/page/ohip-schedule-benefits-and-fees" target="_blank" rel="noopener">Schedule of Benefits</a> before billing. Statutory holidays count as weekend-tier; this page cannot detect them, so the highlight may be wrong on a holiday.</p>
+  </div>
+</main>
+
+<script>
+'use strict';
+
+// Fees come from billingData.js — the same rows the search page renders, so a
+// fee can never be right in one place and stale here. Nothing in this file
+// hardcodes a dollar value.
+const FEE  = {};
+const DESC = {};
+for (const row of DATA) { if (row[2] !== null) { FEE[row[0]] = row[2]; DESC[row[0]] = row[1]; } }
+
+// Critical care is billed as a stack of per-15-minute codes.
+const STACK = {
+  G5x1: ['G521'], G5x2: ['G521','G523'], G5x3: ['G521','G523','G522'],
+  G3x1: ['G395'], G3x2: ['G395','G391'], G3x3: ['G395','G391','G391']
+};
+
+const SHIFTS = [
+  { id:'day',     name:'Daytime',         when:'Mon–Fri 08:00–17:00',       prem:null,
+    minor:'H101', comp:'H102', multi:'H103', re:'H104' },
+  { id:'evening', name:'Evening',         when:'Mon–Thu 17:00–24:00',       prem:'H114',
+    minor:'H131', comp:'H132', multi:'H133', re:'H134' },
+  { id:'wknd',    name:'Wknd / Holiday',  when:'08:00–24:00 · incl Fri eve', prem:'H113',
+    minor:'H151', comp:'H152', multi:'H153', re:'H154' },
+  { id:'nights',  name:'Nights',          when:'00:00–08:00',               prem:'H112',
+    minor:'H121', comp:'H122', multi:'H123', re:'H124' }
+];
+
+const FAMILIES = [
+  { fam:'g5',      colour:'#2C6FA8', text:'G5xN — G521 / 523 / 522 · imminent resuscitation, per 15 min' },
+  { fam:'g3',      colour:'#7FA8C9', text:'G3xN — G395 / 391 · potential resuscitation, per 15 min' },
+  { fam:'consult', colour:'#D98324', text:'H055 / H065 — consultation to ED (FRCPC / CFPC)' },
+  { fam:'k',       colour:'#8E6BA8', text:'K623 Form 1 · K005 / K028 counselling' },
+  { fam:'assess',  colour:'#DDE7F0', text:'H1x1 / x2 / x3 / x4 — minor / comprehensive / multiple / reassessment' }
+];
+
+// ── guard ────────────────────────────────────────────────────────────────────
+// Two ways this page could go quietly wrong: a code it needs disappears from
+// the data, or the fees get rounded back to whole dollars (which reorders rows
+// — K623 and G3x3 sit 20c apart in the daytime column). Say so on the page
+// rather than rendering a plausible-looking wrong answer.
+const NEEDS_CENTS = ['H101','H102','H103','H104','H131','H132','H133','H134',
+                     'H121','H122','H123','H124','H151','H152','H153','H154',
+                     'H112','H113','H114','H055','H065'];
+function check() {
+  const needed = new Set(['H055','H065']);
+  for (const codes of Object.values(STACK)) codes.forEach(c => needed.add(c));
+  for (const c of ['K005','K028','K623']) needed.add(c);
+  for (const s of SHIFTS) [s.minor, s.comp, s.multi, s.re, s.prem].forEach(c => c && needed.add(c));
+
+  const missing = [...needed].filter(c => !(c in FEE));
+  const rounded = NEEDS_CENTS.filter(c => c in FEE && Number.isInteger(FEE[c]));
+  const problems = [];
+  if (missing.length) problems.push('missing from billingData.js: ' + missing.join(', '));
+  if (rounded.length) problems.push('stored as whole dollars rather than exact cents, so rows may be mis-ranked: ' + rounded.join(', '));
+  if (!problems.length) return true;
+  const el = document.getElementById('sv-warn');
+  el.hidden = false;
+  el.innerHTML = '<b>This table is not trustworthy right now.</b> ' + problems.join('; ') + '.';
+  return false;
+}
+
+// ── rows ─────────────────────────────────────────────────────────────────────
+const money = n => '$' + n.toFixed(2);
+
+// "H104, H104" -> "2×H104"; keeps the combo label short enough for a column.
+function label(codes) {
+  const out = [];
+  for (const c of codes) {
+    const last = out[out.length - 1];
+    if (last && last.code === c) last.n++;
+    else out.push({ code: c, n: 1 });
+  }
+  return out.map(p => (p.n > 1 ? p.n + '×' : '') + p.code).join(' + ');
+}
+
+function rowsFor(s) {
+  const rows = [];
+  const add = (fam, codes, name) => rows.push({ fam, codes, name: name || label(codes) });
+  // Premium-eligible: critical care and counselling.
+  const prem = s.prem ? [s.prem] : [];
+  for (const k of ['G5x3','G5x2','G5x1']) add('g5', STACK[k].concat(prem), label([k].concat(prem)));
+  for (const k of ['G3x3','G3x2','G3x1']) add('g3', STACK[k].concat(prem), label([k].concat(prem)));
+  for (const k of ['K623','K028','K005']) add('k', [k].concat(prem));
+  // Consultations: bare, or with reassessments. No premium, no H1x2/H1x3.
+  for (const c of ['H055','H065']) {
+    add('consult', [c, s.re, s.re]);
+    add('consult', [c, s.re]);
+    add('consult', [c]);
+  }
+  // Assessments: the time tier is already in the code, so no premium.
+  for (const base of [s.comp, s.multi]) {
+    add('assess', [base, s.re, s.re]);
+    add('assess', [base, s.re]);
+    add('assess', [base]);
+  }
+  add('assess', [s.minor]);
+
+  for (const r of rows) r.total = r.codes.reduce((t, c) => t + FEE[c], 0);
+  rows.sort((a, b) => b.total - a.total);
+  return rows;
+}
+
+// ── which shift is it now ────────────────────────────────────────────────────
+// Friday 17:00–24:00 counts as weekend-tier (April 2026 change) — the single
+// rule the old printed sheets got wrong. Holidays are not detectable here.
+function currentShift(d) {
+  const h = d.getHours(), day = d.getDay();     // 0 = Sunday
+  if (h < 8) return 'nights';
+  if (day === 0 || day === 6) return 'wknd';
+  if (h >= 17) return day === 5 ? 'wknd' : 'evening';
+  return 'day';
+}
+
+// ── render ───────────────────────────────────────────────────────────────────
+const grid = document.getElementById('sv-grid');
+const pick = document.getElementById('sv-pick');
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+let active = currentShift(new Date());
+
+function render() {
+  grid.innerHTML = SHIFTS.map(s => {
+    const here = s.id === active;
+    const rows = rowsFor(s).map((r, i) => {
+      const parts = r.codes.map(c =>
+        '<div class="sv-part"><span class="sv-part-code">' + c + '</span>' +
+        '<span class="sv-part-desc">' + esc(DESC[c]) + '</span>' +
+        '<span class="sv-part-fee">' + money(FEE[c]) + '</span></div>').join('');
+      return '<button class="sv-row" data-fam="' + r.fam + '" data-parts="' + s.id + '-' + i + '" ' +
+             'aria-expanded="false"><span class="sv-combo">' + esc(r.name) + '</span>' +
+             '<span class="sv-amt">' + money(r.total) + '</span></button>' +
+             '<div class="sv-parts" id="' + s.id + '-' + i + '">' + parts + '</div>';
+    }).join('');
+    return '<section class="sv-col" data-active="' + (here ? 'yes' : 'no') + '" data-current="' + (here ? 'yes' : 'no') + '">' +
+           '<header class="sv-col-head"><span class="sv-col-name">' + s.name +
+           (here ? '<span class="sv-badge">now</span>' : '') + '</span>' +
+           '<span class="sv-col-when">' + s.when + '</span></header>' + rows + '</section>';
+  }).join('');
+}
+
+function renderPicker() {
+  pick.innerHTML = SHIFTS.map(s =>
+    '<button type="button" data-shift="' + s.id + '" aria-pressed="' + (s.id === active) + '">' +
+    s.name + '</button>').join('');
+}
+
+document.getElementById('sv-legend').innerHTML = FAMILIES.map(f =>
+  '<span class="sv-key"><span class="sv-swatch" style="background:' + f.colour + '"></span>' +
+  esc(f.text) + '</span>').join('');
+
+pick.addEventListener('click', e => {
+  const b = e.target.closest('button[data-shift]');
+  if (!b) return;
+  active = b.dataset.shift;
+  renderPicker(); render();
+  gtag('event', 'shift_value_pick', { shift: active });
+});
+
+grid.addEventListener('click', e => {
+  const b = e.target.closest('.sv-row');
+  if (!b) return;
+  const box = document.getElementById(b.dataset.parts);
+  const open = box.dataset.open === 'yes';
+  box.dataset.open = open ? 'no' : 'yes';
+  b.setAttribute('aria-expanded', String(!open));
+});
+
+if (check()) {
+  const now = new Date();
+  document.getElementById('sv-now').textContent =
+    'Highlighted column is the shift running now (' +
+    now.toLocaleDateString(undefined, { weekday: 'long' }) + ' ' +
+    String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') +
+    '). Tap any row to see the codes it is made of.';
+  renderPicker();
+  render();
+}
+</script>
+
+</body>
+</html>
