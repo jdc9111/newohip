@@ -33,8 +33,9 @@
   .sv-sub { font-size: 0.88rem; color: var(--sc-muted); margin: 0; }
   .sv-sub b { color: var(--sc-ink); font-weight: 600; }
 
-  /* Shift picker — a control on narrow screens, a legend-less no-op on wide */
-  .sv-pick { display: none; gap: 6px; margin: 0 0 12px; flex-wrap: wrap; }
+  /* Shift picker — one shift at a time at every width; "All four" puts the
+     columns back side by side for comparing shifts. */
+  .sv-pick { display: flex; gap: 6px; margin: 0 0 12px; flex-wrap: wrap; }
   .sv-pick button {
     font: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer;
     padding: 7px 12px; border-radius: 999px; color: var(--sc-ink);
@@ -43,7 +44,18 @@
   .sv-pick button[aria-pressed="true"] { background: var(--sc-rail); border-color: var(--sc-rail); color: #fff; }
   .sv-now { font-size: 0.72rem; color: var(--sc-muted); margin: 0 0 12px; }
 
-  .sv-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; align-items: start; }
+  /* One shift: a single readable column rather than a quarter-width one.
+     All four: the comparison view. */
+  .sv-grid { display: grid; grid-template-columns: minmax(0, 660px); gap: 12px; align-items: start; }
+  .sv-grid[data-view="all"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .sv-col[data-active="no"] { display: none; }
+  .sv-grid[data-view="all"] .sv-col[data-active="no"] { display: block; }
+
+  /* The single column has room to breathe, so use it. */
+  .sv-grid[data-view="one"] .sv-row { padding: 9px 14px; }
+  .sv-grid[data-view="one"] .sv-combo { font-size: 0.86rem; }
+  .sv-grid[data-view="one"] .sv-amt { font-size: 0.92rem; }
+  .sv-grid[data-view="one"] .sv-col-head { padding: 11px 14px; }
 
   .sv-col { background: #fff; border: 1px solid var(--sc-line); border-radius: 10px; overflow: hidden; }
   .sv-col-head { background: var(--sc-rail-deep); color: #fff; padding: 9px 12px; }
@@ -103,14 +115,18 @@
 
   @media (max-width: 900px) {
     .sv-grid { grid-template-columns: 1fr; }
-    .sv-pick { display: flex; }
-    .sv-col[data-active="no"] { display: none; }
+    /* "All four" stacks rather than squeezing four columns onto a phone. */
+    .sv-grid[data-view="all"] { grid-template-columns: 1fr; }
   }
 
   @media print {
     .sv-pick, .sv-now, app-header { display: none !important; }
-    .sv-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .sv-col, .sv-col[data-active="no"] { display: block !important; break-inside: avoid; border-color: #999; }
+    /* Print is always the full sheet, whichever shift is on screen. */
+    .sv-grid, .sv-grid[data-view="one"], .sv-grid[data-view="all"] { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .sv-col, .sv-col[data-active="no"],
+    .sv-grid[data-view="one"] .sv-col[data-active="no"] { display: block !important; break-inside: avoid; border-color: #999; }
+    .sv-grid[data-view="one"] .sv-row { padding: 2px 5px; }
+    .sv-grid[data-view="one"] .sv-combo, .sv-grid[data-view="one"] .sv-amt { font-size: 7.4pt; }
     .sv-col-head { background: #fff !important; color: #000 !important; border-bottom: 1px solid #000; }
     .sv-row { padding: 2px 5px; border-left-width: 2px; }
     .sv-combo, .sv-amt { font-size: 7.4pt; }
@@ -273,11 +289,15 @@ function currentShift(d) {
 const grid = document.getElementById('sv-grid');
 const pick = document.getElementById('sv-pick');
 const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-let active = currentShift(new Date());
+const nowShift = currentShift(new Date());
+let active = nowShift;                       // a shift id, or 'all'
 
 function render() {
+  grid.dataset.view = active === 'all' ? 'all' : 'one';
   grid.innerHTML = SHIFTS.map(s => {
-    const here = s.id === active;
+    const shown = active === 'all' || s.id === active;
+    const here = s.id === nowShift;           // the badge marks the real shift,
+                                              // not whichever one you are reading
     const rows = rowsFor(s).map((r, i) => {
       const parts = r.codes.map(c =>
         '<div class="sv-part"><span class="sv-part-code">' + c + '</span>' +
@@ -288,7 +308,7 @@ function render() {
              '<span class="sv-amt">' + money(r.total) + '</span></button>' +
              '<div class="sv-parts" id="' + s.id + '-' + i + '">' + parts + '</div>';
     }).join('');
-    return '<section class="sv-col" data-active="' + (here ? 'yes' : 'no') + '" data-current="' + (here ? 'yes' : 'no') + '">' +
+    return '<section class="sv-col" data-active="' + (shown ? 'yes' : 'no') + '" data-current="' + (here ? 'yes' : 'no') + '">' +
            '<header class="sv-col-head"><span class="sv-col-name">' + s.name +
            (here ? '<span class="sv-badge">now</span>' : '') + '</span>' +
            '<span class="sv-col-when">' + s.when + '</span></header>' + rows + '</section>';
@@ -296,9 +316,11 @@ function render() {
 }
 
 function renderPicker() {
-  pick.innerHTML = SHIFTS.map(s =>
-    '<button type="button" data-shift="' + s.id + '" aria-pressed="' + (s.id === active) + '">' +
-    s.name + '</button>').join('');
+  const opts = SHIFTS.map(s => [s.id, s.name + (s.id === nowShift ? ' · now' : '')]);
+  opts.push(['all', 'All four']);
+  pick.innerHTML = opts.map(([id, name]) =>
+    '<button type="button" data-shift="' + id + '" aria-pressed="' + (id === active) + '">' +
+    name + '</button>').join('');
 }
 
 document.getElementById('sv-legend').innerHTML = FAMILIES.map(f =>
@@ -325,10 +347,10 @@ grid.addEventListener('click', e => {
 if (check()) {
   const now = new Date();
   document.getElementById('sv-now').textContent =
-    'Highlighted column is the shift running now (' +
+    'Showing the shift running now (' +
     now.toLocaleDateString(undefined, { weekday: 'long' }) + ' ' +
     String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') +
-    '). Tap any row to see the codes it is made of.';
+    '). Pick another above, or All four to compare them. Any row opens to show the codes it is made of.';
   renderPicker();
   render();
 }
