@@ -58,7 +58,7 @@ const CSS = `
   .sc-rail::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.22); border-radius: 3px; }
 
   .sc-brand { display: flex; align-items: center; gap: 10px; padding: 0 4px 2px; min-height: 38px; }
-  .sc-brand img { height: 34px; width: auto; display: block; flex-shrink: 0; }
+  .sc-brand img { height: 30px; width: 30px; display: block; flex-shrink: 0; }
   .sc-brand-txt { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; white-space: nowrap; }
   .sc-brand-txt b { color: ${C.accent}; font-weight: 700; }
 
@@ -141,7 +141,7 @@ const CSS = `
       background: ${C.rail}; color: #fff; box-sizing: border-box;
       display: flex; align-items: center; gap: 10px; padding: 0 14px;
     }
-    .sc-mtop img { height: 22px; width: auto; display: block; }
+    .sc-mtop img { height: 24px; width: 24px; display: block; }
     .sc-mtop .sc-brand-txt { font-size: 16px; }
     .sc-mtop .sc-spring { flex: 1; }
     .sc-mtop a.sc-cta {
@@ -173,7 +173,7 @@ const CSS = `
       display: flex; align-items: center; gap: 12px; padding: 16px 0 18px;
       position: sticky; top: 0; background: ${C.rail};
     }
-    .sc-drawer-top img { height: 24px; width: auto; display: block; }
+    .sc-drawer-top img { height: 24px; width: 24px; display: block; }
     .sc-drawer-x {
       margin-left: auto; background: none; border: none; color: rgba(255,255,255,0.85);
       font-size: 22px; line-height: 1; cursor: pointer; min-width: 44px; min-height: 44px;
@@ -355,7 +355,7 @@ class AppHeader extends HTMLElement {
       <nav class="sc-rail" aria-label="Main">
         <button type="button" class="sc-collapse" id="scCollapse" aria-label="Collapse navigation">‹</button>
         <a href="/" class="sc-brand" style="text-decoration:none;color:inherit">
-          <img src="shiftcodes-icon-transparent.png" alt="ShiftCodes">
+          <img src="shiftcodes-mark.svg" alt="ShiftCodes">
           <span class="sc-brand-txt">Shift<b>Codes</b></span>
         </a>
         ${groups}
@@ -368,7 +368,7 @@ class AppHeader extends HTMLElement {
       </nav>
 
       <div class="sc-mtop">
-        <img src="shiftcodes-icon-transparent.png" alt="">
+        <img src="shiftcodes-mark.svg" alt="">
         <span class="sc-brand-txt">Shift<b style="color:${C.accent}">Codes</b></span>
         <span class="sc-spring"></span>
         <a href="updates.html" class="sc-cta">Apr 1</a>
@@ -386,7 +386,7 @@ class AppHeader extends HTMLElement {
 
       <div class="sc-drawer" id="scDrawer">
         <div class="sc-drawer-top">
-          <img src="shiftcodes-icon-transparent.png" alt="">
+          <img src="shiftcodes-mark.svg" alt="">
           <span class="sc-brand-txt">Browse</span>
           <button type="button" class="sc-drawer-x" id="scDrawerX" aria-label="Close">✕</button>
         </div>

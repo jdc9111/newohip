@@ -35,6 +35,10 @@
   box-shadow: 0 2px 6px rgba(1,86,205,.3); transition: background .15s;
 }
 .sp-card:hover .sp-cta { background: var(--sp-brand-deep); }
+/* Breathing room under the search toolbar on desktop. */
+@media (min-width: 641px) {
+  .sp-card { margin: 14px 0 20px; }
+}
 @media (max-width: 640px) {
   .sp-card { flex-wrap: wrap; gap: 12px; padding: 14px; }
   .sp-cta { width: 100%; text-align: center; }
