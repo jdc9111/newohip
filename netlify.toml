@@ -42,7 +42,11 @@
   status = 301
   force = true
 
+# force = true is needed here too: Netlify serves updates.html for the
+# extensionless "/updates", which counts as an existing file and shadows a
+# non-forced rule (the live site was answering 200 at both paths).
 [[redirects]]
   from = "/updates"
   to = "/updates.html"
   status = 301
+  force = true

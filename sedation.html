@@ -15,13 +15,20 @@
 <meta property="og:title" content="Procedural Sedation OHIP Billing | ShiftCodes">
 <meta property="og:description" content="Calculate OHIP billing for procedural sedation in the Ontario emergency department, including modifiers and time units.">
 <meta property="og:url" content="https://newohipcodes.netlify.app/sedation.html">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R"></script>
+<!-- Google tag (gtag.js). Loaded only on the live site, so localhost and
+     Netlify deploy previews don't report into GA. gtag() is still defined
+     everywhere so page code that sends events keeps working. -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-YMK3RYM38R');
+  if (location.hostname === 'shiftcodes.ca') {
+    var gaTag = document.createElement('script');
+    gaTag.async = true;
+    gaTag.src = 'https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R';
+    document.head.appendChild(gaTag);
+    gtag('js', new Date());
+    gtag('config', 'G-YMK3RYM38R');
+  }
 </script>
 <link rel="stylesheet" href="steel.css?v=4">
 <style>
