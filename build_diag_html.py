@@ -23,13 +23,20 @@ html = f'''<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Diagnostic Code Search \u2014 ED OHIP</title>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R"></script>
+<!-- Google tag (gtag.js). Loaded only on the live site, so localhost and
+     Netlify deploy previews don't report into GA. gtag() is still defined
+     everywhere so page code that sends events keeps working. -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){{dataLayer.push(arguments);}}
-  gtag('js', new Date());
-  gtag('config', 'G-YMK3RYM38R');
+  if (location.hostname === 'shiftcodes.ca') {{
+    var gaTag = document.createElement('script');
+    gaTag.async = true;
+    gaTag.src = 'https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R';
+    document.head.appendChild(gaTag);
+    gtag('js', new Date());
+    gtag('config', 'G-YMK3RYM38R');
+  }}
 </script>
 <style>
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
