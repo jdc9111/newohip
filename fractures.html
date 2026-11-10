@@ -17,7 +17,23 @@
 <meta property="og:title" content="Fractures & Dislocations OHIP Codes | ShiftCodes">
 <meta property="og:description" content="OHIP billing codes for fracture and dislocation management in the Ontario emergency department.">
 <meta property="og:url" content="https://newohipcodes.netlify.app/fractures.html">
+<!-- Google tag (gtag.js). Loaded only on the live site, so localhost and
+     Netlify deploy previews don't report into GA. gtag() is still defined
+     everywhere so page code that sends events keeps working. -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  if (location.hostname === 'shiftcodes.ca') {
+    var gaTag = document.createElement('script');
+    gaTag.async = true;
+    gaTag.src = 'https://www.googletagmanager.com/gtag/js?id=G-YMK3RYM38R';
+    document.head.appendChild(gaTag);
+    gtag('js', new Date());
+    gtag('config', 'G-YMK3RYM38R');
+  }
+</script>
 <link rel="stylesheet" href="steel.css?v=5">
+<link rel="stylesheet" href="sponsor.css?v=2">
 <style>
   /* Shared foundation, accordion and code rows → steel.css.
      Header/nav → header-v2.js. Nothing page-specific yet. */
@@ -294,5 +310,6 @@ function toggle(btn) {
   btn.classList.toggle('open', isOpen);
 }
 </script>
+<script src="sponsor.js?v=2"></script>
 </body>
 </html>

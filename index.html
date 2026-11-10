@@ -442,11 +442,11 @@ function rerender() {
 }
 
 // ── Sponsor card ─────────────────────────────────────────────────────────────
-// Home screen only: hidden once a search starts (so it never pushes results
-// down) and in favourites views. GA tracking lives in sponsor.js.
+// Home screen and favourites views: hidden once a search starts, so it never
+// pushes results down. GA tracking lives in sponsor.js.
 const sponsorCard = document.getElementById('sponsor-card');
 function renderSponsor() {
-  sponsorCard.hidden = favMode || !!document.getElementById('query').value.trim();
+  sponsorCard.hidden = !!document.getElementById('query').value.trim();
 }
 
 // ── All · Billing · Diagnostic switch ────────────────────────────────────────
@@ -1122,6 +1122,6 @@ function dismissCOTD(optOut) {
 
 // }, { capture: true });
 </script>
-<script src="sponsor.js?v=1"></script>
+<script src="sponsor.js?v=2"></script>
 </body>
 </html>
