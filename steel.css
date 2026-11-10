@@ -123,6 +123,18 @@ mark {
   margin: 0 auto;
 }
 
+/* What the site is, above the search box (index and AI search). */
+.sc-tagline {
+  font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em;
+  color: var(--sc-ink); margin: 0 0 10px;
+}
+.sc-tagline span { color: var(--sc-rail-deep); }
+.sc-tagline i { font-style: normal; }
+@media (max-width: 640px) {
+  .sc-tagline { font-size: 0.92rem; margin-bottom: 8px; }
+  .sc-tagline i { display: none; }   /* keep it to one line */
+}
+
 /* Text input with a leading icon. Wrap: <div class="sc-input-wrap"><svg/><input class="sc-input"></div> */
 .sc-input-wrap { position: relative; }
 .sc-input-wrap > svg {
@@ -173,12 +185,10 @@ mark {
   transition: background 0.12s, border-color 0.12s;
 }
 .search-chip:hover { background: #E4EEF7; border-color: #B9D2E6; }
-.chip-toggle { display: none; font-weight: 700; }
-@media (max-width: 640px) {
-  .chip-extra { display: none; }
-  .chip-toggle { display: block; }
-  .search-examples.expanded .chip-extra { display: block; }
-}
+.chip-toggle { font-weight: 700; }
+/* Three example chips at every width; the rest behind "Examples". */
+.search-examples .chip-extra { display: none; }
+.search-examples.expanded .chip-extra { display: block; }
 
 /* All · Billing · Diagnostic switch above search results. The body class
    hides the other kind's section (it wins over inline display styles). */
