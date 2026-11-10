@@ -1,5 +1,5 @@
-/* ── Sponsor card (ResolvMD) — on the search pages, hidden once a search starts.
-   Used by index.html and ai-search.html; tracking lives in sponsor.js. ── */
+/* ── Sponsor card (ResolvMD) — on every sidebar page. The search pages hide it
+   once a search starts; elsewhere sponsor.js builds it at the top of <main>. ── */
 .sp-card {
   --sp-brand: #0156cd; --sp-brand-deep: #0046ad; --sp-wash: #eaf2fe; --sp-line: #cfe0fa;
   display: flex; gap: 16px; align-items: center; margin: 0 0 14px;
