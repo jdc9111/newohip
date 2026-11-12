@@ -36,6 +36,7 @@
 <link rel="stylesheet" href="steel.css?v=5">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,500..700&display=swap">
 <link rel="stylesheet" href="sponsor.css?v=2">
+<link rel="stylesheet" href="pace.css?v=1">
 <style>
   /* Shared foundation (tokens, toolbar, table, chips, empty states) → steel.css
      Header/nav → header-v2.js. Only index-specific rules live here. */
@@ -232,6 +233,14 @@
 <body>
 
 <app-header active="billing"></app-header>
+
+<div class="pace-strip" id="pace-strip" role="region" aria-label="Announcement">
+  <span class="ps-new">New</span>
+  <span class="ps-msg"><b>Pace</b> — a private shift tracker for ER clinicians<span class="ps-short">: patients/hr, acuity and flow, just for you</span>. Early access is open.</span>
+  <a class="ps-cta" href="https://pace.shiftcodes.ca/?utm_source=shiftcodes&amp;utm_medium=strip&amp;utm_campaign=pace_launch">Join early access</a>
+  <button class="ps-x" type="button" aria-label="Dismiss announcement">×</button>
+</div>
+<script>try { if (localStorage.getItem('pace-strip-dismissed') === '1') document.getElementById('pace-strip').hidden = true; } catch (e) {}</script>
 
 <div id="reminder-banner" style="display:none"></div>
 
@@ -1123,5 +1132,6 @@ function dismissCOTD(optOut) {
 // }, { capture: true });
 </script>
 <script src="sponsor.js?v=2"></script>
+<script src="pace.js?v=1"></script>
 </body>
 </html>

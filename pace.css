@@ -1,0 +1,33 @@
+/* Pace early-access announcement (pace.shiftcodes.ca).
+   Strip: index.html, top of content. Callout: shift-value.html, below the table.
+   Pace's own dark/mint colours on purpose, so it doesn't read as the ResolvMD card. */
+.pace-strip, .pace-callout { --pace-bg: #0E1A22; --pace-fg: #E6F1EE; --pace-mint: #3DDC97; --pace-mint-hi: #5BE8AB; --pace-dim: #9FB3AE; }
+
+.pace-strip { display: flex; align-items: center; gap: 12px; padding: 9px 16px; background: var(--pace-bg); color: var(--pace-fg); font-family: var(--sc-sans); font-size: 14px; line-height: 1.35; }
+.pace-strip[hidden] { display: none; }
+.pace-strip .ps-new { flex: none; font: 600 11px/1 var(--sc-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--pace-bg); background: var(--pace-mint); border-radius: 999px; padding: 4px 8px; }
+.pace-strip .ps-msg { flex: 1; min-width: 0; }
+.pace-strip .ps-msg b { color: var(--pace-mint); font-weight: 600; }
+.pace-strip .ps-cta { flex: none; color: var(--pace-bg); background: var(--pace-mint); font-weight: 600; text-decoration: none; border-radius: 999px; padding: 6px 14px; white-space: nowrap; }
+.pace-strip .ps-cta:hover { background: var(--pace-mint-hi); }
+.pace-strip .ps-x { flex: none; background: none; border: 0; color: var(--pace-dim); font-size: 20px; line-height: 1; cursor: pointer; padding: 2px 4px; }
+.pace-strip .ps-x:hover { color: #fff; }
+
+.pace-callout { display: flex; gap: 16px; align-items: center; margin: 24px 0; padding: 16px 18px; border: 1px solid var(--sc-line); border-left: 4px solid var(--pace-mint); border-radius: 10px; background: #fff; font-family: var(--sc-sans); }
+.pace-callout .pc-stat { flex: none; text-align: center; background: var(--pace-bg); color: var(--pace-fg); border-radius: 8px; padding: 10px 14px; min-width: 84px; }
+.pace-callout .pc-stat b { display: block; font: 600 22px/1 var(--sc-mono); color: var(--pace-mint); }
+.pace-callout .pc-stat span { font-size: 11px; color: var(--pace-dim); letter-spacing: .04em; }
+.pace-callout .pc-body { flex: 1; min-width: 0; }
+.pace-callout h3 { margin: 0 0 4px; font-size: 16px; color: var(--sc-ink); }
+.pace-callout p { margin: 0; font-size: 14px; color: var(--sc-muted); line-height: 1.45; }
+.pace-callout .pc-cta { flex: none; color: var(--pace-bg); background: var(--pace-mint); font-weight: 600; text-decoration: none; border-radius: 999px; padding: 8px 16px; white-space: nowrap; }
+.pace-callout .pc-cta:hover { background: var(--pace-mint-hi); }
+
+@media (max-width: 640px) {
+  .pace-strip { flex-wrap: wrap; font-size: 13px; gap: 8px 10px; }
+  .pace-strip .ps-msg { flex-basis: calc(100% - 90px); }
+  .pace-strip .ps-short { display: none; }
+  .pace-callout { flex-wrap: wrap; }
+  .pace-callout .pc-body { flex-basis: calc(100% - 110px); }
+  .pace-callout .pc-cta { width: 100%; text-align: center; }
+}
