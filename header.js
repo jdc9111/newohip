@@ -325,7 +325,7 @@ class AppHeader extends HTMLElement {
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
           <a href="updates.html" class="nav-link">April 1st Updates</a>
-          <a href="https://www.ontario.ca/files/2026-03/moh-schedule-benefit-2026-03-27.pdf" target="_blank" rel="noopener" class="nav-link nav-link-sob">Schedule of Benefits ↗</a>
+          <a href="https://www.ontario.ca/files/2026-08/moh-schedule-benefit-effective-2026-04-01.pdf" target="_blank" rel="noopener" class="nav-link nav-link-sob">Schedule of Benefits ↗</a>
         </div>
       </header>
       <div class="nav-scroll-container">
