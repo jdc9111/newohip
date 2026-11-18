@@ -230,7 +230,7 @@ const ALIASES = {
   'ai-diag':    'ai-search',
 };
 
-const SOB_URL = 'https://www.ontario.ca/files/2026-03/moh-schedule-benefit-2026-03-27.pdf';
+const SOB_URL = 'https://www.ontario.ca/files/2026-08/moh-schedule-benefit-effective-2026-04-01.pdf';
 
 const CONTACT_EMAIL = 'info@erfaster.ca';
 const FEEDBACK_URL = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('ShiftCodes feedback')}`;
