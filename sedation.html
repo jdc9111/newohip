@@ -292,7 +292,7 @@
   <div class="step-card">
     <div class="step-header">
       <div class="step-num">1</div>
-      <div class="step-title">Select Procedure <span class="step-subtitle">(F / D / Z code)</span></div>
+      <div class="step-title">Select Procedure <span class="step-subtitle">(F / D / Z code, or CT)</span></div>
     </div>
     <div class="step-body">
       <div id="proc-selected" style="display:none">
@@ -311,7 +311,7 @@
           <input id="proc-query" class="sc-input" type="search" placeholder="e.g. shoulder dislocation, ankle fracture, abscess…" autocomplete="off">
           <div id="proc-drop"></div>
         </div>
-        <p class="search-hint">Only F, D, and Z codes shown — the procedure code + "C" is the sedation billing code.</p>
+        <p class="search-hint">F, D, and Z codes plus J007 (CT) shown — the procedure code + "C" is the sedation billing code.</p>
       </div>
     </div>
   </div>
@@ -721,9 +721,19 @@ const PROC_DATA = ALL_DATA.filter(r => {
   return false;
 });
 
+// Sedation-only procedures: billed here as code + "C" but carrying no ED
+// professional fee, so they are not in billingData.js (which feeds the fee
+// search). J007 has no specialist fee in the April 2026 Schedule.
+PROC_DATA.push(
+  ["J007", "Tomogram (CT scan)", null, "Imaging", ""]
+);
+
 const UNIT_RATE  = 15.96;
 const OMA_MULT   = 2.9;
-const PROC_BASE  = 6;   // base units for any sedation procedure code
+const PROC_BASE  = 6;   // default anaesthesia base units for a sedation procedure code
+// Codes whose base units differ from PROC_BASE (Schedule, Anae column).
+const PROC_BASE_BY_CODE = { J007: 7 };
+const baseUnitsFor = code => PROC_BASE_BY_CODE[code] ?? PROC_BASE;
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let selProc    = null;
@@ -745,14 +755,17 @@ let focusIdx = -1;
 
 // ── extra search terms per category (not shown in the UI) ────────────────────
 const CATEGORY_ALIASES = {
-  'On-Call': 'call-in call in callin callback call back'
+  'On-Call': 'call-in call in callin callback call back',
+  'Imaging': 'ct computed tomography cat scan scanner radiology'
 };
 
 function score(r, q) {
   const h = (r[0] + ' ' + r[1] + ' ' + (r[3]||'') + ' ' + (CATEGORY_ALIASES[r[3]] || '')).toLowerCase();
   const n = q.toLowerCase().trim();
   if (!n) return 0;
-  if (h.includes(n)) return 100 + (n.length / h.length) * 50;
+  // Whole-word hits outrank substring ones, so "ct" finds CT, not "reduction".
+  const whole = new RegExp('(^|[^a-z0-9])' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '($|[^a-z0-9])').test(h);
+  if (h.includes(n)) return 100 + (whole ? 25 : 0) + (n.length / h.length) * 50;
   const words = n.split(/\s+/).filter(Boolean);
   let hits = 0;
   for (const w of words) if (h.includes(w)) hits++;
@@ -1049,7 +1062,7 @@ function recalc() {
   const SITTING   = sitting ? 4 : 0;
   const totalASA  = ASA + ASA_E + BARI + PRONE + SITTING;
   const premUnits = timePrem !== 'none' ? (T + totalASA) : 0;
-  const total     = PROC_BASE + T + totalASA + premUnits;
+  const total     = baseUnitsFor(selProc[0]) + T + totalASA + premUnits;
   const ohipFee   = total * UNIT_RATE;
   const outside   = ohipFee * OMA_MULT;
 
