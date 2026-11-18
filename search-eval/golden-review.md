@@ -115,7 +115,7 @@
 |  | perianal abscess under general | variant | `Z105` Perianal abscess I&D (GA) | `Z104` Perianal abscess I&D (LA) |  |
 |  | two abscesses drained | variant | `Z173` Abscess I&D – two abscesses (LA) | `Z101` Abscess I&D – one abscess (LA)<br>`Z174` Abscess I&D – 3+ abscesses (LA) |  |
 |  | patella dislocation with sedation | variant | `D031` Patella dislocation – with sedation, no cast | `D040` Patella dislocation – no sedation, no cast |  |
-|  | therapeutic thoracentesis | variant | `Z332` Therapeutic thoracentesis | `Z331` Diagnostic thoracentesis |  |
+|  | therapeutic thoracentesis | variant | `Z332` Thoracentesis – diagnostic or therapeutic |  |  |
 |  | diagnostic paracentesis | variant | `Z590` Diagnostic paracentesis | `Z591` Therapeutic paracentesis<br>`Z763` Paracentesis with lavage for diagnosis |  |
 |  | venipuncture child | variant | `G482` Venipuncture - child | `G480` Venipuncture - infant<br>`G489` Venipuncture - adolescent or adult |  |
 |  | IV push adult | variant | `G379` IV injection - child, adolescent or adult | `G376` IV injection - newborn or infant |  |
@@ -164,7 +164,7 @@
 |  | cardiversion | typo | `Z437` Cardioversion (max 3/day) |  |  |
 |  | epistaxsis | typo | `Z315` Anterior nasal pack<br>`Z314` Nasal cautery | `Z316` Posterior nasal pack |  |
 |  | colles fractre | typo | `F027` Colles/Smith fracture – no reduction<br>`F028` Colles/Smith fracture – with reduction | `F046` Colles/Smith fracture – with reduction + sedation |  |
-|  | thoracentisis | typo | `Z331` Diagnostic thoracentesis<br>`Z332` Therapeutic thoracentesis |  |  |
+|  | thoracentisis | typo | `Z332` Thoracentesis – diagnostic or therapeutic |  |  |
 |  | pnuemothorax chest tube | typo | `Z341` Chest tube (tube thoracostomy for closed drainage) |  |  |
 |  | intubaton | typo | `G211` Intubation |  |  |
 |  | Z154 | code | `Z154` Face suture 0–5 cm |  |  |
