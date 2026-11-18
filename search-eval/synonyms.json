@@ -31,7 +31,6 @@
   "H964": "on-call travel night, night travel, oncall travel night, travel claim night, travel oncall night, on call travel night, oncall travel nite, oncall travel nite, oncall travel nigth, oncall travel nite, oncall travel nigth, oncall travel nite",
   "H980": "on-call first patient day, oncall 1st pt day, first pt travel day, oncall first pt day, 1st patient weekday, oncall 1st patient, oncall first patient, oncall 1st pt, oncall 1st patint, oncall 1st patiant, oncall first patint, oncall first patiant",
   "H984": "on-call first patient eve, oncall 1st pt eve, first pt travel eve, oncall first pt eve, 1st patient evening, oncall 1st patient eve, oncall first patient eve, oncall 1st pt evening, oncall 1st patint eve, oncall 1st patiant eve, oncall first patint eve, oncall first patiant eve",
-  "H968": "on call first patient weekend, on call 1st wkd, on call 1st holiday, on call 1st pt wkd, on call 1st pt hol, on-call wkd, on-call hol, weekend on call, holiday on call, oncall wkd, oncall hol",
   "H986": "on call first patient night, on call 1st night, on call 1st pt night, on-call night, night on call, oncall night",
   "H981": "on call addl patient weekday, on call additional weekday, on call addl pt weekday, on call addl wkd day, on-call addl weekday, weekday on call addl, oncall addl weekday",
   "H985": "on call addl patient eve, on call additional evening, on call addl pt eve, on call addl weekday eve, on-call addl evening, evening on call addl, oncall addl evening",
@@ -350,7 +349,8 @@
   "G227": "cranial nerve block, facial nerve block, glossopharyngeal block, cranial nerve injection, cranial nerve anaesthetic, cranial nerve anesthesia, cranial nerve freezing, cranial nerve shot, cranial nerve bloc, cranial nerve blok",
   "G258": "intrapleural block, intrapleural injection, pleural nerve block, pleural block, chest wall injection, intrapleural anaesthetic, intrapleural anesthesia, intrapleural nerve freezing, intrapleural nerve shot, intrapleural bloc, intrapleural blok",
   "J149P": "us guidance, ultrasound guidance, ultrasound assist, us guided aspiration, us guided drainage, ultrasound for tap, ultrasound for drain, ultrasound for procedure, ultrasound guided tap, ultrasound guided drain, ultrasound guidanc, ultrasound guidnace",
-  "F006": "intra-articular metacarpal fracture, metacarpal base fracture, bennett fx reduced, bennett fracture reduction, bennett's fracture reduction, thumb base fracture reduction, first metacarpal base fracture reduction, reduced bennett fracture, set bennett fracture, bennet fracture reduction, bennetts fracture reduction"
+  "F006": "intra-articular metacarpal fracture, metacarpal base fracture, bennett fx reduced, bennett fracture reduction, bennett's fracture reduction, thumb base fracture reduction, first metacarpal base fracture reduction, reduced bennett fracture, set bennett fracture, bennet fracture reduction, bennetts fracture reduction",
+  "H988": "on call first patient weekend, on call 1st wkd, on call 1st holiday, on call 1st pt wkd, on call 1st pt hol, on-call wkd, on-call hol, weekend on call, holiday on call, oncall wkd, oncall hol"
  },
  "diag": {
   "100": "suppressed diagnosis, confidential diagnosis, hidden diagnosis",
